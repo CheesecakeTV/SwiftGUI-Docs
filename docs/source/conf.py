@@ -2,12 +2,12 @@
 
 # -- Project information
 
-project = 'Lumache'
-copyright = '2021, Graziella'
-author = 'Graziella'
+project = 'SwiftGUI'
+copyright = '2025, CheesecakeTV'
+author = 'Eric aka CheesecakeTV'
 
 release = '0.1'
-version = '0.1.0'
+version = '0.3.0'
 
 # -- General configuration
 
