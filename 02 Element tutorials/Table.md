@@ -5,11 +5,12 @@
 ## Comparison to PySimpleGUI's Table
 Let me tell you, why SwiftGUI's Table is much better than the one of PySimpleGUI.
 
-If you don't care, just skip this part.
+If you don't care, just skip this part.\
+It's just me ranting about PySimpleGUI again...
 
 When first setting up the table, or overwriting all of its contents, PySimpleGUI is a lot quicker, especially when adding a lot of rows.\
 That's the sole advantage of PySimpleGUI's Table.\
-(**Update since version 0.7.4**: Nevermind, the issue is more or less fixed. See section "Making the table less laggy" for details.)
+(**Update since version 0.7.4**: Nevermind, the issue is more or less fixed. See section "Making the table less laggy" of this tutorial for details.)
 
 However, to change any row of PySimpleGUI's Table, you need to **replace the whole table**.
 There is no intended way to modify, append, insert, or delete a single row.

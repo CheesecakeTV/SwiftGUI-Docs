@@ -32,6 +32,11 @@ Update to use the newest features and elements:
 pip install SwiftGUI -U
 ```
 
+# Documentations and tutorials are very important to me
+If SwiftGUI should have any chance on competing with other gui-packages, it has to have a solid documentation.
+
+My goal is to make developers use tools they don't know yet, so I better teach them properly.
+
 # Why not just use PySimpleGUI?
 I know how popular PySimpleGUI became over time, which it definetly deserved.
 A lot of time and effort went into creating PySimpleGUI.
