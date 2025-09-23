@@ -50,7 +50,7 @@ sg.clipboard_observer(w, key="ClipboardChanged", throw_initial_value=True)  # Th
 previous_clp = None # Clipboard previous loop
 
 for e,v in w:
-    print(e,v)
+    #print(e,v)
 
     if e == "ClipboardChanged" and previous_clp != v[e]:    # previous_clp gets important later
         previous_clp = v[e] # Read the new clipboard from the observer

@@ -9,4 +9,7 @@ Examples are divided into categories:
 - Advanced: You have some experience in using SwiftGUI and a solid understanding of the Python language
 - Expert: Anything above "advanced". Really tries pushing the boundaries of SwiftGUI
 
+These categories are less about how advanced the subjects are, but how complicated the script is.\
+Simple examples are easy to understand, intermediate ones are a bit more complicated.
+
 When an interesting question is asked in the forums (issues/discussions), I might use that opportunity to write an example just for that application.
