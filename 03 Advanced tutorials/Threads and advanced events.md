@@ -38,7 +38,7 @@ Check it out in the [python-docs](https://docs.python.org/3/library/threading.ht
 
 
 # Multithreading in SwiftGUI
-Usually, the window blocks the script execution in the event-loop until an event occurs.
+Usually, the window blocks the script-execution in the event-loop, until an event occurs.
 
 Using threading, you can execute code while the window is waiting for its next event.
 You can even throw your own events.
@@ -46,7 +46,10 @@ You can even throw your own events.
 This tutorial covers all you need to know to run background-threads properly.
 
 # Basic "rules"
-Create and start the threads **after** the window-creation **before** entering the event-loop:
+Less rules, more guidelines.
+You should folow them until you are experienced though.
+
+Create and start the threads **after** the window-creation, **before** entering the event-loop:
 ```py
 w = sg.Window(layout)
 
@@ -62,7 +65,7 @@ Don't change values or use `.update` from inside the thread.
 It might work, but could very well crash your code instead.
 The proper way to do this is explained later.
 
-Reading values from is totally fine though.
+Reading values from elements is totally fine though.
 
 Set `deamon= True`, so the thread stops executing when the window closes.
 
