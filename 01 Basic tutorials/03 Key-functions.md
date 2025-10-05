@@ -85,6 +85,7 @@ If you create parameters with these names, they will be written accordingly:
 - `v`     - Value-"dict", same as `v` in the for-loop
 - `val`   - Value (Value of the event-element, same as `w[key].value` if you set a key)
 - `elem`  - Element (Element that caused the event, same as `w[key]`, if you set a key)
+- `args` - The tkinter-event-arguments (if you don't know what this is, ignore it.), its type is always `tuple`.
 
 Example: Let's create an input-element that prints its value to the console after being changed:
 ```py
