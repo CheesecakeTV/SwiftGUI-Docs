@@ -45,11 +45,11 @@ for e,v in w:
 
 SubWindows have almost all of the same options normal windows have.\
 You can set an icon, title, background_color, etc.\
-You can use `.update` the same way you use it on normal windows.
+`.update` works the same as with `sg.Window`.
 
 ## Single events
-Subwindows can't have an event-loop (yet).
-You can do something very simmilar to an event-loop, which I'll explain later.
+Subwindows can't have their own "true" event-loop.
+But there is something very simmilar, which I will explain later.
 
 Using key-functions is the best way to handle events.
 
@@ -72,24 +72,24 @@ e,v = sw.loop_close()
 print("Button clicked:", e)
 print("Input:", v["Input"])
 ```
-`sw.loop_close()` will wait for a keyed event.
-The only possible keyed events are button presses.
+`sw.loop_close()` waits for a keyed event.
+In this example, the only possible keyed events are button presses.
 The `sg.Input` has a key, but no events enabled by default, so it won't cause a keyed event.
 
-Key-function-events don't cause the window to close, so you may use these for functionality inside the subwindow.
+Key-function-events don't count, so you may use these for functionality inside the subwindow.
 
 ## "Blocking" windows
-Executing the above code, you'll notice that it is not possible to click on the button in the main window, until the subwindow is closed.
+Executing the above code, you'll notice that it is not possible to click on the button in the main window, while the subwindow is open.
 That's because `sg.loop_close()` "blocks" all the other windows.
 
-Blocked windows won't cause (almost any) events, until unblocked.
+Blocked windows won't allow (almost) any events, until unblocked.
 Disable this behavior by setting `block_others = False`:
 ```py
 e,v = sw.loop_close(block_others= False)
 ```
 Just remember that the event-loop won't run if the code stops at loop_close, before reaching the event-loop.
 
-There are other ways to block other windows:
+There are other methods to block other windows:
 - `sg.block_others` to block all other windows, `sg.unblock_others` to unblock them again. The methods won't stop the code from executing.
 - `sw.block_others_until_closed()` will block other windows, until the calling window is closed. It won't close until it is actually closed by the user or by calling `sw.close()`.
 
