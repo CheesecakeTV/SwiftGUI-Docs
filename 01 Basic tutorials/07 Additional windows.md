@@ -6,7 +6,7 @@ Since SwiftGUI version 0.9.0, it is possible to create and use multiple windows 
 
 To not "take a sledgehammer to crack a nut", I'll explain the easiest way to handle additional windows first.
 
-By "easiest", I mean windows for a maximum of a single keyed event.
+By "easiest", I mean windows for up to exactly one keyed event.
 Sounds useless, but it's perfect for something like a small popup.
 
 Create another window using `sg.SubWindow` instead of `sg.Window`:
@@ -45,16 +45,16 @@ for e,v in w:
 
 SubWindows have almost all of the same options normal windows have.\
 You can set an icon, title, background_color, etc.\
-You can use `.update` the same way you use it on normal windows.
+`.update` works the same as with `sg.Window`.
 
 ## Single events
-Subwindows can't have an event-loop (yet).
-You can do something very simmilar to an event-loop, which I'll explain later.
+Subwindows can't have their own "real" event-loop.
+But there is something very simmilar, which I will explain later.
 
-Using key-functions is the best way to handle events.
+Key-functions work as usual.
 
 For smaller popups, I recommend using `loop_close`.
-It will wait for a single keyed event, then close the sub-window, returning the event-key and the last state of values:
+It will wait for a single keyed event, then close the sub-window, returning the event-key and the most recent state of values:
 ```py
 another_layout = [
     [
@@ -72,31 +72,31 @@ e,v = sw.loop_close()
 print("Button clicked:", e)
 print("Input:", v["Input"])
 ```
-`sw.loop_close()` will wait for a keyed event.
-The only possible keyed events are button presses.
+`sw.loop_close()` waits for any keyed event.
+In this example, the only possible keyed events are button presses.
 The `sg.Input` has a key, but no events enabled by default, so it won't cause a keyed event.
 
-Key-function-events don't cause the window to close, so you may use these for functionality inside the subwindow.
+Again, key-function-events don't count, so you may use these for functionality inside the subwindow.
+
+As soon as a button is pressed, the sub-window closes and `sw.loop_close()` returns the event and the value-dict.
 
 ## "Blocking" windows
-Executing the above code, you'll notice that it is not possible to click on the button in the main window, until the subwindow is closed.
+Executing above code, you might have noticed that it is not possible to click on the button in the main window, while the subwindow is open.\
 That's because `sg.loop_close()` "blocks" all the other windows.
 
-Blocked windows won't cause (almost any) events, until unblocked.
+Blocked windows won't allow (almost) any events, until unblocked.
 Disable this behavior by setting `block_others = False`:
 ```py
 e,v = sw.loop_close(block_others= False)
 ```
-Just remember that the event-loop won't run if the code stops at loop_close, before reaching the event-loop.
+Just remember that the event-loop won't execute if the code stops at loop_close before actually reaching the event-loop.
 
-There are other ways to block other windows:
-- `sg.block_others` to block all other windows, `sg.unblock_others` to unblock them again. The methods won't stop the code from executing.
+There are other methods to block other windows:
+- `sg.block_others` to block all other windows, `sg.unblock_others` to unblock them. These methods won't stop the code from executing though.
 - `sw.block_others_until_closed()` will block other windows, until the calling window is closed. It won't close until it is actually closed by the user or by calling `sw.close()`.
 
 # Popups with a decent event-loop
-My lazyness is utilitarian: If the required effort for everyone gets lowered, it's fine for me to put in a little more myself.
-
-That's why SwiftGUI offers a neat way to create functional popups that are very easy to use.
+SwiftGUI offers a neat/easy way to create popups with extended functionality.
 
 First, create a popup-class using this template:
 ```py
@@ -121,8 +121,8 @@ Just use it like your normal for-loop.
 
 The window-object is saved in `self.w`.
 
-Just build your layout as usually and you are good to go.
-The key-system is completely seperate from the main one, so use keys as much as you like.
+Just build your layout like you normally would and you are good to go.
+The key-system is completely seperate from the main one, so use keys however you like.
 
 When you're done, use the popup by "calling" the class:
 ```py
@@ -148,18 +148,19 @@ Example("How are you today?")
 ![](../assets/images/2025-09-26-13-34-09.png)
 
 When clicking the buttons, `print(e,v)` is executed.
+The popup is not closed.
 
 ## Return-value
-But how do we return an actual value?
+But how do we return anything?
 
 Since `return` can't be used as a method-name, the return-method is called `done`:
 ```py
     def _event_loop(self, e: Hashable, v: sg.ValueDict):
         self.done(e)    # (Just return the event)
 ```
-`self.done(val)` works exactly like `return`, but for the whole popup.
+`self.done(val)` works like `return`, but for the whole popup.
 
-The popup will close and the return-value is returned:
+The popup will close and the "return"-value is returned:
 ```py
 class Example(sg.BasePopup):
 
@@ -176,7 +177,7 @@ class Example(sg.BasePopup):
         super().__init__(layout)
 
     def _event_loop(self, e: Hashable, v: sg.ValueDict):
-        self.done(e)
+        self.done(e)    # "return" which button was clicked
 
 print("Answer:", Example("How are you today?"))
 ```
@@ -188,24 +189,26 @@ SwiftGUI-magic!
 ## Typehints
 There is one minor, yet annoying downside to this.
 
-Many IDEs, like PyCharm won't recognize that `Example(...)` might return something different, possibly resulting in warnings:\
+Many IDEs, like PyCharm won't recognize that `Example(...)` might return anything but an `Example`-object, possibly resulting in warnings:\
 ![](../assets/images/2025-09-26-13-41-54.png)
 
-To counter this, I'm afraid, you'll sadly have to do an atrocity:\
+To counter this, I'm afraid, you'll have to commit an atrocity:\
 ![](../assets/images/2025-09-26-13-43-18.png)
 
 You'll have to inherit from the return-type too.
 
-I found no other way to do this.
-Happy about any idea on this.
+Make sure that `sg.BasePopup` (yes, it's wrong in the image) is on the left, so `super().__init__()...` works as expected.
+
+I found no other way to do this.\
+Happy about any ideas.
 
 ## Default return
-If the user closes the window by himself, `None` is returned.
+By default, if the user closes the window, `None` is returned.
 
-That can be nasty, if you depend your code on the normal return-type.
+That can be nasty, especially if your code depends on the usual return-type.
 If you expect e.g. `list`, `None` could crash your code.
 
-To return something else instead of `None`, pass `default` to `super().init(...)`:
+To return something else instead of `None`, pass `default` to `super().__init__(...)`:
 ```py
     super().__init__(layout, default= "")
 ```
@@ -215,14 +218,17 @@ Just remember, that `default` will be returned, even if you intentionally try to
 Popups created this way are still `sg.SubWindow`s.
 As with other subwindows, when creating one before creating `sg.Window`, the popup will turn into the main window.
 
-Also, popups created this way will be blocking, meaning they suspend the user-events of all other windows, while open.
+Also, popups created this way will be blocking, meaning they'll suspend the user-events of all other windows, while open.
 Otherwise, that whole return-functionality wouldn't work.
+
+Oh, and by the way, `super().__init__(...)` passes all defined arguments to the underlying sub-window.
+This way, you could remove the titlebar, set an icon, etc.
 
 # Full, additional windows
 In SwiftGUI, sub-windows can do anything normal windows can (except an event-loop that uses `for`).
 
 ## Somewhat-event-loop
-You can still have a fully functional event-loop for sub-windows, if you don't loop, but use a function:
+You can still have a fully functional event-loop for sub-windows, if you don't loop, but use a function instead:
 ```py
 import SwiftGUI as sg
 
@@ -248,7 +254,7 @@ another_layout = [
     ]
 ]
 
-def sw_loop(e,v):
+def sw_loop(e,v):   # "loop" only for the sub-window
     # Some example-loop
     print("Button-press:", e)
     print("Input-value:", v["Input"])
@@ -257,7 +263,7 @@ def sw_loop(e,v):
 w = sg.Window(main_layout)
 sw = sg.SubWindow(another_layout, event_loop_function=sw_loop)
 
-for e,v in w:
+for e,v in w:   # main loop
     print(e,v)
 ```
 It was already mentioned at the end of the previous tutorial.
@@ -272,20 +278,20 @@ If the window is closed, all the sub-windows will close too.
 Pro-tipp: `sg.main_window()` always returns the currently active window.
 
 Sometimes, you can't be sure if a sub-window is really opened after the main window is created.\
-E.g.: If you create a function that opens a popup. 
-What if the user wants to open the popup without a window?
+E.g.: Popups.
+What if the user wants to open a popup before creating a window?
 
-For that reason, `sg.SubWindow` **will create an actual window if none is present**.
+For that reason, `sg.SubWindow` **will turn into an actual window if none is present**.
 
 So, if you are unsure, create a sub-window.
 
-### Important!
+### Very important!
 This can cause funny problems.
 
-Remember, if the window is closed, all the sub-windows close too.
+Remember, if the window is closed, all sub-windows close too.
 
-So, if you open multiple popups at once without a pre-made main window, closing the first popup closes all the others too.
+So, if you open multiple popups at once without a pre-made main window, closing the first popup, closes all the others too.
 
-If you are unsure, if all popups and stuff is closed when creating the actual main window, call `sg.close_all_windows()`.
+If you are unsure, if no window/subwindow is active when creating the actual main window, call `sg.close_all_windows()` before.
 
 

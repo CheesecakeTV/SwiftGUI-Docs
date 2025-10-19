@@ -1,17 +1,18 @@
 
 # Global options
+(Themes are explained below)
 
-Sometimes, you need to change a certain parameter (configuration option) of many elements at once.
+Sometimes, you need to define the same option (configuration) of many elements at once.
 
-E.g.: The default fontsize is pretty small and might be hard to read for some users.
+E.g.: The default fontsize is quite small and might be hard to read for some users.
 
 You could adjust it in every single element manually, but there is a better way: Changing the global option.
 
-**If you don't specify an option when creating an element**, the corresponding "Global option" will be applied instead.
+**If you don't specify an option when creating an element**, the corresponding "Global option" will be applied instead, if available.
 
 ## Changing global options for a single element-type
 Every type of Element has its own global-option-class.
-That class is ALWAYS called exactly like the Element.
+That class is ALWAYS called exactly like the Element (no aliases atm).
 
 To change a global option, just change the fitting attribute of said class:
 ```py
@@ -27,7 +28,7 @@ layout:list[list[sg.BaseElement]] = [
     ],[
         sg.T("Another big text"),
     ],[
-        sg.T("Small text", fontsize=8)  # fontsize is written, so global option won't be applied
+        sg.T("Small text", fontsize=8)  # fontsize is defined, so global option won't be applied
     ]
 ]
 
@@ -39,15 +40,13 @@ w = sg.Window(layout)
 ### Main loop ###
 for e,v in w:
     ...
-
-### After window was closed ###
 ```
 
 ![](../assets/images/2025-08-05-15-11-36.png)
 
-The class-attribute is ALWAYS called the same as the parameter you pass to the element.
+The class-attribute is ALWAYS called the same as the corresponding option you pass to the element.
 
-There is a downside to this: If we add an element with a different type, like an `sg.Checkbox`, it won't be affected by the change:
+There is a downside to this: If we add an element with a different type, like `sg.Checkbox`, it won't be affected by the change:
 
 ```py
 ### Global options ###
@@ -69,23 +68,23 @@ layout:list[list[sg.BaseElement]] = [
 
 ![](../assets/images/2025-08-05-15-16-23.png)
 
-Of course, you could go ahead and change the fontsize for every used element-type separately, but that's very inconvenient:
+Of course, you could go ahead and change the fontsize for every used element-type separately, but that defies the whole purpose of global options:
 ```py
 ### Global options ###
 sg.GlobalOptions.Text.fontsize = 14
 sg.GlobalOptions.Checkbox.fontsize = 14
 ```
-This is where the global options of SwiftGUI get to show off their true power.
-
+This is where this feature gets to show off its true power:
+Global-option-hierarchy.
 
 ## Global-option-hierarchy
-When accessing an attribute of a global option in PyCharm, PyCharm will not only suggest the attribute, but also tell you what class it actually comes from:\
+When accessing an attribute of any class in PyCharm, PyCharm will not only suggest the attribute, but also display what class it actually "comes from":\
 ![](../assets/images/2025-08-05-15-22-57.png)
 
-Even though you are changing an attribute of `GlobalOptions.Text`, PyCharm recognizes this attribute actually belongs to `GlobalOptions.Common_Textual`.
+Even though you are changing an attribute of `GlobalOptions.Text`, PyCharm recognizes this attribute actually belonging to `GlobalOptions.Common_Textual`.
 Strange.
 
-`GlobalOptions` will be shortened to `go` in the following for better readability.
+Note that `GlobalOptions` will be shortened to `go` from now on.
 
 Here is how it works:
 
@@ -95,30 +94,30 @@ In this case, `go.Text` inherits `fontsize` from its parent, `go.Common_Textual`
 If a child-class like `go.Text` doesn't have a certain attribute, the parent-class will supply it.
 By setting `go.Text.fontsize`, `go.Common_Textual` won't be used for that option anymore.
 
-Pseudo-Algorithm for our current case:
+Pseudo-Algorithm for this specific case:
 ```
-sg.Text supplies fontsize
+sg.Text supplies fontsize.
 
     fontsize not available?
 
-=> go.Text supplies fontsize
+go.Text supplies fontsize.
 
     fontsize not available?
 
-=> go.Common_Textual supplies fontsize
+go.Common_Textual supplies fontsize.
 
     fontsize not available?
 
-=> DEFAULT_OPTIONS_CLASS (Parent of all go-classes) supplies fontsize
+DEFAULT_OPTIONS_CLASS (Parent of all go-classes) supplies fontsize.
 
     fontsize not available?
 
-=> leave it None and let tkinter figure it out
+Leave it None and let tkinter figure it out.
 ```
 
 Finally, let's change the fontsize for `sg.Text` and `sg.Checkbox` together.
 
-Since both `go.Text` and `go.Checkbox` inherit from `go.Common_Textual`, we can change both options at once:
+Both `go.Text` and `go.Checkbox` inherit from `go.Common_Textual`, so we can change both options at once:
 ```py
 ### Global options ###
 sg.GlobalOptions.Common_Textual.fontsize = 14
@@ -145,10 +144,10 @@ layout:list[list[sg.BaseElement]] = [
     ]
 ]
 ```
-Strange, the button did not change textsize:\
+Strange, the button did not change its textsize:\
 ![](../assets/images/2025-08-05-15-52-16.png)
 
-That's because the button overwrites the fontsize itself:\
+That's because the button overwrites the fontsize too:\
 ![](../assets/images/2025-08-05-15-53-38.png)\
 The class still derives from `go.Common_Textual`.
 
@@ -157,6 +156,7 @@ This is the actual go-button-class:\
 From the little blue dots on the left, you can see that fontsize is already defined in a parent-class (`Common_Textual`) and overwritten by the button.
 
 That's because the default fontsize makes the button as tall as Input-elements with default fontsize (10).
+It just looks better if buttons have a smaller fontsize than inputs.
 
 To make the button apply `go.Common_Textual`'s attribute, we need to remove it from `go.Button`, or set it to None:
 ```py
@@ -177,11 +177,20 @@ sg.T.defaults.fontsize = 14
 
 The window has its own global option called `GlobalOptions.Window`.
 
-Elements that look like their background was invisible (like `sg.Text`, `sg.Checkbox`, but not `sg.Input`) derive `background_color` from `Common_Background`.
+Elements that look like their background was invisible (like `sg.Text`, `sg.Checkbox`, but not `sg.Input`) mostly derive `background_color` from `Common_Background`.
 Most excluded elements derive from `Common_Field_Background`.
+
+Go-classes do not act like you'd expect classes to act.
+There is a very complicated set of coding-magic running in the background.\
+Therefore, you should really not read the value of an attribute by calling `.attributeName`.
+It usually returns nonsense.\
+Use `.single("attributeName")` instead.\
+This has performance-reasons.
 
 # Themes
 Themes are a way to apply pre-made sets of global options.
+
+In SwiftGUI version 0.10.2, there are 46 pre-made themes.
 
 To apply a theme, simple "call" it:
 ```py
@@ -191,7 +200,7 @@ sg.Themes.Hacker()
 ![](../assets/images/2025-08-05-16-12-52.png)
 
 See all available themes by calling `sg.Examples.preview_all_themes()`:\
-![](../assets/images/2025-08-22-17-27-50.png)
+![](../assets/images/2025-10-19-19-00-04.png)
 
 ## Creating custom themes
 It's very easy to create your own theme, so feel free to do so.
@@ -199,9 +208,10 @@ I'd love to see what you came up with, feel free to post it in the [GitHub-discu
 
 Let's take a look at the `Hacker`-theme (In its current state):
 ```py
+import SwiftGUI
 from SwiftGUI import GlobalOptions as go
 
-class Hacker(BaseTheme):
+class Hacker(sg.Themes.BaseTheme):
 
     def apply(self) -> None:
         go.Common_Textual.fonttype = font_windows.Fixedsys
@@ -234,7 +244,7 @@ class Hacker(BaseTheme):
 
         go.Separator.color = "red"
 ```
-As you can see, you only need to derive the class from `BaseTheme` (`sg.Themes.BaseTheme`) and put all of your changes into `apply`.
+As you can see, you only need to derive the class from `BaseTheme` and make all of your changes in `apply`.
 
 As an example, let's create a simple theme and apply it:
 ```py
@@ -273,7 +283,7 @@ class Marine(sg.Themes.BaseTheme):
 
 
 ## FourColors themes
-You find many abstract color-maps online.
+You find many abstract color-maps online.\
 These color-maps consist of different colors that look well together.
 
 I got the ones used in SwiftGUI from [here](https://colorhunt.co).
@@ -300,10 +310,11 @@ You can't enter color-names like `"blue"`, only color-codes.
 Also, don't add `#` in front of the color-code.
 
 ### Well looking color-combinations
-Not all colors look good together.
+Not all good looking color-combination also work well for GUIs.
+In fact, most of them don't.
 
-Follow these rules when chosing the colors to maximize your chance of creating something good-looking:
-- col3 and col4 should both have a good contrast to col1 and col2. 3 and 4 should be readable on both, 1 and 2.
-- col3 should stand out from the rest, it's used for highlights and such.
-- col1 and col2 should be simmilar, but if they are not, it can look pretty good too.
+Follow these guidelines when chosing the colors to maximize your chance of creating something good-looking:
+- col3 and col4 should both have a good contrast to col1 and col2. Text colored col3 or col4 should be readable on both, col1 and col2.
+- col3 should really stand out from the rest.
+- col1 and col2 should look somewhat simmilar. This is not as important as the other points, but helps a lot.
 
