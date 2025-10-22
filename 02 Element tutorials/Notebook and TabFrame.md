@@ -114,7 +114,7 @@ To do so, enable `event_on_backend_selection`:
         event_on_backend_selection= True,
     )
 ```
-You'll notice that the initialization of the notebook also counts as a tab-change and causes an event.
+You'll notice that the initialization of the notebook also counts as a tab-change and therefore causes an event.
 
 
 

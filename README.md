@@ -4,12 +4,12 @@
 
 Find the main repository here: https://github.com/CheesecakeTV/SwiftGUI
 
-# Does your GUI look shitty?
+# Does your GUI look bad?
 `import SwiftGUI as sg`
 
 Call `sg.Themes.FourColors.Emerald()` before creating the layout.
 
-This applies the `Emerald`-theme.
+This applies the `Emerald`-theme, my personal favorite.
 
 See which themes are available by calling `sg.Examples.preview_all_themes()`.
 
