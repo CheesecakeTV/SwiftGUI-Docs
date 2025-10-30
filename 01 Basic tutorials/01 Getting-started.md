@@ -47,7 +47,7 @@ You can always find that template here: [`Examples/Beginner-friendly/_template.p
 
 # Layout
 The layout contains all elements to be shown inside the GUI.
-As you might see, the typehint expects a "double-list", or lists inside a list.
+As you might see, the typehint expects a "double-list", or "lists inside a list".
 
 Every "inner" list represents a row of elements.
 
@@ -101,9 +101,9 @@ sg.Themes.FourColors.FourColors.DarkGold
 Preview all available themes by calling `sg.Examples.preview_all_themes()`.
 
 # Basic elements
-There are a couple of elements you can use in your gui.
+There are a lot of elements you can use in your gui.
 
-They each have a ton of options you can use to customize the element, but we'll only focus on the common ones in this tutorial.
+Most of them have a ton of options you can use to customize the element, but we'll only focus on the common ones in this tutorial.
 
 Pro-tipp: Preview all available elements by calling `sg.Examples.preview_all_elements()`.
 
@@ -117,7 +117,7 @@ Consider this example:
 ```py
 layout:list[list[sg.BaseElement]] = [
     [
-        sg.T(
+        sg.T(   # sg.T is the same as sg.Text
             # \n is the newline-character and will add a line-break
             "I'm a text.\nI have a couple of options you should know about...",
             width=60,   # Reserve space for 60 characters, no matter how long the text actually is
@@ -134,7 +134,7 @@ It will generate this window:\
 ![](../assets/images/2025-08-05-13-26-19.png)\
 As you can see, SwiftGUI provides pre-made colors and fonts (only for windows atm, version 0.3.0). 
 
-Preview all colors by calling `sg.preview_all_colors()`.\
+Preview all colors by calling `sg.Examples.preview_all_colors()`.\
 You can also use custom colors, by either entering a hex-code (e.g.: `#FF0020`), or by using the rgb-function (e.g.: `sg.rgb(255, 0, 32)`).
 
 ## Input
@@ -165,8 +165,7 @@ How to actually read/use what the user wrote in there will be explained later.
 It is possible to make this element "readonly", doing exactly what you think it does.
 The user will still be able select and copy (Ctrl + C) the text inside, but can't change it.
 
-That's pretty useful if you only want to display a value.
-You could use `sg.Text` instead, but `sg.Input` looks better and the text can be copied selected/copied.
+That's pretty useful if you only want to display a value, looking better than `sg.Text`.
 
 ## Button
 `sg.Button` creates a button the user can press to trigger an "event".
@@ -235,7 +234,7 @@ for e,v in w:
 As you might have noticed, the script will get stuck here.
 Even if you put some code into the for-loop, it won't execute.
 
-That's because you need to "throw" an event each time you want to go through the loop.
+That's because you need to "throw" (cause) an event each time you want to go through the loop.
 
 There are a couple of ways to set up events:
 - Using event-elements like `sg.Button`
@@ -244,11 +243,15 @@ There are a couple of ways to set up events:
 - Throwing events manually from a different thread
 - Using the binding decorator
 
-All of these ways have something essential in common: **You have to define a key to throw an event to the event-loop!**\
-Not setting a key can definetly be useful too, but that's a different topic.
+All of these ways have something essential in common: **You have to define a key to throw an event to the event-loop!**
 
-Whenever an "keyed-"event gets thrown, `e` ("event") will be set to the corresponding key (See the examples below).
-The loop will then execute once.
+A key is the identifier of an element.
+Think of it like the name of that specific element.
+SwiftGUI does not require you to set keys, but that's more advanced.\
+Let's use keys for now.
+
+Whenever a "keyed-"event gets thrown, `e` ("event") will be set to the corresponding key (See the examples below).
+The loop will then execute once and then wait for the next keyed-event.
 
 ## Using buttons, or default events
 A button already comes with a builtin event.
@@ -264,12 +267,12 @@ layout:list[list[sg.BaseElement]] = [
     [
         sg.Button(
             "Button 1",
-            key="B1",
+            key="B1",   # <-- Here
             fontsize=14,
         ),
         sg.Button(
             "Button 2",
-            key="B2",
+            key="B2",   # <-- Here
             fontsize=14,
         )
     ]
@@ -284,15 +287,15 @@ w = sg.Window(layout)
 for e,v in w:
     print("Event:", e)
 
-    if e == "B1":
+    if e == "B1":   # If the key is "B1"
         print("Button 1 was pressed!")
 
-    if e == "B2":
+    if e == "B2":   # If the key is "B2"
         print("Button 2 was pressed!")
 
 ### After window was closed ###
 ```
-This functionality is the basic idea behind SwiftGUI (, or PySimpleGUI, to be fair).
+This functionality is the basic idea behind SwiftGUI (and PySimpleGUI, to be fair).
 
 To not slow down your code by throwing too many events, elements like `sg.Input` won't naturally throw events.\
 You'll have to specifically ask for it, by setting `default_event = True`.
@@ -309,8 +312,8 @@ layout:list[list[sg.BaseElement]] = [
     [
         sg.In(
             fontsize=20,
-            default_event=True,
-            key="Input"
+            default_event=True, # Tell the input to throw an event
+            key="Input" # "Name" of the element
         )
     ]
 ]
@@ -324,12 +327,12 @@ w = sg.Window(layout)
 for e,v in w:
     print("Event:",e)
 
-    if e == "Input":
+    if e == "Input":    # Check if the input caused the event
         print("The sg.Input was changed!")
 
 ### After window was closed ###
 ```
-What precisely causes the event is pretty obvious in my opinion.
+What precisely causes the event for an element is pretty obvious in my opinion.
 
 Examples:
 - For `sg.Input`, it's caused by changing the input.
@@ -339,8 +342,10 @@ Examples:
 How to actually read what was written into the `sg.Input` will be explained later.
 
 ## Binding custom events
+This part is a tiny bit more advanced than the rest and can be skipped for now.
+
 SwiftGUI is based on `tkinter`, a builtin Python-package.
-`tkinter` offers a lot of different events you can throw: [TKinter reference](https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/event-types.html).
+`tkinter` offers a lot of events you can throw: [TKinter reference](https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/event-types.html).
 You don't need to know most of these of the top of your head, but it can be useful to know what's possible sometimes.
 
 "Binding" events is done via the corresponding event-string, some of which are listed in the above linked tkinter-reference.
@@ -373,7 +378,7 @@ yourElement.bind_event(sg.Event.ClickAny, key_extention="_Click").bind_event(sg.
 
 ## Throwing events from different threads
 Threading can be tricky for Python-beginners.
-**If you don't know how to use threading, skip this part.**
+**If you don't know how to use threading, skip this part.**\
 There is an in-depth explanation of these features in an advanced tutorial (if you don't see a link here, I forgot to add it...).
 
 Call `w.throw_event(key)` on a different thread to throw an event.
@@ -443,38 +448,33 @@ my_text.value = "Hello GitHub"
 
 To make life easier for users transitioning from PySimpleGUI, all "keyed" values are accessible through `v` (`for e, v in w`), something that can be used simmilar to a dictionary.
 
-`v[key]` is the same as `w[key].value`, so `v[key] = new_value` the same as `w[key].value = new_value`.
+`v[key]` is the same as `w[key].value`, so `v[key] = new_value` does the same as `w[key].value = new_value`.
 
 You can `print(v)`, which will print `v` like a dictionary.
-However, this "collects" the value of every keyed elements, so you should only do it for debug reasons and remove it later.
+However, this costs more cpu time than you'd expect, so only do it for debugging.
 
-This collecting-mechanism is too complicated for this tutorial.\
-Let's just simplify: Every value is "fully collected" only once per loop.
-That means, calling `print(v)` only really "hurts" once per loop.
-
-It also means, `print(v)` might not contain values that got updated by `w[key].value = ...`.
-
-However, **`v[key]` is very reliable and always returns the correct value.**
+However, `print(v)` might not contain values that just got updated by `w[key].value = ...`.
+**`v[key]` though is very reliable and always returns the correct value.**
 
 (Unnecessary side-rant about PySimpleGUI) In PySimpleGUI, `v` (or `value`) is a normal dictionary that is updated only in the beginning of each loop.
 That means, changing the value of elements won't update `value`.
 Doesn't sound like much, but it annoyed the s...wiftGUI out of me.
 
 # Updating the layout
-You can change most of the options (configurations) of elements after creating the window too.
+You can change most of the options (configurations) of elements not only when creating the window, but afterwards too.
 This way, you could e.g. make buttons change color, disable Input-elements, make text jump from one side to the other, etc.
 
 To update an option, get the reference to the element (you could use `w[key]`) and call `.update` on it.
 `.update` accepts most of the parameters the element itself accepts and if not, Python will tell you.
 
-Examples:
+**Examples:**
 
-To change the background-color of the `sg.Input`-Element from a previous example:
+Change the background-color of the `sg.Input`-Element from a previous example:
 ```py
 w["Input"].update(background_color = sg.Color.red)
 ```
 
-To disable a button (button can't be clicked anymore):
+Disable a button (button can't be clicked anymore):
 ```py
 w["ButtonKey"].update(disabled = True)
 ```
@@ -500,10 +500,11 @@ That means, `.get_option("bg")` will return that configuration directly from the
 # Where to now?
 This library offers A LOT more while still being easy to use.
 
-I highly recommend reading every basic tutorial.
+I highly recommend reading every single basic tutorial.
 You will be able to use the package pretty well just from these.
+However, the later ones might require a better understanding of Python than this one.
 
-The Elements (widgets) itselves have a lot more functionality than you'd expect.
+The Elements itselves have a lot more functionality than you'd expect.
 You might have been implementing features that are already implemented, because you didn't know.\
 If you want to dive deeper into that, read the Element tutorials.\
 It's not about remembering all of it, it's about knowing what's possible.
@@ -511,6 +512,6 @@ It's not about remembering all of it, it's about knowing what's possible.
 The advanced tutorials explain how the package itself works, so you will be able to create your own widgets, or even packages that derive from SwiftGUI.
 
 If you have any questions, feel free to ask them in the GitHub Forum.\
-I also appreciate ideas and ciricism.
+I also appreciate any ideas and ciricism.
 
 Have fun!

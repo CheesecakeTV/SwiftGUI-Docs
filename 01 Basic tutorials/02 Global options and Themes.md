@@ -2,7 +2,7 @@
 # Global options
 (Themes are explained below)
 
-Sometimes, you need to define the same option (configuration) of many elements at once.
+Sometimes, you need to define the same option (configuration) of a lot of elements at once.
 
 E.g.: The default fontsize is quite small and might be hard to read for some users.
 
@@ -14,7 +14,7 @@ You could adjust it in every single element manually, but there is a better way:
 Every type of Element has its own global-option-class.
 That class is ALWAYS called exactly like the Element (no aliases atm).
 
-To change a global option, just change the fitting attribute of said class:
+To change a global option, just change the fitting attribute of said global-option-class:
 ```py
 import SwiftGUI as sg
 
@@ -28,7 +28,7 @@ layout:list[list[sg.BaseElement]] = [
     ],[
         sg.T("Another big text"),
     ],[
-        sg.T("Small text", fontsize=8)  # fontsize is defined, so global option won't be applied
+        sg.T("Small text", fontsize=8)  # fontsize is defined, so global option won't apply
     ]
 ]
 
