@@ -1,21 +1,24 @@
 
 # Custom combined elements
-When using SwiftGUI regularely, you will notice that you implement the same "layout-parts" over and over again.
+When using SwiftGUI regularely, you might end up implementing the same layouts (or layout-parts) over and over again.
 
-Combined elements give you a way to implement these layout-parts once, to use over and over again.
+Combined elements provide a way to turn such layout-parts into its own element, which you can use over and over again.
+It's simmilar to a template, but a lot more powerful.
 
-This tutorial teaches you how to easily create combined elements.
+Additionally, since SwiftGUI version 0.8.0, combined elements have their own key-system.
+That makes creating combined elements as easy as creating a normal window.
 
 ## What is a combined element?
-It's an element that contains multiple "inner" elements.
+It's an element that contains multiple "inner" elements, simmilar to a frame.
+However, unlike a frame, combined elements already have elements inside.
 
-E.g.: `sg.Form` contains multiple `sg.Label`, `sg.Button` and `sg.Input` elements.
-This is a single combined element:\
+E.g.: `sg.Form` contains multiple `sg.Label`, `sg.Button` and `sg.Input` elements:
+
 ![](../assets/images/2025-08-12-14-13-01.png)
 ```py
 layout = [
     [
-        sg.Form(
+        sg.Form(    # Only one element to create the whole layout
             ("Name", "Birthday", "Organization", "Favorite Food"),
             key = "Form",
             submit_button= True,
@@ -33,10 +36,11 @@ There is (or will be) a tutorial on `sg.Form`, check it out if you want to learn
 I highly encourage you showing off your combined elements in the [GitHub forum](https://github.com/CheesecakeTV/SwiftGUI/discussions/7#discussion-8484735).
 I'd love to include your element in the SwiftGUI package, if it is useful.
 
-# Even simpler: Layout-template-functions
-If you just want to copy a part of your layout (with minor modifications), you don't need to create a combined element.
+# Even simpler: Template-functions
+A tiny version of combined elements are "template-functions".
+It's nothing SwiftGUI provides, but rather a smart usage of functions.
 
-Instead, create a function that returns said element:
+Let some part of the layout be created by a function and you can recreate it just by calling that function:
 ```py
 import SwiftGUI as sg
 
@@ -70,7 +74,7 @@ for e,v in w:
 To create multiple rows at once, return all rows as a list and add a `*` in front of the function:
 ```py
 def form(texts):
-    _return = []
+    _return = []    # Will contain multiple rows
 
     for text_now in texts:  # Add the rows one-by-one
         _return.append([
@@ -91,32 +95,24 @@ layout = [
     ]
 ]
 ```
-Of course, I'd never include anything like that in SwiftGUI.
-It's quick and dirty, but therefore perfect for quick and dirty layouts.
 
-## Disadvantage of template-functions
-As you can see, every `sg.Input` gets its own key, meaning the value-dict (From `for e,v in w`) will become crowded.
+## When to use template-functions
+As you can see, every `sg.Input` gets its own key, meaning the value-dict (From `for e,v in w`) grows and grows.
 
-Also, if you'd want to use the template again, using the same texts, the value-dict will only contain one of each value.
-You'd have no chance to retrieve the value of both templates.
+Also, you can't (shouldn't) use the same text twice, because its key is already occupied.
 
-Sure, you can work around that, there are workarounds for everything in Python, but that wouldn't be "quick and dirty", just "dirty".
+I only use template-functions for very small parts of the layout, a single row at max.
+It's quick and dirty.
 
-In contrast, `sg.Form` collects all values of its inputs and saves them to a single key as a dictionary.
-
-Another big disadvantage is how hard it is to add/modify functionality.
-This will become aparrent later.
+For anything bigger, you should definetly create a combined element instead.
 
 # How to create combined elements
-To do anything useful, you need to know how to use key-functions (not so much anymore since SwiftGUI version 0.8.0).
-Check it out in the basic tutorials first.
-
-Combined elements are a little more complicated than template-functions, but nothing too bad.
-
-Let's recreate a basic version of `sg.Form` as an example.
+To demonstrate how to create combined elements, let's recreate `sg.Form` in the following tutorial.
 
 ## First step
-Start by copying the template also found in `Examples/Advanced tutorials/CombinedElementTemplate.py`:
+An easy start is to copy the template found in `Examples/Advanced tutorials/CombinedElementTemplate.py` (main repo).
+
+That example contains pretty much everything combined elements have to offer, so don't worry, you can ignore most of it for now:
 ```py
 from typing import Any, Callable, Iterable, Self
 import SwiftGUI as sg
@@ -189,11 +185,12 @@ class Example(sg.BaseCombinedElement):
 ```
 (Obviously) rename the class to your liking.
 
-You don't have to allow the user to pass `key`, `key_function`, or `apply_parent_background_color`, but these are very common and handled entirely by the super-class.
+`key`, `key_function`, and `apply_parent_background_color` are common options and handled completely by the super-class.
+You don't need to pass them along though.
 
 ## Creating the layout
-As you can see, `super().__init__` requests an `sg.Frame` (or simmilar).
-This frame becomes the actual element behind your combined element.
+As you can see, `super().__init__` requests an `sg.Frame`, or layout.
+This is the actual element hidden behind your combined one.
 
 So let's fill up the frame with the layout-part used earlier:
 ```py
