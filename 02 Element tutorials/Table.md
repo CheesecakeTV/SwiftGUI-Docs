@@ -6,15 +6,15 @@
 Let me tell you, why SwiftGUI's Table is much better than the one of PySimpleGUI.
 
 If you don't care, just skip this part.\
-It's just me ranting about PySimpleGUI again...
+It's just me ranting about PySimpleGUI yet again...
 
 When first setting up the table, or overwriting all of its contents, PySimpleGUI is a lot quicker, especially when adding a lot of rows.\
 That's the sole advantage of PySimpleGUI's Table.\
-(**Update since version 0.7.4**: Nevermind, the issue is more or less fixed. See section "Making the table less laggy" of this tutorial for details.)
+(**Update since version 0.7.4**: Nevermind, the issue can be avoided now. See section "Making the table less laggy" of this tutorial for details.)
 
 However, to change any row of PySimpleGUI's Table, you need to **replace the whole table**.
 There is no intended way to modify, append, insert, or delete a single row.
-I found [a GitHub Thread from 2022](https://github.com/PySimpleGUI/PySimpleGUI/issues/5659) about this issue, yet the issue remains.
+I found [a GitHub Thread from 2022](https://github.com/PySimpleGUI/PySimpleGUI/issues/5659) about this, yet the issue remains.
 There are workarounds, but you can work around anything in Python, so that doesn't count.
 
 As you might have guessed, SwiftGUI's Table lets you do all of the above (and more) with little to no runtime penalty.
@@ -27,10 +27,10 @@ Let's call PySimpleGUI `psg` and SwiftGUI `sg` for an easier read.
 What really annoyed me about psg-Table is that you clear all the user-selections when replacing/updating the table.
 Also, the view gets reset to the beginning of the table.
 Imagine editing an Excel-Cell, but when you press enter, the selection is gone and you are looking at the top left corner of the sheet.\
-In Germany we say "Katastrophe" ("Catastrophy").\
-Again, there are workarounds, but you shouldn't need to work around such a basic feature.
+In Germany, we say "Katastrophe" ("Catastrophy").\
+Again, there are workarounds, but you shouldn't need to work around such a trivial feature.
 
-The most infuriating part about this is how easy it was for me to implement these features.
+The most infuriating part is how easy it was for me to implement these features.
 Tkinter literally offers all the needed methods, I basically just needed to pass them along.
 
 sg-Tables keep any selection when modifying the table.
@@ -40,24 +40,24 @@ This feels really natural to the user and would be a pain to implement in psg.
 On top of that, sg-Tables offer a lot of "higher" features, like sorting and filtering through the table.
 Of course, selections are preserved.
 
-By default, clicking on a column-heading sorts the table by this column. Clicking it again, sorts by this column in reverse.
+By default, clicking on a column-heading sorts the table by this column. 
+Clicking it again, sorts by this column in reverse.
 Of course, you can disable this behavior.
 
-Another annoying thing about psg-Tables was that they returned the index of the table rather than the actual value. 
-psg-Listbox does the opposite.
+Another annoying thing about psg-Tables is that they return the index of the table rather than the actual value. 
 Also, most times you don't need all selected rows, just one.
 So why always return a list with all selections?
 
 In sg, you can read the value, index, all values and all indexes seperately.
 
 # Basic functionality
-
 After ranting about PySimpleGUI excessively, let's dive into SwiftGUI's Table.
 
 A basic layout with a table could look like this:
 ```py
 import SwiftGUI as sg
 
+# Rows of the table
 elements = [
     ["First row", "Second column"],
     ["Second row", "Second column"],
@@ -105,7 +105,7 @@ Tipp: You don't have to pass elements, you could just leave the table it empty.
 
 # Replacing the whole table
 
-You can go the "PySimpleGUI-Mode" and replace the whole table:
+You can go the "PySimpleGUI-way" and replace the whole table:
 ```py
 table.overwrite_table([["Only", "row", "in the table"]])
 ```
@@ -149,7 +149,7 @@ If you ran
 ```py
 elements[0][2] = "3rd column"
 ```
-you'd get an Index-error, because the inner list doesn't contain the index `2`.
+you'd get an index-error, because the inner list doesn't contain the index `2`.
 It's too short.
 
 **The `sg.Table` does not fill empty columns with an empty value, it just stays non-existant.**
@@ -163,7 +163,7 @@ elements = [
     ["Third row", "Second column", ""],
 ]
 ```
-Elements can have different length, but keep in mind that the structure of any row is the same as the passed element.
+Rows can have different lengths, but keep in mind that the structure of any row is the same as the passed element.
 
 `table[0]` returns the 0th row of the table in a list-like object.
 You can do everything with it that you are able to do with normal lists:
@@ -185,7 +185,7 @@ table_row = ["Anything","Else"] # This doesn't work and table_row is now unuseab
 ```
 ![](../assets/images/2025-08-06-14-14-51.png)
 
-Tipp: If you somehow can't use `table[index] = new_row` for any reason (e.g. inside a lambda function), use `table.__setitem__(index, new_row)` instead.
+Tipp: If you can't use `table[index] = new_row` for any reason (e.g. inside a lambda function), use `table.__setitem__(index, new_row)` instead.
 Literally the same method.
 
 ## Adding rows
@@ -194,7 +194,7 @@ Literally the same method.
 ```py
 table.append(["New","Row"]) # Added to the end of the list
 table.extend(
-    [  # Added to the end of the list
+    [  # 2 rows, added to the end of the list
         ["Another","New","Row"],
         ["And","yet another", "one"]
     ]
@@ -214,9 +214,9 @@ It works just like `.insert`, but you pass a list (or any Iterable) of rows inst
 The given index will be the index of the first element.
 All the other elements are inserted after that one.
 
-It doesn't provide performance advantage (yet), the method just calls `.insert` for each element:
+It doesn't provide any performance advantage (yet), the method just calls `.insert` for each element:
 ```py
-    def insert_multiple(self,rows:Iterable[Iterable[Any]], index: int) -> tuple[TableRow, ...]:
+    def insert_multiple(self, rows: Iterable[Iterable[Any]], index: int) -> tuple[TableRow, ...]:
         r = []
         for row in rows:
             r.append(self.insert(row,index))
@@ -238,7 +238,6 @@ del table[0]
 ![](../assets/images/2025-08-06-15-24-21.png)
 
 If you can't use `del table[index]` for any reason (e.g. inside a lambda-function), use `table.__delitem__(index)` instead.
-Does the exact same thing.
 
 # Sorting the list
 
@@ -287,7 +286,7 @@ After clicking `Col3`:\
 **There are a few things to keep in mind with this feature:**
 - Indexes always refer to the table as shown. That means, after sorting, indexes probably refer to different rows. Existing references to rows stay the same.
 - With bigger tables (5000+ elements), sorting can be slow and should be deactivated.
-- Sorting is a one-time-action. Any changes made after sorting, won't be sorted automatically.
+- Sorting is a one-time-action. Any changes made after sorting won't be sorted automatically.
 - The state of the table before sorting is not saved and therefore cannot be restored.
 
 **To deactivate this feature**, pass `sort_col_by_click=False` to the `sg.Table`:
@@ -316,7 +315,7 @@ It does have two more features though.
 By specifying `by_column` (index or title of a column), the sorting function will be applied to "a list that contains only this column's values".
 All the other columns will be ignored.
 
-If you pass a key (function, refer to the docs), that function will not receive a whole row, only that column's value.
+If you pass a key (function, refer to the docs for more info), that function will not receive a whole row, only that column's value.
 
 Example: I'd like to sort the list by the number of digits in the second column (index 1):
 ```py
@@ -350,9 +349,8 @@ layout = [
 ```
 ![](../assets/images/2025-08-06-16-16-18.png)
 
-
 The other difference to normal list-sorting is that you can pass `empty_to_back` (bool), which is `True` by default.
-If `True`, empty strings and None will be placed at the end of the table. `False` places them at front.
+If `True`, empty strings and `None` will be placed at the end of the table. `False` places them at front.
 This is independent of your key-function.
 
 # Filtering the list
@@ -375,32 +373,42 @@ layout = [
 ```
 ![](../assets/images/2025-08-06-16-45-01.png)
 
-When applying the first filter, you enter the "filter-mode".
+When applying a filter, the table enters "filter-mode".
 The state before filtering is saved.
 You can restore it using `.reset_filter()`, which exits the filter-mode and restores the list to the state before filtering.
 
 While in filter-mode, you can't use `.insert`, but `.append`, `.extend`, modifying and deleting rows still works.
-Keep in mind that newly added, or modified rows won't go through the filter again automatically.
+Keep in mind that newly added, or modified rows won't go through the filter automatically.
 
 "Row-moving" methods like `.sort` still work, but will be reset when you call `.reset_filter()`.
 
-Indexes still refer to the actual shown rows, so the same index might refer to a different row after filtering. References don't change though.
+Changing the contents of rows works and won't be undone when exiting filter-mode.
+
+Indexes still refer to the actually shown rows, so the same index might refer to a different row after filtering.
+References don't change though.
 
 `.clear_whole_table` still clears the whole table, not only remaining elements.
 
 ## Chaining filters
 
 Usually, `.filter` applies to all rows, visible or not.
-By passing `only_remaining_rows = True` to the filter method, the filter will not include non-visible filters.
+By passing `only_remaining_rows = True` to the filter method, the filter will not include non-visible rows.
 
-Example: Let's filter for all Values of `Col2` below 10 that are divisible by 2:
+Example: Let's filter for all values of `Col2` below 10 that are divisible by 2:
 ```py
 layout = [
     [
         table := sg.Table(
             elements,
             headings=("Col1", "Col2", "Col3"),
-        ).filter(lambda val:val < 10, by_column=1).filter(lambda val:val%2 == 0, by_column=1, only_remaining_rows=True)
+        ).filter(   # Filter for values under 10
+            lambda val:val < 10, 
+            by_column=1
+        ).filter(   # Filter for values divisible by 2
+            lambda val:val%2 == 0, 
+            by_column=1, 
+            only_remaining_rows=True
+        )
     ]
 ]
 ```
@@ -410,18 +418,21 @@ layout = [
 As stated earlier, you can exit the filter-mode by calling `.reset_filter()` on your table.
 
 However, if you'd like to discard all rows that did not get through the filter, use `.persist_filter()` instead.
+This exists the filter-mode and removes all non-visible rows.
 
 `.filter_mode` is `True`, if the table is in filter-mode.
 
 # Selections
 
-To get the currently selected row, use `.value`, for the index of that row, `.index`.
+To read the currently selected row, use `.value`. 
+For the index of that row, use `.index`.
 
 To change the selection, simply change `.index`, or use `.set_index(index)`.
 
 `.value` returns a reference to the selected row, so modifying it also modifies the row itself.
 
-Example: Let's change `Col1` to "clicked" when a row was clicked. This is the implementation using the event-loop:
+Example: Let's change `Col1` to "clicked" when a row is clicked. 
+This is the implementation using the event-loop:
 ```py
 import SwiftGUI as sg
 import random
@@ -476,17 +487,14 @@ for e,v in w:
 ## Select elements from code
 To select an element, just set `.index` to a valid index.
 
-**Changing the selection by code also throws an event.**
-I'm not sure if this is useful or annoying, but I think it's more useful than annoying.
-Happy to hear your feedback.
+Changing the index via code does not throw an event.
+I changed it in version 0.10.8.
 
 Let's set the index to 0 from the start, to eliminate the chance of no row being selected:
 ```py
 w = sg.Window(layout)
 table.index = 0
 ```
-Since an event is thrown for this row, the key function is called, changing `Col1` to "clicked":\
-![](../assets/images/2025-08-06-17-30-18.png)
 
 ## Multiple selections
 There are 3 selectmodes you can chose from:
@@ -537,7 +545,6 @@ It moves the row at index `from_index` so that it has the index `to_index` after
 If `to_index < from_index`, the row at `to_index` gets pushed to the back.
 
 Let's consider this basic example:
-
 ```py
 import SwiftGUI as sg
 
@@ -559,14 +566,15 @@ layout = [
 ]
 
 w = sg.Window(layout)
-table.move(0, 2)
+table.move(0, 2)    # Move row 0 to the index 2
 
 for e,v in w:
     ...
 ```
 ![](../assets/images/2025-08-06-17-57-04.png)
 
-As you can see, row 0 now has the index 2. Because 0 < 2, row 1 and 2 automatically got their new indexes.
+As you can see, row 0 now has the index 2. 
+Because 0 < 2, row 1 and 2 automatically got their new indexes.
 
 Let's move row 4 to index 2 now:\
 ![](../assets/images/2025-08-06-17-59-27.png)
@@ -575,7 +583,7 @@ Because 4 <! 2, row 2 and 3 got pushed back one index to make space for row 4.
 
 ## Quick moves
 You can use `.move_up(index, n)` and `.move_down(index, n)`, to move the row at a certain index up/down n places.
-n is one by default.
+`n` is 1 by default.
 
 The row won't move "over the edge", so you can e.g. keep "moving up", even when you try to move row 0 to index -1.
 
@@ -585,15 +593,16 @@ You can swap two rows with `.swap(index_1, index_2)`.
 This method probably needs no explanation, but it wasn't as easy to implement as you might think.
 
 # Making the table less laggy
-When adding a lot (3000+) of rows, you might notice the program freezing for a moment.
+When adding a lot (3000+) of rows, you might notice the program freezing for a brief moment.
 It's not a big deal, but the user will probably notice.
 
-Adding a lot more (50000+) rows, the program might even freeze a couple of seconds showing "no response".
+Adding a lot more (50000+) rows, the program might even freeze for a couple of seconds, showing "no response".
 This can be annoying, especially when it slows down the program-startup.
+Always remember that users are usually stupid and might start to panic if the program shows "no response".
 
-SwiftGUI's table-element offers a way to divide the added elements into chunks of elements that get added one-by-one.
+SwiftGUI's table-element offers a way to divide the new rows into chunks of rows that get added one-by-one.
 
-This way, you don't cause one giant lag, but rather a lot of smaller ones.
+This way, you don't cause one giant lag, but rather a series of smaller ones.
 This feels much less annoying for the user.
 
 To use this feature, just call `table.overwrite_table_threaded` instead of `table.overwrite_table`.
@@ -627,29 +636,29 @@ Besides `.overwrite_table_threaded`, the following methods are available as a th
 Tipp: To append to the front of the list, use `insert_multiple_threaded` with `index= 0`.
 
 ## Important! "Interrupting" threaded methods
-There is a big downside to using these "threaded methods", so handle it with care.
+There is a big downside to using these "threaded methods", so handle them with care.
 
 What do you think happens, when the table is currently adding values with these methods and you add some row using a non-threaded method like `.append`?
 
 The results are predictable, but not in an easy way, so I'll only present them simplified.
-While the thread is running, these effects will occur:
+While the thread is running, these effects might/will occur:
 - Adding rows might mess up the row-order
-- **Threaded methods are safe and will run one after another**
+- **Threaded methods are safe to be used together and will run one after another**
 - If the thread crashes, added rows might not actually be added
 - Deleting rows might mess up the row-order, or crash the thread in rare cases
-- Clearing the table (deleting all rows) crashes the thread in most cases
+- Clearing the table (deleting all rows), crashes the thread in most cases
 - Sorting ignores all rows that didn't get added yet
-- Filtering has a good chance of crashing the thread and ignores all rows that didn't get added yet
+- Filtering has a good chance of crashing the thread and ignores all rows that weren't added yet
 - Persisting the filter-view doesn't stop pending rows to be added
 - Moving rows should be safe
 - Updating the look (colors, font, ...) of the table is safe
 - The scrollbar might act somewhat strange while rows are being added
 
-The thread is running, if `table.thread_running` is `True`.
+While the thread is running, `table.thread_running` is `True`.
 
 Follow these rules and you'll be fine using threaded methods:
-- If row-order is important, only use threaded methods to add rows.
-- Deleting rows is safe if you only use `.extend_threaded`.
+- If row-order is important, only use threaded methods to append rows.
+- Deleting rows is safe as long as you only use `.extend_threaded`.
 - If row-order is important, disable `sort_col_by_click`.
 - Don't filter/persist while the thread is running
 
@@ -690,7 +699,7 @@ If you want to add some space above/below the table, put a spacer in the previou
 
 In my experience, this shouldn't be an issue.
 Implementing a solution means more invisible elements slowing down the code and making the codebase messier.\
-So let's call it a feature, not a bug.
+So let's just call it a feature, not a bug.
 
 ## Customization
 There are a couple of options you can use to change the apperance of this element.
@@ -747,7 +756,7 @@ Change these options to configure the row-font:
     font_underline: bool = None,
     font_overstrike: bool = None,
 ```
-For the headings, change these options:
+For the headings, change these options instead:
 ```py
     fonttype_headings: str = None,
     fontsize_headings: int = None,
@@ -756,7 +765,7 @@ For the headings, change these options:
     font_underline_headings: bool = None,
     font_overstrike_headings: bool = None,
 ```
-If you don't specify an option for headings, the row-option will be applied.
+If you don't specify an option for headings, the row-option will be applied instead.
 
 ### Colors
 There are also a couple of colors:
@@ -773,12 +782,12 @@ There are also a couple of colors:
 ```
 Pretty self-explanitory in my opinion, or maybe I'm just getting lazy after writing 660 lines of documentation.
 
-active means selected/clicked.
+"Active" means selected/clicked.
 When headings are clicked, they change color while the mouse is being held down. 
 That color is the active one.
 
 The option `background_color` determines the actual background color of the widget.
 This color shows inside the element-padding and "behind" rows.
-So if there are not enough rows to cover the whole element, remaining space is filled with `background_color`.
+When there are not enough rows to cover the whole element, remaining space is filled with `background_color`.
 
 

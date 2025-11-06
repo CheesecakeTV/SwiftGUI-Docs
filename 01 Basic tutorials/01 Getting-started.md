@@ -241,20 +241,22 @@ There are a couple of ways to set up events:
 - Enabling the default-events for interactive elements like `sg.Input`, `sg.Table`, `sg.Checkbox`, etc.
 - Binding custom events
 - Throwing events manually from a different thread
+- Using a timeout
 - Using the binding decorator
 
 All of these ways have something essential in common: **You have to define a key to throw an event to the event-loop!**
 
-A key is the identifier of an element.
-Think of it like the name of that specific element.
-SwiftGUI does not require you to set keys, but that's more advanced.\
+A key usually is the identifier of an element.
+Think of it like the name of an element.
+Combined with an event, the key becomes the "name" of that event too.\
+SwiftGUI does not require you to set keys in order to throw events, but that's more advanced.
 Let's use keys for now.
 
 Whenever a "keyed-"event gets thrown, `e` ("event") will be set to the corresponding key (See the examples below).
-The loop will then execute once and then wait for the next keyed-event.
+The loop will then execute once.
 
 ## Using buttons, or default events
-A button already comes with a builtin event.
+A button already comes with a builtin event.\
 Just define a key and you are good to go:
 ```py
 import SwiftGUI as sg
@@ -341,6 +343,48 @@ Examples:
 
 How to actually read what was written into the `sg.Input` will be explained later.
 
+## Timeout
+(Since version 0.10.8)
+
+A timeout occurs if no event triggered for some time (default 1 second).
+
+Especially beginners like to utilize this feature, but **I recommend to not use it at all!**\
+Usually, the timeout is used to do something unrelated to it, like running something periodically.
+So, use threading instead.
+
+But I'll let you choose, even if I probably won't like the result.
+
+To activate the timeout, initialize it and give it a key:
+```py
+w = sg.Window(layout).init_timeout(key= "Timeout")
+
+### Additional configurations/actions ###
+
+
+### Main loop ###
+for e,v in w:
+    ... # Some hidden code
+    
+    if e == "Timeout":
+        print("Timeout occured!")
+```
+Now, if no event triggers for one second, the event `"Timeout"` is thrown.
+
+Pass `seconds` to specify how quickly a timeout occurs:
+```py
+w = sg.Window(layout).init_timeout(key= "Timeout", seconds= 3.5)
+```
+Tipp: You shouldn't set this to less than `0.5`.
+
+The timeout can be activated/deactivated by setting `w.timeout_active` to `True`/`False`:
+```py
+    if e == "Timeout":
+        print("Timeout occured!")
+        w.timeout_active = False    # No timeout will occur until this is set to True again
+```
+
+
+
 ## Binding custom events
 This part is a tiny bit more advanced than the rest and can be skipped for now.
 
@@ -387,30 +431,26 @@ You can also pass a value (`w.throw_event(key, value)`), which will be added to 
 
 The value stays in the value-dict until you change it by throwing another event to the same key.
 
-If you use a key that is already "occupied" by an element, the value will not transfer.
-What sounds like a pretty stupid idea can really come in handy, when you want to make your application respond, as if a certain user-input occured.
-Saves a bit of annoying code.
-
 # Reading and writing/changing values
 In SwiftGUI, you can read and write element-values pretty easily.
 
-Reading: `w[key].value`\
-Writing: `w[key].value = new_value`, or `w[key].set_value(new_value)`\
-(`w` is a reference to the window-object)
+Reading: `w[key].value`, or `v[key]`\
+Writing: `w[key].value = new_value`, or `w[key].set_value(new_value)`, or `v[key] = new_value`\
+(`w` is a reference to the window-object, `v` is explained later)
 
 What exactly you are reading/writing depends on the type of element.
 For `sg.Input`-Elements, `w[key].value` returns/changes the text inside the input-element.
 Its type is `str`.
 
-In most cases, the type of `.value` is very obvious.
-But I am adding a lot of typehints, to make it as easy as it gets.
+In most cases, the type of `.value` is obvious.
+But I am still adding a lot of typehints, to make it as easy as it gets.
 
 Universal rule for any element: Reading and writing values always relates to the same thing.
 If reading returns the text inside the element, writing it will change that text.\
 E.g.: Reading the value of a `sg.Listbox` returns the text inside the selected row.
-Changing `.value` of that element chances the text inside the selected row.
+So, changing `.value` overwrites the text in that list-row.
 
-Note that for `w[key]` to work, the element needs a key.
+Note that for `w[key]` to work, the element needs a key.\
 If you don't define a key, that element can't be accessed this way.
 If two elements share the same key (which you shouldn't do, but who am I to judge), only one of these elements will be accessible through `w`.
 
@@ -430,7 +470,7 @@ w = sg.Window(layout)
 my_text.value = "Hello GitHub"
 ```
 
-For better readability, I recommend the "walrus-operator" (Not making up the name).
+For better readability, I recommend using the "walrus-operator" (Not making up the name).
 This code does exactly the same as before:
 ```py
 ### Layout ###
@@ -446,18 +486,19 @@ w = sg.Window(layout)
 my_text.value = "Hello GitHub"
 ```
 
-To make life easier for users transitioning from PySimpleGUI, all "keyed" values are accessible through `v` (`for e, v in w`), something that can be used simmilar to a dictionary.
+To make life easier for users transitioning from PySimpleGUI, all "keyed" values are accessible through `v` (`for e, v in w`).
+`v` is simmilar to a dictionary.
 
 `v[key]` is the same as `w[key].value`, so `v[key] = new_value` does the same as `w[key].value = new_value`.
 
-You can `print(v)`, which will print `v` like a dictionary.
+You can `print(v)`, which prints `v` like a dictionary.
 However, this costs more cpu time than you'd expect, so only do it for debugging.
 
-However, `print(v)` might not contain values that just got updated by `w[key].value = ...`.
-**`v[key]` though is very reliable and always returns the correct value.**
+Also, `print(v)` might not contain values that just got updated by `w[key].value = ...`.
+**`v[key]` on the other hand is very reliable and always returns the correct value.**
 
 (Unnecessary side-rant about PySimpleGUI) In PySimpleGUI, `v` (or `value`) is a normal dictionary that is updated only in the beginning of each loop.
-That means, changing the value of elements won't update `value`.
+That means, in PySimpleGUI, changing the value of elements won't update `v`.
 Doesn't sound like much, but it annoyed the s...wiftGUI out of me.
 
 # Updating the layout

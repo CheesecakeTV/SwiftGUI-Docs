@@ -33,7 +33,7 @@ layout = [
             width= 50,
         ).bind_event(   # Pressing enter should also submit the password
             sg.Event.KeyEnter,
-            key= "Submit"   # This should be the same as pressing the submit-button
+            key= "Submit"   # Same key as the Submit-key
         ),
     ],[
         sg.Button(

@@ -1,21 +1,24 @@
 
 # Custom combined elements
-When using SwiftGUI regularely, you will notice that you implement the same "layout-parts" over and over again.
+When using SwiftGUI regularely, you might end up implementing the same layouts (or layout-parts) over and over again.
 
-Combined elements give you a way to implement these layout-parts once, to use over and over again.
+Combined elements provide a way to turn such layout-parts into its own element, which you can use over and over again.
+It's simmilar to a template, but a lot more powerful.
 
-This tutorial teaches you how to easily create combined elements.
+Additionally, since SwiftGUI version 0.8.0, combined elements have their own key-system.
+That makes creating combined elements as easy as creating a normal window.
 
 ## What is a combined element?
-It's an element that contains multiple "inner" elements.
+It's an element that contains multiple "inner" elements, simmilar to a frame.
+However, unlike a frame, combined elements already have elements inside.
 
-E.g.: `sg.Form` contains multiple `sg.Label`, `sg.Button` and `sg.Input` elements.
-This is a single combined element:\
+E.g.: `sg.Form` contains multiple `sg.Label`, `sg.Button` and `sg.Input` elements:
+
 ![](../assets/images/2025-08-12-14-13-01.png)
 ```py
 layout = [
     [
-        sg.Form(
+        sg.Form(    # Only one element to create the whole layout
             ("Name", "Birthday", "Organization", "Favorite Food"),
             key = "Form",
             submit_button= True,
@@ -26,17 +29,18 @@ layout = [
 ```
 `sg.Form` combines all of these smaller elements into a single big one.
 
-It also offers builtin functionality, like the clear-button, which clears all inputs.
+It also offers internal functionality, like the clear-button, which clears all inputs.
 
 There is (or will be) a tutorial on `sg.Form`, check it out if you want to learn more.
 
 I highly encourage you showing off your combined elements in the [GitHub forum](https://github.com/CheesecakeTV/SwiftGUI/discussions/7#discussion-8484735).
 I'd love to include your element in the SwiftGUI package, if it is useful.
 
-# Even simpler: Layout-template-functions
-If you just want to copy a part of your layout (with minor modifications), you don't need to create a combined element.
+# Even simpler: Template-functions
+A tiny version of combined elements are "template-functions".
+It's nothing SwiftGUI provides, but rather a smart usage of functions.
 
-Instead, create a function that returns said element:
+Let some part of the layout be created by a function and you can recreate it just by calling that function:
 ```py
 import SwiftGUI as sg
 
@@ -70,7 +74,7 @@ for e,v in w:
 To create multiple rows at once, return all rows as a list and add a `*` in front of the function:
 ```py
 def form(texts):
-    _return = []
+    _return = []    # Will contain multiple rows
 
     for text_now in texts:  # Add the rows one-by-one
         _return.append([
@@ -91,32 +95,24 @@ layout = [
     ]
 ]
 ```
-Of course, I'd never include anything like that in SwiftGUI.
-It's quick and dirty, but therefore perfect for quick and dirty layouts.
 
-## Disadvantage of template-functions
-As you can see, every `sg.Input` gets its own key, meaning the value-dict (From `for e,v in w`) will become crowded.
+## When to use template-functions
+As you can see, every `sg.Input` gets its own key, meaning the value-dict (From `for e,v in w`) grows and grows.
 
-Also, if you'd want to use the template again, using the same texts, the value-dict will only contain one of each value.
-You'd have no chance to retrieve the value of both templates.
+Also, you can't (shouldn't) use the same text twice, because keys should be unique in a key-handler (window).
 
-Sure, you can work around that, there are workarounds for everything in Python, but that wouldn't be "quick and dirty", just "dirty".
+I only use template-functions for very small parts of the layout, a single row at max.
+It's quick and dirty.
 
-In contrast, `sg.Form` collects all values of its inputs and saves them to a single key as a dictionary.
-
-Another big disadvantage is how hard it is to add/modify functionality.
-This will become aparrent later.
+For anything bigger, you should definetly create a combined element instead.
 
 # How to create combined elements
-To do anything useful, you need to know how to use key-functions (not so much anymore since SwiftGUI version 0.8.0).
-Check it out in the basic tutorials first.
-
-Combined elements are a little more complicated than template-functions, but nothing too bad.
-
-Let's recreate a basic version of `sg.Form` as an example.
+To demonstrate how to create combined elements, let's recreate `sg.Form` in the following tutorial.
 
 ## First step
-Start by copying the template also found in `Examples/Advanced tutorials/CombinedElementTemplate.py`:
+An easy start is to copy the template found in `Examples/Advanced tutorials/CombinedElementTemplate.py` (main repo).
+
+That example contains pretty much everything combined elements have to offer, so don't worry if it looks complicated at first, you can ignore most of it for now:
 ```py
 from typing import Any, Callable, Iterable, Self
 import SwiftGUI as sg
@@ -136,7 +132,7 @@ class Example(sg.BaseCombinedElement):
         ]
 
         super().__init__(
-            frame= sg.Frame(self._layout),   # You can use any kind of Frame, e.g. LabelFrame
+            sg.Frame(self._layout),   # You can use any kind of Frame, e.g. LabelFrame
             key= key,
             key_function= key_function,
             apply_parent_background_color= apply_parent_background_color,
@@ -189,11 +185,12 @@ class Example(sg.BaseCombinedElement):
 ```
 (Obviously) rename the class to your liking.
 
-You don't have to allow the user to pass `key`, `key_function`, or `apply_parent_background_color`, but these are very common and handled entirely by the super-class.
+`key`, `key_function`, and `apply_parent_background_color` are common options and handled completely by the super-class.
+You don't need to pass them along though.
 
 ## Creating the layout
-As you can see, `super().__init__` requests an `sg.Frame` (or simmilar).
-This frame becomes the actual element behind your combined element.
+As you can see, `super().__init__` requests an `sg.Frame`, or a layout.
+This is gonna be the actual element hidden behind your combined one.
 
 So let's fill up the frame with the layout-part used earlier:
 ```py
@@ -225,7 +222,7 @@ So let's fill up the frame with the layout-part used earlier:
         )
 
         super().__init__(
-            frame=sg.Frame(self._layout),  # You can use any kind of Frame, e.g. LabelFrame or GridFrame
+            sg.Frame(self._layout),  # You can use any kind of Frame, or just pass the layout without a frame
             key=key,
             key_function=key_function,
             apply_parent_background_color=apply_parent_background_color,
@@ -249,8 +246,8 @@ for e,v in w:
 ![](../assets/images/2025-08-12-15-43-11.png)\
 ...but it won't do anything yet.
 
-## Key and key_function (Events)
-If you passed a key to `super().__init__`, the key gets automatically registered into the window.
+## Key and key-function (Events)
+If you passed a key to `super().__init__`, the key gets automatically registered into the window this element is in.
 
 That means, `w[key]` returns the `Example`-Element.
 
@@ -259,29 +256,31 @@ So that already works like every other element.
 
 If provided, the key-functions register too.
 
-However, since there is no way of "naturally" generating an event through a "fake" element, you can use `self.throw_event()` instead.
+However, SwiftGUI doesn't "naturally" know what should cause an event, so you need to throw it manually using `self.throw_event()` instead.
 
 The thrown event works just like any other event.
 If you provided a key, the event gets thrown to the event-loop.
 If you provided key-functions, they will be executed.
 
+Tipp: When some inner element should cause `throw_event()`, just use it as a key-function:
+```py
+    sg.Input(
+        default_event= True,
+        key_function= self.throw_event,
+    ),
+```
+Any event caused by that input is going to cause an event of the combined element.
+
 ## Inner key-management
 Since SwiftGUI version 0.8.0, combined elements have their own internal key-management and event-loop.
-The system itself is pretty complex, but due to SwiftGUIs magic it is very easy to use.
-My fingers bled so yours don't have to.
 
-Every key of the internal layout is not registered to the actual window, but the sub-layout inside the element.
+Each combined element has its own event-"loop" by default.
 
-What does that mean?
+That means, any key "inside" the combined element is not registered in the main window, so `w[key]` doesn't work.
 
-If elements inside the combined element have a key, `w[key]` won't work.
-Also, no event of that element runs through the main event-loop.
+This is explained in detail in Basic tutorial 07 (Additional windows).
 
-Instead, the combined element gets its own "private window" and "private event-loop".
-
-This way, you can use that element multiple times without any key-conflicts.
-
-Example.
+Example:
 
 Let's assign keys to the `sg.Input`-elements, so we can read the inputs.
 We'll also assign a key to the button, so it can throw a keyed-event.
@@ -305,31 +304,31 @@ Instead of the main event-loop, we need to use the internal event-method:
                     anchor="w",
                 ),
                 sg.Input(
-                    key= text_now,
+                    key= text_now,  # Set a key and activate the default event
                     default_event= True,
                 ),
             ])
 
         self._layout.append(    # Add the last row
             [
-                sg.Button("Clear", key= "Clear")
+                sg.Button("Clear", key= "Clear")    # Assign a key
             ]
         )
 
         super().__init__(
-            frame=sg.Frame(self._layout),  # You can use any kind of Frame, e.g. LabelFrame or GridFrame
+            sg.Frame(self._layout),  # You can use any kind of Frame, e.g. LabelFrame or GridFrame
             key=key,
             key_function=key_function,
             apply_parent_background_color=apply_parent_background_color,
         )
 
-    def _event_loop(self, e: Any, v: dict):
+    def _event_loop(self, e: Any, v: dict): # Use this instead of the event-loop
         """An event-loop just for this element. Use self.w to refer to keys inside this element."""
         print(e, v) # Clear {'Organization': 'SwiftGUI', 'Name': 'Eric', 'Clear': 'Clear', 'Birthday': '', 'Favorite Food': ''}
 ```
 When the `clear`-button is clicked, `_event_loop` is called simmilar to the main-loop doing one iteration.
 
-As you can see, the value-dict `v` only contains the elements inside the combined element.
+As you can see, the value-dict `v` of that method only contains the elements inside the combined element.
 
 To access elements by their key, use `self.w[key]` instead of `w[key]`.
 
@@ -367,8 +366,6 @@ for e,v in w:
 ```
 As you can see, the key `Form` is inside the value-dict, but has no value (yet). (As of SwiftGUI version 0.8.0, the value will be the value-dict of the combined element instead.)
 
-This makes sence, how would Python know, which value of which element to use?
-
 ## Defining .value
 ### Getting the value
 The next step is to define what `.value` should return.
@@ -397,7 +394,7 @@ for e,v in w:
     print(v)    # {'Form': 'My value'}
     print() # Empty line
 ```
-Of course, it makes no sence to return `My value` every time.
+Of course, it makes no sense to return `My value` every time.
 An actually useful implementation could be this one:
 ```py
     def _get_value(self) -> Any:
@@ -415,6 +412,8 @@ for e,v in w:
     print(v)    # {'Form': {'Name': 'Eric', 'Birthday': '', 'Organization': 'SwiftGUI', 'Favorite Food': ''}}
     print() # Empty line
 ```
+Since SwiftGUI version 0.8.0, the value of a combined element is the value-dict of the inner layout.
+(Remember, the value-dict gets also passed to `v` in `._event_loop(...)`).
 
 ### Setting the value
 Most elements accept `elem.value = ...`.
@@ -427,7 +426,7 @@ Feel free to check out the implementation of `sg.Form.set_value` for an example.
 
 ## Updating using .update()
 This part explains how to properly integrate `.update(...)` into your combined element.
-Sure, you could just overwrite it, but working with SwiftGUI is easier than working against it.
+This is the proper SwiftGUI-way, but a custom way might be simpler.
 
 The whole SwiftGUI update-routine is quite complicated, but you only need to know a tiny part of it.
 
@@ -453,7 +452,7 @@ That key is dropped, so `kwargs` looks like this now: `{"text": "Hello World"}`.
 **Next**, `someElement._update_default_keys(kwargs)` is called with the remaining kwargs.
 
 **The difference between `.update` and `._update_initial` is that `.update` ignores `None`-values.**
-If it would be the same method, you couldn't annotate `.update` properly.
+If it was the same method, you couldn't annotate `.update` properly.
 
 Consider this example:
 ```py
@@ -462,34 +461,33 @@ def .update(background_color = None, text_color = None):
 ```
 If `.update` acted like `._update_initial` and the user called `.update(text_color = "red")`, `background_color` would be reset to the default/GlobalOptions-value, because its passed value is `None`.
 
-That means, you should call `._update_initial` in `__init__` and `.update` anywhere else.
+That means, you should call `._update_initial` only in `__init__` and use `.update` in other cases.
 An example to this is shown later.
 
-In reality, `.update` removes everything `None` and calls `._update_initial` with all the remaining options.
+Behind the scenes, `.update` removes everything `None` and calls `._update_initial` with all the remaining options.
 
 ### Good practice for ._update_special_key
 This method usually looks something like this:
 ```py
     def _update_special_key(self, key:str, new_val:Any) -> bool|None:
         match key:
-            case "background_color":    # Pick out key
+            case "background_color":    # Pick out a key
                 # Do what you must with that key
                 self._sg_widget.update(background_color = new_val)
             case _:
                 # The key wasn't found in any other case
                 return super()._update_special_key(key, new_val)    # Look in the parent-class
 
-        # The key was found in match-case
+        # The key was found in match-case, so don't process it further
         return True
 ```
-It makes it very convenient to "pick out" keys.
+This makes it very convenient to "pick out" keys.
 Just add a case and the method returns `True` for that key.
 
 ### Adding global options
 You can attach your own global-options-class by setting `defaults = yourClass` (It is included in the template).
 
-There is a dedicated tutorial on how to create global-options-classes, so I won't go into detail.
-
+There is a dedicated tutorial on how to create global-options-classes, so I won't go into detail any further.
 
 ### Calling .update before the window is created
 The element doesn't actually get created in `.__init__`, but when the window is initialized (`w = sg.Window(...)`).
@@ -497,12 +495,13 @@ Sooner or later, you will stumble upon an error in `.update`, because you are tr
 
 Instead of `.update`, you could call `someElement.update_after_window_creation(**kwargs)` instead.
 This method stores the `.update`-call and "re-calls" it when the window is done.
+If the window already exists, the update-call is done instantly.
 
 To test if the window exists from within the element-class, it's easiest to call `hasattr(self, "window")`.
 
 E.g.: You want to update `"background_color"` only if the window exists:
 ```py
-    def _update_special_key(self, key:str, new_val:any) -> bool|None:
+    def _update_special_key(self, key: str, new_val: Any) -> bool|None:
         match key:
             case "background_color":    # Pick out key
                 if not hasattr(self, "window"):
@@ -531,14 +530,14 @@ For default-keys it could look something like this:
 ```
 
 ### Single-time actions once the window exists
-When the window was created, `init_window_creation_done` is called on every single element.
+When the window was created, `init_window_creation_done` is called once on every single element.
 
 When this method gets called, you can be sure that all other elements exist.
 
 Use (overwrite) this method for one-time-calls that require other elements to exist.
 
 ## Good practice for init
-If you can pass a parameter to `__init__` of an element, you can usually pass that option to `.update` too.
+For normal SwiftGUI-Elements, most parameters passed to `__init__` can also be used in `.update(...)`.
 
 That's why all configurations that are safe to change later should be handled by `.update` and only be called in `__init__`.
 
@@ -608,15 +607,15 @@ As an example, here is `__init__` of `sg.Frame`:
             "side":self.defaults.single("alignment",alignment),
         })
 ```
-As you can see, most of the parameters just get passed on to `._update_initial`.
+As you can see, most of the parameters just get passed on to `._update_initial` to be handled by the update-routine.
 
 ## Additional functionality
-As you might have guessed, you can add more methods to `Example` to add some more/higher functionality.
+As you might have guessed, you can add more methods to `Example`.
 
 Let's add a simple method to clear (empty) every input-element:
 ```py
     def clear_input_elements(self):
-        for row in self._layout[:-1]:   # Not the last row, it contains buttons
+        for row in self._layout[:-1]:   # Not the last row, it only contains buttons
             row[1].value = ""   # row[1] is the input of that row
 ```
 
@@ -639,7 +638,7 @@ The solution: Saving/Buffering the method-call and "re-calling" it once the wind
 
 Of course, SwiftGUI's magic offers a very easy way to do that:
 ```py
-    @BaseCombinedElement._run_after_window_creation
+    @sg.BaseCombinedElement._run_after_window_creation
     def clear_input_elements(self):
         for row in self._layout[:-1]:   # Not the last row, it contains buttons
             row[1].value = ""
@@ -656,7 +655,6 @@ myElement.clear_input_elements().do_something_else()
 ```
 
 In SwiftGUI, most methods that "only do something, but don't return anything", return `self` instead.
-
 
 # Conclusion
 I hope you understand the significance of combined elements, especially in bigger layouts.

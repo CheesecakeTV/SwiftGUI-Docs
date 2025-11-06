@@ -2,16 +2,16 @@
 # Bigger / Advanced layouts
 There comes a time when a basic "row-layout", as described in tutorial "01 Getting-started", just isn't enough.
 
-E.g. when you have too many elements.
+Like when you have too many elements.
 The GUI gets too crowded and is neither good looking, nor user-friendly.
 
 Or when you want to place multiple smaller elements besides a single bigger one (like `sg.Listbox`):\
 ![](../assets/images/2025-08-21-10-08-22.png)\
 Since the `sg.Listbox` is only one element in one row, this is not possible without utilizing the functionalities described in this tutorial.
-You can't add "multiple rows to a single row", without using frames.
+You can't add "multiple rows into a single row" without using frames.
 
 # Frames
-The previous example was solved using the element `sg.Frame`.
+The previous example was created using the element `sg.Frame`.
 
 A frame allows you to pack a whole layout into a single element.
 
@@ -20,7 +20,7 @@ The above example consists of two actual layouts, the "outer"/main one (green) a
 ```py
 ### Layout ###
 inner_layout = [
-    [sg.T("Smaller element")],  # Notice how this is a full row (List in the list)
+    [sg.T("Smaller element")],  # Notice how this is a full row (List inside the list)
     [sg.Button("Another smaller element")],
     [sg.T("<-- sg.Listbox")]
 ]
@@ -31,7 +31,7 @@ layout:list[list[sg.BaseElement]] = [
             range(10)
         ),
         sg.Frame(
-            inner_layout,
+            inner_layout,   # Pack the inner layout into the frame
             expand_y=True
         )
     ]
@@ -47,9 +47,9 @@ If you set it to `False` (default), the frame will only be as high as necessary,
 This might be intended for some layouts, your decision.
 
 ## LabelFrame
-There are different kinds of frames (2 at the moment, version 0.5.3).
+There are different kinds of frames (2 since version 0.5.3, 5 since version 0.10.8).
 
-I find `sg.LabelFrame` especially good looking in bigger layouts, because it divides seperate parts of the layout visibly:\
+I find `sg.LabelFrame` especially useful for bigger layouts, because it divides seperate parts of the layout visibly:\
 ![](../assets/images/2025-08-21-10-30-47.png)
 ```py
 layout:list[list[sg.BaseElement]] = [
@@ -57,7 +57,7 @@ layout:list[list[sg.BaseElement]] = [
         sg.Listbox(
             range(10)
         ),
-        sg.LabelFrame(
+        sg.LabelFrame(  # Not a normal frame
             inner_layout,
             text = "LabelFrame",
         )
@@ -72,7 +72,7 @@ To not draw sketchy red borders all the time, I'm going to use `sg.LabelFrame` w
 ## GridFrame
 If you want to arrange your elements in a grid, use `sg.GridFrame` (Added in SwiftGUI version 0.7.6).
 
-Normally, all elements in a row are aligned.
+Usually, all elements in a row are aligned.
 With GridFrames, the elements align in rows AND columns:\
 ![](../assets/images/2025-09-10-14-06-28.png)
 
@@ -104,7 +104,7 @@ As you can see, `Upper left` is centered above `Hii`.
 They form a column.
 
 In row-oriented (normal) layouts, the tallest element decides the height of the row.
-This is also true for grids, but now, in addition, the broadest element decides the width of its column:
+This is also true for grids, but in addition, the broadest element in each column decides the width of that column:
 ![](../assets/images/2025-09-10-14-17-02.png)
 ```py
 grid_contents = [
@@ -122,12 +122,12 @@ grid_contents = [
 The elements are still centered vertically and horizontally.
 
 ## Expanding elements
-In SwiftGUI, every element can only "expand" if it doesn't resize its container.
+In SwiftGUI, every element can only "expand" using `expand` and `expand_y`, if it doesn't resize its container.
 
 E.g. take a look at the previous example (Scrollbar different due to newer version):\
 ![](../assets/images/2025-09-10-13-53-47.png)
 
-Theoretically, the LabelFrame could expand to the top/bottom, because the Listbox makes the row taller.
+Theoretically, the LabelFrame could expand further to the top/bottom, because the Listbox makes the row taller.
 The surrounding frame (or Window) would not need to resize:\
 ![](../assets/images/2025-09-10-14-00-06.png)
 ```py
@@ -139,13 +139,13 @@ layout:list[list[sg.BaseElement]] = [
         sg.LabelFrame(
             inner_layout,
             text = "LabelFrame",
-            expand_y= True
+            expand_y= True, # Make it as tall as possible
         )
     ]
 ]
 ```
 
-However, it can not expand further left/right, because it would expand the window itself.
+However, it can not expand further to the left/right, because it would need to resize the window.
 
 That's why `expand_y` is possible and `expand` does nothing.
 
@@ -173,14 +173,13 @@ layout:list[list[sg.BaseElement]] = [
 ```
 ![](../assets/images/2025-09-10-14-22-00.png)
 
-As you can see, the elements can expand inside their row/colum.
+As you can see, the elements can't expand beyond their row/colum and won't resize them.
 
 The Button `Very Big` has a specified width and height, so it is allowed resize the container (`sg.Gridframe`).
 
 ## Horizontal alignment
 Elements are aligned "center" by default.
 To allign them differently, just pass the option `alignment` to the surrounding frame:\
-![](../assets/images/2025-08-21-10-39-53.png)
 ```py
     sg.LabelFrame(
         inner_layout,
@@ -188,6 +187,8 @@ To allign them differently, just pass the option `alignment` to the surrounding 
         alignment= "left",
     )
 ```
+![](../assets/images/2025-08-21-10-39-53.png)
+
 This only applies to that frame though, containing frames won't be affected.
 
 Since the main window also contains an `sg.Frame`, you can set the alignment for it too:
@@ -223,7 +224,7 @@ And again, this won't affect containing frames, so elements inside the `sg.Label
 To set the alignment for all frames, including the main window, utilize global-options:
 ```py
 ### Global options ###
-sg.GlobalOptions.Frame.alignment = "left"
+sg.GlobalOptions.Frame.alignment = "left"   # All frames should align left by default
 
 ### Layout ###
 inner_layout = [
@@ -259,9 +260,7 @@ This is due to `tkinter`, the main package behind SwiftGUI.
 That's why SwiftGUI has a feature called "background color propagation".
 It basically applies changes to the background-color of a frame to all containing elements with certain properties.
 
-So when changing the background-color of a frame, that frame will update the background-color of contained elements with these certain properties.
-
-Long story short, seamingly transparent elements will change their background-color so they still look transparent.
+So when changing the background-color of a frame, that frame will update the background-color of all contained elements that look transparent.
 
 Example:
 ```py
@@ -286,11 +285,11 @@ layout:list[list[sg.BaseElement]] = [
     ]
 ]
 
-w = sg.Window(layout, alignment="left", background_color="red")
+w = sg.Window(layout, alignment="left", background_color="red") # Color the whole window red
 ```
 ![](../assets/images/2025-08-21-11-01-31.png)
 
-It might not sound that cool, but remember that elements with "open" texts, like `sg.Text` and `sg.Checkbox` also have their own background-color.
+It might not sound that cool, but remember that elements with "open" texts, like `sg.Text` and `sg.Checkbox` also have a background-color.
 
 Without background-color-propagation, the GUI looks like this:\
 ![](../assets/images/2025-08-21-11-03-15.png)
@@ -305,10 +304,10 @@ layout:list[list[sg.BaseElement]] = [
         sg.LabelFrame(
             inner_layout,
             no_label=True,
-            background_color="green"
+            background_color="green"    # Specified, so no bg-color-propagation from the window
         )
     ],[
-        sg.T("Below Frames", background_color="lightblue")
+        sg.T("Below Frames", background_color="lightblue")  # Here too
     ]
 ]
 
@@ -335,7 +334,7 @@ layout:list[list[sg.BaseElement]] = [
 
 w = sg.Window(layout, alignment="left")
 myFrame.update(background_color = "lightblue")  # Frame is blue now
-w.update(background_color = "red")  # Frame is red again
+w.update(background_color = "red")  # Frame is red again :C
 ```
 You can disable that behaviour manually by setting `apply_parent_background_color = False`:
 ```py
@@ -347,7 +346,7 @@ layout:list[list[sg.BaseElement]] = [
         myFrame := sg.LabelFrame(
             inner_layout,
             no_label=True,
-            apply_parent_background_color= False,
+            apply_parent_background_color= False,   # No pg-color-propagation for this element
         )
     ],[
         sg.T("Below Frames")
@@ -366,7 +365,7 @@ For frames, you could also disable changing the color of containing elements by 
     myFrame := sg.LabelFrame(
         inner_layout,
         no_label=True,
-        pass_down_background_color= False,
+        pass_down_background_color= False,  # Don't update contained elements
     )
 ```
 ![](../assets/images/2025-08-21-11-22-10.png)\
@@ -398,7 +397,7 @@ right_tab = sg.Frame([
 layout:list[list[sg.BaseElement]] = [
     [
         sg.Notebook(
-            left_tab,
+            left_tab,   # Put tabs into the notebook
             right_tab,
         )
     ]
