@@ -1,17 +1,19 @@
 
 # Combining events under a single key
-SwiftGUI does not forbid the "duplication" of keys.
+SwiftGUI does not forbid reusing keys.
 Multiple elements and events can have the same key, even if they are in the same key-handler (window).
 
-This opens up some possibilities and some challenges.
+This opens up some possibilities and challenges, which are the topic of this application note.
 
 # Motivation
-Probably the most useful application of duplicated keys is to trigger the same functionality through different events.
+Using the same key for different elements/events allows you to treat them the same in the event-loop.
 
 Example:
 An `sg.Input` next to a `sg.Button`.
 When the button is pressed, something should happen.
 However, when the user presses `enter` inside the input-element, that same thing should also happen.
+
+This is a very common case.
 
 This is how you could do it without key-duplication:
 ```py
@@ -171,4 +173,14 @@ The input-element is still accessible through `w["Input"]` and `v["Input"]`.
 Keep in mind that `w` inside the key-function always refers to the input's key-handler.
 So placing this layout inside e.g. a sub-window, that sub-window receives the event, not the main window.
 
+# Throwing values onto existing keys
+Using `w.throw_event` you can not only throw events, but also pass values to the connected value-dict.
+
+The values are stored in the value-dict under the thrown key.
+
+However, in SwiftGUI, value-dicts are not actual dicts.
+When getting a value (`v[key]`), the value-dict reads the value directly from the widget.
+
+For that reason, writing to a key that is occupied by an element doesn't work.
+Even if you overwrote the value using `throw_event`, `v[key]` still returns the true value of that element.
 
