@@ -87,6 +87,19 @@ layout = [
 
 It's a bit hard to see, but the lower button looks like it is held down, because it is "checked".
 
+## Radiobutton
+Aliases: Radio
+
+The radiobutton is somewhat simmilar to a checkbox, but only one radio of a group can be checked:\
+![](../assets/images/2025-11-12-13-35-25.png)
+
+When `Radio 2` is clicked, `Radio 1` unchecks.
+
+## Scale
+The "opposite" of `sg.Progressbar`:
+Lets the user select a number by sliding a slider:\
+![](../assets/images/2025-11-12-13-38-12.png)
+
 ## Frame
 Aliases: Column
 
@@ -94,32 +107,112 @@ The frame can combine multiple elements into one.
 
 It's crucial for building well-looking GUIs and explained in-depth in basic tutorial 06 (bigger layouts).
 
+## GridFrame
+Usually, elements are ordered in rows.
+Inside a `sg.GridFrame`, elements are also aligned in columns.
+
+It's also explained more detailed in basic tutorial 04 (bigger layouts).
+
+## LabelFrame
+Same as `sg.Frame`, but has a border and a descriptive text:\
+![](../assets/images/2025-11-12-13-28-31.png)
+
 ## Input
 Aliases: In, Entry
 
+The input lets the user enter a text.\
+![](../assets/images/2025-11-12-12-06-06.png)
 
-## Separators (HorizontalSeparator, VerticalSeparator)
-Aliases: HSep, VSep
-
-
-## Spacer
-Aliases: S
-
-To be exact, this is an extended element, but it's so basic, let's keep it here.
+As you already know, the default-event of an input is thrown whenever the input-text changes.\
+An alternative to this is to only throw an event when `return` is pressed:
+```py
+    sg.Input(
+        "Enter your text",
+        key= "Input"
+    ).bind_event(
+        sg.Event.KeyEnter
+    ),
+```
 
 ## Listbox
+The listbox displays a list of texts:\
+![](../assets/images/2025-11-12-12-22-33.png)
+```py
+    sg.Listbox(
+        range(15)
+    )
+```
+The user can select rows by clicking on them, causing the default event, if enabled.
 
+A little known functionality is that you can color specific rows.
+```py
+    sg.Listbox(
+        range(15)
+    ).color_rows(
+        (3,4,7),
+        background_color= "red",
+    )
+```
+![](../assets/images/2025-11-12-12-27-48.png)
+
+However, the coloring disappears when overwriting a colored row.
 
 ## TKContainer
 Aliases: TKWidget
 
+If you know tkinter, you can use this element to add a tkinter widget into the SwiftGUI layout with not too much hassle.
 
 ## TextField
 Aliases: Multiline
 
+The Multiline is basically an input but with multiple lines of text:\
+![](../assets/images/2025-11-12-12-43-25.png)
+
+The tkinter-widget behind this has a loooooot of additional functionality.
+For now (version 0.10.13), these are not implemented in SwiftGUI yet.
+
+One cool thing that is implemented already is the undo-stack.
+When setting `undo = True`, the user can reset previous changes by pressing `Ctrl + z` inside the element.
 
 ## Treeview (WIP)
+The element that gives me the most headache, so I put it off for now (version 0.10.13).
+It will be implemented until version 1.0.0, I promise.
 
+## Notebook
+Aliases: TabGroup
+
+Notebooks let you divide your layout into tabs:\
+![](../assets/images/2025-11-12-13-07-47.png)
+
+## Combobox
+Aliases: Combo
+
+The combobox features a drop-down menu to select a string form a list.
+The selected string is displayed even when the drop-down is closed:\
+![](../assets/images/2025-11-12-13-18-10.png)
+
+![](../assets/images/2025-11-12-13-21-55.png)
+
+## Canvas
+The canvas lets you "draw" structures and layouts very freely:\
+![](../assets/images/2025-11-12-13-26-33.png)
+
+This element is huge and not explained in detail here, but there is an element-tutorial for it.
+
+## Progressbar, ProgressbarVertical
+(Usually) displays a percentage in a bar-graph:\
+![](../assets/images/2025-11-12-13-31-17.png)\
+(3 `sg.Progressbar`)
+
+The vertical version is called `sg.ProgressbarVertical`:\
+![](../assets/images/2025-11-12-13-32-27.png)
+
+# Extended elements
+SwiftGUI offers a couple of elements that contain a single tkinter-widget, but change/extend its functionality drastically.
+
+The definition is up to interpretation.
+E.g. sg.Table is actually made from a ttk.Treeview but modified to something completely different, so it should be categorized as extended.
+It's still closer to a widget-element in my opinion.
 
 ## Table
 A table with one or more columns.\
@@ -133,29 +226,25 @@ I do have to admit that PySimpleGUI's Table has a lower startup-time when adding
 
 You should really check out the detailed documentation on Tables, this element is incredibly useful.
 
-## Notebook
-Aliases: TabGroup
+## Spacer
+Aliases: S
+
+To be exact, this is an extended element, but it's so basic, let's keep it here.
+
+## Separators (HorizontalSeparator, VerticalSeparator)
+Aliases: HSep, VSep
+
+## FileBrowseButton
+A button that opens a file-dialogue when clicked.
+
+## ColorChooserButton
+A button that opens a color-chooser-menu when clicked.
 
 ## Image
 Simple widget to display an image.
 
 ## ImageButton
 Button with an image instead of a text.
-
-# Elements with extended functionality
-SwiftGUI offers a couple of elements that contain a single tkinter-widget, but change/extend its functionality drastically.
-
-The definition is up to interpretation.
-E.g. sg.Table is actually made from a ttk.Treeview but modified to something completely different, so it should be categorized as extended.
-It's still closer to a widget-element in my opinion.
-
-## FileBrowseButton
-A button that opens a file-dialogue when clicked.
-
-
-## ColorChooserButton
-A button that opens a color-chooser-menu when clicked.
-
 
 
 # Combined elements
