@@ -1,38 +1,98 @@
 
-# WIP
-
-Still working on this tutorial.
-
-Best to ignore it for now.
-
-Preview every element by calling `sg.Examples.preview_all_elements()`.
 
 # Elements overview
+Tipp: Preview every element by calling `sg.Examples.preview_all_elements()`.
 
-This tutorial gives you an overview over all the available SwiftGUI-elements.
+This tutorial gives you a brief overview over all the available SwiftGUI-elements.
 
 Most of these elements can do much more than I show in this tutorial, so it pays off to read the corresponding element-tutorials.
 
+SwiftGUI-elements are categorized into 3 groups:
+- Widget elements: Elements containing only a single tkinter-widget that is used as tkinter intends to
+- Extended elements: Elements containing only a single tkinter-widget that is used significantly different to tkinters intention
+- Combined elements: (Exclusive to SwiftGUI) Elements containing multiple tkinter-widgets
+
+All screenshots in this tutorial use the theme `sg.Themes.FourColors.Emerald`.
+
 # Widget-elements
-This chapter covers all "non-combined" elements, which contain only a single tkinter-widget.
+Tkinter, the package behind SwiftGUI already offers a lot of elements (called widgets).
+
+Widget-elements are basically just a raw tkinter-widget, maybe with some custom, higher-level functionality.
+
+These elements should be simmilar for most GUI-libraries based on tkinter.
 
 ## Text
 Aliases: T, Label
 
-Displays a text. Nothing more, nothing less.
+Displays a text. Nothing more, nothing less:\
+![](../assets/images/2025-11-12-10-58-44.png)
 
-**Elements that have any text in them usually contain all options of this element**, so they are explained a bit more detailed.
+Something I like to do is to set the relief to `groove`, so it looks like a value-display:\
+![](../assets/images/2025-11-12-11-01-06.png)
+```py
+    sg.T("14.2 °C", relief= "groove", width= 10, anchor= "center")
+```
 
 ## Button
+A button that can be clicked:\
+![](../assets/images/2025-11-12-11-03-19.png)
 
+The only element with its default-event enabled without specifying.
+
+There is a little known functionality:
+Setting `repeatdelay` and `repeatinterval`, the button will repeat its press when the user holds it down.
+
+Try this out:
+```py
+import SwiftGUI as sg
+import time
+
+sg.Themes.FourColors.Emerald()
+
+layout = [
+    [
+        sg.Button(
+            "Press me",
+            key= "Button",
+            repeatdelay= 400,
+            repeatinterval= 200,
+        )
+    ]
+]
+
+w = sg.Window(layout, padx=30, pady=30)
+
+for e, v in w:
+    print(e, v)
+```
+If you hold down the button, it will start to repeat after 400 ms and simulate a press each 200 ms.
 
 ## Checkbox
 Aliases: Check, Checkbutton
 
+Something the user can "check" and "uncheck" by clicking on it:\
+![](../assets/images/2025-11-12-11-14-32.png)
+
+You can also make it look like a button setting `check_type = "button"`:\
+![](../assets/images/2025-11-12-11-16-35.png)
+```py
+layout = [
+    [
+        sg.Checkbox("Check", check_type= "button", width= 8)
+    ],[
+        sg.Checkbox("Checked", default_value= True, check_type= "button", width= 8)
+    ]
+]
+```
+
+It's a bit hard to see, but the lower button looks like it is held down, because it is "checked".
 
 ## Frame
 Aliases: Column
 
+The frame can combine multiple elements into one.
+
+It's crucial for building well-looking GUIs and explained in-depth in basic tutorial 06 (bigger layouts).
 
 ## Input
 Aliases: In, Entry
