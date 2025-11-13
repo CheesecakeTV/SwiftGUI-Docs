@@ -139,6 +139,18 @@ for e, v in w:
 ```
 ![](../assets/images/2025-11-08-19-53-01.png)
 
+# Value
+`.value` is of the type `bool` and returns weather the specific radio-button is checked or not.
+
+To check a radio-button from the backend, call `.select()`.
+Uncheck by calling `.deselect()`.
+
+`.value = True` is equal to `.select()`, likewise `.value = False` equals `.deselect()`.
+
+When a radio-button is selected, all other buttons from that group are automatically deselected.
+
+You shouldn't deselect radio-buttons, but rather select a different one.
+
 # Options
 ## default_value
 Set this to `True` to select this radiobutton by default.
@@ -199,4 +211,9 @@ Options related to `sg.Button`:
 - underline
 - expand
 - expand_y
+
+# Flashing
+Call `.flash()` to make the radiobutton flash a couple of times.
+
+If the button is displayed in the classical way, only the "dot" flashes.
 
