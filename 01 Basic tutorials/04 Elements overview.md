@@ -4,6 +4,7 @@
 Tipp: Preview every element by calling `sg.Examples.preview_all_elements()`.
 
 This tutorial gives you a brief overview over all the available SwiftGUI-elements.
+Just read over it quickly so you have an idea of what's possible.
 
 Most of these elements can do much more than I show in this tutorial, so it pays off to read the corresponding element-tutorials.
 
@@ -193,6 +194,15 @@ The selected string is displayed even when the drop-down is closed:\
 
 ![](../assets/images/2025-11-12-13-21-55.png)
 
+## Spinbox
+Aliases: Spin
+
+Spinboxes are suprisingly simmilar to comboboxes, but instead of a dropdown-menu, the user needs to cycle through the values:\
+![](../assets/images/2025-11-13-18-44-43.png)
+
+Even though this element is usually used with numbers, strings are fine too:\
+![](../assets/images/2025-11-13-18-58-15.png)
+
 ## Canvas
 The canvas lets you "draw" structures and layouts very freely:\
 ![](../assets/images/2025-11-12-13-26-33.png)
@@ -216,39 +226,124 @@ It's still closer to a widget-element in my opinion.
 
 ## Table
 A table with one or more columns.\
-Probably the best element of them all.
+My absolute, personaly favorite element of SwiftGUI.
 
-Also actually an extended Element, but it fits better in this category in my opinion.
+It has a ton of high-level functionality that is pretty unique to SwiftGUI.
+
+Example: By default, clicking on a column header sorts the table alphabetically by that column.
 
 ![](../assets/images/2025-08-06-12-16-53.png)
 
-I do have to admit that PySimpleGUI's Table has a lower startup-time when adding a lot of rows, but SwiftGUI's Table easily has the better performance at runtime.
+I do have to admit that PySimpleGUI's Table has a lower startup-time when adding a lot of rows.
+However, SwiftGUI's table exceeds at everything else and has a much lower runtime-performance than PySimpleGUI's.
 
-You should really check out the detailed documentation on Tables, this element is incredibly useful.
+You should really check out the detailed documentation on Tables.
 
 ## Spacer
 Aliases: S
 
-To be exact, this is an extended element, but it's so basic, let's keep it here.
+An "invisible" element with a certain size.
+This is used to add space between rows/elements:\
+![](../assets/images/2025-11-13-19-05-24.png)
 
 ## Separators (HorizontalSeparator, VerticalSeparator)
 Aliases: HSep, VSep
 
+A line to divide things visibly:\
+![](../assets/images/2025-11-13-19-06-20.png)
+
 ## FileBrowseButton
 A button that opens a file-dialogue when clicked.
+
+Looks like a normal button, so no screenshot.
 
 ## ColorChooserButton
 A button that opens a color-chooser-menu when clicked.
 
+The menu is part of your operating system.
+This is how it looks on (German) windows 10:\
+![](../assets/images/2025-11-13-19-09-48.png)
+
+When you pick a color, the color of that color-chooser-button changes:\
+![](../assets/images/2025-11-13-19-11-53.png)
+
 ## Image
-Simple widget to display an image.
+Simple widget to display an image:\
+![](../assets/images/2025-11-13-19-18-59.png)
+
+SwiftGUI has a builtin functionality to resize images easily:\
+![](../assets/images/2025-11-13-19-23-03.png)
+```py
+sg.Image("Sym3.png", image_width=25),
+sg.Image("Sym3.png", image_width=50),
+sg.Image("Sym3.png", image_width=75),
+```
+
+Tipp: This site has a ton of open-source icons:
+https://icon-sets.iconify.design
 
 ## ImageButton
-Button with an image instead of a text.
+A button with an image:\
+![](../assets/images/2025-11-13-19-26-03.png)
 
+Can also have text next to the image:\
+![](../assets/images/2025-11-13-19-28-02.png)
+
+## TabFrame
+Just a frame that makes a lot of things easier dealing with `sg.Notebook`s.
 
 # Combined elements
 SwiftGUI offeres a couple of "combined" elements that consist of multiple SwiftGUI-elements.
 
-## Form (WIP)
+Tipp: It's amazingly simple to create your own custom elements.
+There is a tutorial on it under "Advanced Tutorials".
+
+## Form
+One or more rows of text-input-combinations, with a bit of higher functionality:\
+![](../assets/images/2025-11-13-19-39-36.png)
+```py
+layout = [
+    [
+        sg.Form(
+            ["Name", "City", "Age"],
+            submit_button= True,
+            big_clear_button= True,
+        )
+    ]
+]
+```
+
+## Console
+Something simmilar to a console-window.
+You can input text on the bottom and send it by pressing `enter`:\
+![](../assets/images/2025-11-13-19-44-40.png)
+
+The console has a print-function that can be used pretty much the same as the normal `print(...)`.
+
+You can even go one step further and overwrite the builtin print function:
+```py
+import SwiftGUI as sg
+
+sg.Themes.FourColors.Emerald()
+
+layout = [
+    [
+        console := sg.Console(width= 50, height= 20)
+    ]
+]
+
+w = sg.Window(layout, padx=30, pady=30)
+
+print = console.print   # Overwrite the builtin print-method
+print("Hi from the console")
+
+for e, v in w:
+    print(e, v)
+```
+
+## MultistateButton
+A group of buttons that works simmilar to a group of radio-buttons:\
+![](../assets/images/2025-11-13-20-24-31.png)
+
+It looks a bit better than radiobuttons and has a single key for all buttons combined.
 
