@@ -97,7 +97,7 @@ In "disabled" state, the element does not respond to events.
 
 In "hidden" state, the element is hidden and unresponsive.
 
-## Normal - active- disabled
+## Normal - active - disabled
 When the mouse is over a canvas-element, that element is considered "active".
 Setting its state to "disabled", will prevent it from being "active".
 
