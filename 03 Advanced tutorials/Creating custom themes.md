@@ -100,7 +100,7 @@ These color-maps consist of different colors that look well together.
 I got the ones used in SwiftGUI from [here](https://colorhunt.co).
 
 SwiftGUI has a theme-template for themes that only change 4 different colors.
-There are also a lot of pre-made themes from that template.
+Most of the provided themes are made from this template.
 
 Apply a four-colors-theme like this:
 ```py
@@ -120,8 +120,11 @@ Jungle()    # Apply theme
 You can't enter color-names like `"blue"`, only color-codes.
 Also, don't add `#` in front of the color-code.
 
+Using this template is a lot easier than creating a full theme.
+Not to forget, if elements are added to SwiftGUI, I'll update the template for you.
+
 ### Well looking color-combinations
-Not all good looking color-combination also work well for GUIs.
+Not all good looking color-combination also work well using the template.
 In fact, most of them don't.
 
 Follow these guidelines when chosing the colors to maximize your chance of creating something good-looking:
