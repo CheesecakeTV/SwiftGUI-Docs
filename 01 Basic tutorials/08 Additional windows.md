@@ -183,7 +183,7 @@ print("Answer:", Example("How are you today?"))
 ```
 This looks very strange, especially to intermediate Python-programmers.
 
-How can the creating of an `Example`-object return a value?
+How can creating an `Example`-object produce something other than an `Example`-object?
 
 But yes, `Example(...)` actually returns a string, not an `Example`-object.\
 SwiftGUI-magic!
@@ -191,7 +191,7 @@ SwiftGUI-magic!
 ## Typehints
 There is one minor, yet annoying downside to this.
 
-Many IDEs, like PyCharm won't recognize that `Example(...)` might return anything but an `Example`-object, possibly resulting in warnings:\
+Many IDEs, like PyCharm, won't recognize that `Example(...)` might return anything but an `Example`-object, possibly resulting in warnings:\
 ![](../assets/images/2025-09-26-13-41-54.png)
 
 To counter this, I'm afraid, you'll have to commit an atrocity:\
@@ -205,23 +205,24 @@ I found no other way to do this.\
 Happy about any ideas.
 
 ## Default return
-By default, if the user closes the window, `None` is returned.
+By default, if the user closes the window himself, `None` is returned.
 
-That can be nasty, especially if your code depends on the usual return-type.
-If you expect e.g. `list`, `None` could crash your code.
+That can be annoying if your code depends on the return-type.
+If you expect e.g. a list, `None` could crash your code.
+An additional check is needed which I am really trying to avoid.
 
-To return something else instead of `None`, pass `default` to `super().__init__(...)`:
+So, to return something other than `None` in that case, pass `default` to `super().__init__(...)`:
 ```py
     super().__init__(layout, default= "")
 ```
-Just remember, that `default` will be returned, even if you intentionally try to "return" `None`.
+Just note that `default` will be returned, even if you intentionally try to "return" `None`.
+To clarify, **`self.done(None)` won't return `None`, but the default value!**
 
 ## Some considerations
 Popups created this way are still `sg.SubWindow`s.
 As with other subwindows, when creating one before creating `sg.Window`, the popup will turn into the main window.
 
-Also, popups created this way will be blocking, meaning they'll suspend the user-events of all other windows, while open.
-Otherwise, that whole return-functionality wouldn't work.
+Also, popups created this way will be blocking, meaning they'll suspend the events of all other windows, while open.
 
 Oh, and by the way, `super().__init__(...)` passes all defined arguments to the underlying sub-window.
 This way, you could remove the titlebar, set an icon, etc.
@@ -230,7 +231,7 @@ This way, you could remove the titlebar, set an icon, etc.
 In SwiftGUI, sub-windows can do anything normal windows can (except an event-loop that uses `for`).
 
 ## Somewhat-event-loop
-You can still have a fully functional event-loop for sub-windows, if you don't loop, but use a function instead:
+You can still have a fully functional event-"loop" for sub-windows, but it's a function now:
 ```py
 import SwiftGUI as sg
 
@@ -268,32 +269,36 @@ sw = sg.SubWindow(another_layout, event_loop_function=sw_loop)
 for e,v in w:   # main loop
     print(e,v)
 ```
-It was already mentioned at the end of the previous tutorial.
+If you are unsure about this, read the basic tutorial 07 (Separate key-systems) again.
 
-## Window-order
+## A single main window
 You can't have multiple `sg.Window`s at once.
+Multiple `sg.SubWindow` intended, but not `sg.Window`.
 If you try, an error will occur.
 
-However, for a sub-window to exist, it needs an active (non-closed) `sg.Window`.
-If the window is closed, all the sub-windows will close too.
+However, for a sub-window to exist, an `sg.Window` needs to exist.
+This window can be called "main window".
 
-Pro-tipp: `sg.main_window()` always returns the currently active window.
+**If the main window is closed, all sub-windows close too.**
 
-Sometimes, you can't be sure if a sub-window is really opened after the main window is created.\
-E.g.: Popups.
+Pro-tipp: `sg.main_window()` always returns the current main window.
+
+Sometimes, you can't be sure if a sub-window is opened before or after the main window is created.\
+E.g.: Popups.\
 What if the user wants to open a popup before creating a window?
 
-For that reason, `sg.SubWindow` **will turn into an actual window if none is present**.
+For that reason, `sg.SubWindow` **will turn into the main window if none is present**.
 
 So, if you are unsure, create a sub-window.
 
 ### Very important!
 This can cause funny problems.
 
-Remember, if the window is closed, all sub-windows close too.
+Remember, if the main window is closed, all sub-windows close too.
 
-So, if you open multiple popups at once without a pre-made main window, closing the first popup, closes all the others too.
+So, if you open multiple popups at once without a pre-made main window, closing the first popup will close all the others too.
 
-If you are unsure, if no window/subwindow is active when creating the actual main window, call `sg.close_all_windows()` before.
+If you really want to make sure that you are creating the main window, call `sg.close_all_windows()` first.
+It closes all existing windows.
 
 
