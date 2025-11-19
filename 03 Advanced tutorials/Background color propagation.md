@@ -4,6 +4,8 @@ The functionality is still up-to-date.
 # Background color propagation
 This feature took me 2 very annoying days to properly implement, so please appreciate it.
 
+It's a feature you probably didn't even noticed, because it feels so natural.
+
 Every frame has its own background-color, they are not actually transparent - unfortunately.\
 This is due to `tkinter`, the main package behind SwiftGUI.
 
@@ -35,11 +37,12 @@ layout:list[list[sg.BaseElement]] = [
     ]
 ]
 
-w = sg.Window(layout, alignment="left", background_color="red") # Color the whole window red
+w = sg.Window(layout, alignment="left", background_color="red") # Color the whole window(-frame) red
 ```
 ![](../assets/images/2025-08-21-11-01-31.png)
 
-It might not sound that cool, but remember that elements with "open" texts, like `sg.Text` and `sg.Checkbox` also have a background-color.
+It might not sound that necessary, but remember that elements with "open" texts, like `sg.Text` and `sg.Checkbox` also seem to have a transparent background.
+Well, they don't.
 
 Without background-color-propagation, the GUI looks like this:\
 ![](../assets/images/2025-08-21-11-03-15.png)
@@ -54,7 +57,7 @@ layout:list[list[sg.BaseElement]] = [
         sg.LabelFrame(
             inner_layout,
             no_label=True,
-            background_color="green"    # Specified, so no bg-color-propagation from the window
+            background_color="green"    # Specified, so no BCP for this element
         )
     ],[
         sg.T("Below Frames", background_color="lightblue")  # Here too
@@ -65,8 +68,8 @@ w = sg.Window(layout, alignment="left", background_color="red")
 ```
 ![](../assets/images/2025-08-21-11-09-17.png)
 
-However, **when using `.update(background_color = ...)`, the color-propagation won't be disabled**.
-The background-color will still change, when a containing frame updates:
+However, **when using `.update(background_color = ...)`, the BCP won't be disabled**.
+The background-color will still change when a containing frame updates:
 ```py
 layout:list[list[sg.BaseElement]] = [
     [
@@ -96,7 +99,7 @@ layout:list[list[sg.BaseElement]] = [
         myFrame := sg.LabelFrame(
             inner_layout,
             no_label=True,
-            apply_parent_background_color= False,   # No pg-color-propagation for this element
+            apply_parent_background_color= False,   # No BCP for this element
         )
     ],[
         sg.T("Below Frames")
@@ -105,7 +108,7 @@ layout:list[list[sg.BaseElement]] = [
 
 w = sg.Window(layout, alignment="left")
 myFrame.update(background_color = "lightblue")  # Frame is blue now
-w.update(background_color = "red")  # Frame doesn't change
+w.update(background_color = "red")  # Frame doesn't change color :D
 ```
 ![](../assets/images/2025-08-21-11-21-06.png)\
 (That blue line next to the frame is a very niche, known bug I'm going to fix sooner or later, version 0.5.3 atm.)
@@ -120,3 +123,5 @@ For frames, you could also disable changing the color of containing elements by 
 ```
 ![](../assets/images/2025-08-21-11-22-10.png)\
 You'll probably never need to do that, but hey, free will and stuff.
+
+

@@ -253,10 +253,10 @@ w = sg.Window(layout)
 ![](../assets/images/2025-08-21-10-45-12.png)
 
 ## Background color propagation
-This part of the tutorial was moved to the advanced tutorials.
+This part of the tutorial was moved to its own advanced tutorial.
 
 # Notebook (Tabview)
-**Notebooks look A LOT better now (version 0.10.3), compared to the following images**. 
+**Notebooks look A LOT better now (version 0.10.3), compared to back when I wrote this tutorial.
 
 The `sg.Notebook`, (`sg.Tabview` in PySimpleGUI) helps to deal with too many elements by not showing all at once:\
 ![](../assets/images/2025-08-21-11-39-21.png)\
@@ -281,7 +281,7 @@ right_tab = sg.Frame([
 layout:list[list[sg.BaseElement]] = [
     [
         sg.Notebook(
-            left_tab,   # Put tabs into the notebook
+            left_tab,   # Put the tabs into the notebook
             right_tab,
         )
     ]
@@ -289,54 +289,14 @@ layout:list[list[sg.BaseElement]] = [
 
 w = sg.Window(layout)
 ```
-As you can see, `sg.Notebook` takes frames (Any type of frame, `sg.LabelFrame` works aswell) and organizes them in tabs.
+As you can see, `sg.Notebook` takes frames and organizes them in tabs.
+The key of that frame becomes the text on the tab.
 
-To set proper names for the tabs, the containing frames need keys.
-If a key is available, it will be used for the name:
-```py
-### Layout ###
-left_tab = sg.Frame([
-    [
-        sg.Listbox(
-            range(10)
-        ),
-    ]
-], key= "left")
+## TabFrame
+The `sg.TabFrame` is a type of frame that makes working with `sg.Notebook` much easier.
+You should always use `sg.TabFrame` for notebooks.
 
-right_tab = sg.Frame([
-    [sg.T("Smaller element")],
-    [sg.Button("Another smaller element")],
-    [sg.T("<-- sg.Listbox")]
-], key= "right")
-
-layout:list[list[sg.BaseElement]] = [
-    [
-        sg.Notebook(
-            left_tab,
-            right_tab,
-        )
-    ]
-]
-```
-![](../assets/images/2025-08-21-11-45-59.png)
-
-Since this might be a little "unconfortable", you can overwrite the name.
-To do that, pass a dictionary containing which frames to "rename":
-```py
-    sg.Notebook(
-        left_tab,
-        right_tab,
-        tab_texts= {
-            "left": "Fancy left tab-name"
-        }
-    )
-```
-![](../assets/images/2025-08-21-11-49-47.png)
-
-There will be a better way to set names, I promise (version 0.5.3).\
-1-2 month later: There is a better way now called `sg.TabFrame` (version 0.10.3).
-
-An `sg.TabFrame` takes the option `text`, which will be used as the tab-text, independent of its key:
+An `sg.TabFrame` accepts the option `text`, which will be used as the tab-text, independent of its key:
 ```py
 left_tab = sg.TabFrame([
     [
@@ -344,7 +304,7 @@ left_tab = sg.TabFrame([
             range(10)
         ),
     ]
-], key= "left_frame", text= "left")
+], key= "left_frame", text= "left") # Specify the text right here in the element
 
 right_tab = sg.Frame([
     [sg.T("Smaller element")],
@@ -364,13 +324,16 @@ layout:list[list[sg.BaseElement]] = [
 ![](../assets/images/2025-10-19-20-57-19.png)\
 (Told you notebooks looked better now)
 
+It you don't want the tab-frame to register its key, don't define `key`, but `fake_key`.
+The notebook won't see a difference, but the element still has no key.
+
 `sg.TabFrame` features more useful functionality when working with notebooks, which won't be covered by this tutorial.
 
 `sg.Notebook` also has an event-system.
 It can throw an event when the tab changes, but also throw specific events depending on the selected tab.
 You may also change the opened tab manually.
 
-Since this tutorial is ment to be mainly about layouts, this is explained in the element-tutorial for `sg.Notebook`.
+Since this tutorial is ment to be mainly about layouts, you'll find the details in the element-tutorial for `sg.Notebook`.
 
 # Separators
 `sg.HorizontalSeparator` and `sg.VerticalSeparator` are basically just horizontal/vertical lines:\
@@ -484,7 +447,7 @@ w = sg.Window(layout)
 
 There is no "native" way of aligning elements to the bottom of a frame (yet, version 0.5.3)
 
-However, if there were an invisible element that took as much vertical (y) space as possible, it would push all other elements down.
+However, if there was an invisible element that took as much vertical (y) space as possible, it would push all other elements down.\
 You probably already know what I am getting at:
 ```py
 inner_layout = [
@@ -553,121 +516,4 @@ What a mess.
 
 This is just a proof of concept, don't do that.
 
-# Separate event-loops (Sub-layouts)
-GUIs with more elements don't only get crowded visually, but also in their code.
-
-Especially when using a lot of keys, new/unused keys are harder and harder to find.
-Your keys will get longer and longer, which kinda defies the purpose of using an event-loop all together.
-
-That's why SwiftGUI offers a way to divide the main layout into sub-layouts (different to frames), which each have their own key-system and event-loop.
-
-This way, you can use the same key multiple times in an application and un-clutter your event-loop.
-
-Pro-tipp: If you want to copy/reuse parts of the layout, the best way to do so is to create a custom combined element.\
-This topic has its own tutorial under the advanced topics: [Custom combined elements](https://github.com/CheesecakeTV/SwiftGUI-Docs/blob/0dfa1a40be07e0345a5e8e3817a9d66ecb58168b/03%20Advanced%20tutorials/Custom%20combined%20elements.md)
-
-Other event-loops are not actually a loop, but a function:
-```py
-def other_loop(e, v):
-    ...
-```
-To assign the loop to some part of your layout, put that part in some type of frame and surround it by an `sg.SubLayout`:
-```py
-import SwiftGUI as sg
-
-sg.Themes.FourColors.Emerald()
-
-def other_loop(e, v):
-    print("Other loop:", e, v)
-
-other_layoutpart = sg.LabelFrame([
-    [
-        sg.Button("Button1", key="Button1"),
-        sg.Button("Button2", key="Button2"),
-        sg.Button("Button3", key="Button3"),
-    ]
-], text= "Other layout-part")
-
-layout = [
-    [
-        sg.SubLayout(
-            other_layoutpart,
-            event_loop_function= other_loop,
-        )
-    ],[
-        sg.Spacer(height= 15)
-    ],[
-        sg.Button("Button1", key="Button1"),    # Same keys as the buttons above
-        sg.Button("Button2", key="Button2"),
-        sg.Button("Button3", key="Button3"),
-    ]
-]
-
-w = sg.Window(layout)
-
-for e,v in w:
-    print("Loop:", e, v)
-```
-![](../assets/images/2025-09-19-17-23-03.png)
-
-When pressing buttons in the sub-layout, `other_layout` will be called.
-Pressing other buttons, executes the main loop (`for e,v in w`), like you're already used to.
-
-## Accessing elements and values inside sub-layouts
-Remember, `w[key]` returns the element with that key.
-
-With sub-layouts, you have to use the sub-layout-element instead of `w`:
-```py
-        my_sublayout := sg.SubLayout(
-            other_layoutpart,
-            event_loop_function= other_loop,
-        )
-
-...
-
-w = sg.Window(layout)
-my_sublayout["Button2"].value = "Works like a charm!"
-```
-![](../assets/images/2025-09-19-17-32-33.png)
-
-Access the value-dict of the sub-layout by calling `my_sublayout.value`.
-
-If you don't want to use an additional variable for the sub-layout, just set a key for it like with any other element:
-```py
-        sg.SubLayout(
-            other_layoutpart,
-            event_loop_function= other_loop,
-            key= "Sublayout"
-        )
-
-...
-
-w = sg.Window(layout)
-w["Sublayout"]["Button2"].value = "Works like a charm!"
-```
-This way, the main value-dict also contains the value-dict of the sub-layout.
-
-In this example, `v` of the main loop looks like this:\
-`{'Button1': 'Button1', 'Sublayout': {'Button1': 'Button1', 'Button3': 'Button3', 'Button2': 'Works like a charm!'}, 'Button3': 'Button3', 'Button2': 'Button2'}`.
-
-Notice that the sub-layout provided its own value-dict as its "value".
-
-## Chaining sub-layouts
-As you might have guessed, you can place sub-layouts inside other sub-layouts.
-
-This way, you could utilize a tree-like key structure:
-```py
-w["sublayout"]["additional_sublayout"]["subsubsublayout"]["Button1"].value = "Why would anyone do that?"
-```
-Not saying you should, but you could.
-
-## Using a function as the main event-loop
-If you like these "event-loop-functions" better than the normal event-loop, you may pass a function to the main window too:
-```py
-w = sg.Window(layout, event_loop_function= other_loop)
-```
-Now, the main-loop is disabled and only `other_loop` will be used.
-
-The main-loop still blocks, but won't react to events.
-When the window is closed, the loop terminates like usual.
 
