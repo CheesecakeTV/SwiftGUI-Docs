@@ -13,9 +13,9 @@ You can't add "multiple rows into a single row" without using frames.
 # Frames
 The previous example was created using the element `sg.Frame`.
 
-A frame allows you to pack a whole layout into a single element.
+A frame allows you to handle a whole layout like a single element.
 
-The above example consists of two actual layouts, the "outer"/main one (green) and a smaller "inner" one (red):\
+The above example consists of two layouts, the "outer"/main one (green) and a smaller "inner" one (red):\
 ![](../assets/images/2025-08-21-10-13-47.png)
 ```py
 ### Layout ###
@@ -25,7 +25,7 @@ inner_layout = [
     [sg.T("<-- sg.Listbox")]
 ]
 
-layout:list[list[sg.BaseElement]] = [
+layout:list[list[sg.BaseElement]] = [   # Main layout
     [
         sg.Listbox(
             range(10)
@@ -70,22 +70,22 @@ To not draw sketchy red borders all the time, I'm going to use `sg.LabelFrame` w
 ![](../assets/images/2025-08-21-10-37-10.png)
 
 ## GridFrame
-If you want to arrange your elements in a grid, use `sg.GridFrame` (Added in SwiftGUI version 0.7.6).
+If you want to arrange your elements in a grid, use `sg.GridFrame` instead (Added in SwiftGUI version 0.7.6).
 
-Usually, all elements in a row are aligned.
+Usually, all elements are aligned in rows.
 With GridFrames, the elements align in rows AND columns:\
 ![](../assets/images/2025-09-10-14-06-28.png)
 
 ```py
 grid_contents = [
     [
-        sg.Button("Upper left"),
-        sg.Button("Hi"),
-        sg.Button("3rd column")
+        sg.Button("Upper left"),    # First column
+        sg.Button("Hi"),            # Second column
+        sg.Button("3rd column")     # Third column
     ],[
-        sg.Button("Hii"),
-        sg.T(), # Placeholder, empty text
-        sg.Button("2nd row")
+        sg.Button("Hii"),           # First column
+        sg.T(),                     # Placeholder (second column)
+        sg.Button("2nd row")        # Third column
     ]
 ]
 
@@ -103,13 +103,13 @@ Just know that elements are aligned in rows and columns.
 As you can see, `Upper left` is centered above `Hii`. 
 They form a column.
 
-In row-oriented (normal) layouts, the tallest element decides the height of the row.
-This is also true for grids, but in addition, the broadest element in each column decides the width of that column:
+In row-oriented (normal) layouts, the tallest element specifies the height of its row.
+This is also true for grids, but in addition, the broadest element in each column decides the width of its column:
 ![](../assets/images/2025-09-10-14-17-02.png)
 ```py
 grid_contents = [
     [
-        sg.Button("Very Big", width=25, height=10),
+        sg.Button("Very Big", width=25, height=10), # Very broad and high
         sg.Button("Hi"),
         sg.Button("3rd column")
     ],[
@@ -119,10 +119,13 @@ grid_contents = [
     ]
 ]
 ```
-The elements are still centered vertically and horizontally.
+The elements are still aligned vertically and horizontally.
 
 ## Expanding elements
-In SwiftGUI, every element can only "expand" using `expand` and `expand_y`, if it doesn't resize its container.
+In SwiftGUI, elements can only "expand" using `expand` and `expand_y`, so far until it needs to resize its "container".
+The container is whatever the layout of that element is inside.\
+Usually, the main window.
+Put the layout in a frame and that frame is its container.
 
 E.g. take a look at the previous example (Scrollbar different due to newer version):\
 ![](../assets/images/2025-09-10-13-53-47.png)
@@ -145,9 +148,9 @@ layout:list[list[sg.BaseElement]] = [
 ]
 ```
 
-However, it can not expand further to the left/right, because it would need to resize the window.
+However, it can not expand further to the left/right, because it would need to resize its container (the main window).
 
-That's why `expand_y` is possible and `expand` does nothing.
+That's why `expand_y` is possible, but `expand` does nothing.
 
 Same with grids.
 
@@ -173,13 +176,11 @@ layout:list[list[sg.BaseElement]] = [
 ```
 ![](../assets/images/2025-09-10-14-22-00.png)
 
-As you can see, the elements can't expand beyond their row/colum and won't resize them.
-
-The Button `Very Big` has a specified width and height, so it is allowed resize the container (`sg.Gridframe`).
+As you can see, the elements can't expand beyond their row/colum, because this would resize the container (`sg.GridFrame`).
 
 ## Horizontal alignment
 Elements are aligned "center" by default.
-To allign them differently, just pass the option `alignment` to the surrounding frame:\
+To allign them differently, pass the option `alignment` to the container/frame:\
 ```py
     sg.LabelFrame(
         inner_layout,
@@ -189,9 +190,9 @@ To allign them differently, just pass the option `alignment` to the surrounding 
 ```
 ![](../assets/images/2025-08-21-10-39-53.png)
 
-This only applies to that frame though, containing frames won't be affected.
+This only applies to that frame, containing frames won't be affected.
 
-Since the main window also contains an `sg.Frame`, you can set the alignment for it too:
+You can set the alignment for the main window too:
 ```py
 ### Layout ###
 inner_layout = [
@@ -219,7 +220,7 @@ w = sg.Window(layout, alignment="left") # Here
 ![](../assets/images/2025-08-21-10-46-25.png)\
 You don't see a difference, because all elements contained in the window directly are already as left as they can be.
 
-And again, this won't affect containing frames, so elements inside the `sg.LabelFrame` are aligned centered by default.
+And again, this won't affect containing frames, so elements inside the `sg.LabelFrame` are still aligned centered.
 
 To set the alignment for all frames, including the main window, utilize global-options:
 ```py
@@ -252,127 +253,10 @@ w = sg.Window(layout)
 ![](../assets/images/2025-08-21-10-45-12.png)
 
 ## Background color propagation
-This feature took me 2 very annoying days to properly implement, so please appreciate it.
-
-Every frame has its own background-color, they are not actually transparent - unfortunately.\
-This is due to `tkinter`, the main package behind SwiftGUI.
-
-That's why SwiftGUI has a feature called "background color propagation".
-It basically applies changes to the background-color of a frame to all containing elements with certain properties.
-
-So when changing the background-color of a frame, that frame will update the background-color of all contained elements that look transparent.
-
-Example:
-```py
-### Layout ###
-inner_layout = [
-    [sg.T("Smaller element")],
-    [sg.Button("Another smaller element")],
-    [sg.T("<-- sg.Listbox")]
-]
-
-layout:list[list[sg.BaseElement]] = [
-    [
-        sg.Listbox(
-            range(10)
-        ),
-        sg.LabelFrame(
-            inner_layout,
-            no_label=True,
-        )
-    ],[
-        sg.T("Below Frames")
-    ]
-]
-
-w = sg.Window(layout, alignment="left", background_color="red") # Color the whole window red
-```
-![](../assets/images/2025-08-21-11-01-31.png)
-
-It might not sound that cool, but remember that elements with "open" texts, like `sg.Text` and `sg.Checkbox` also have a background-color.
-
-Without background-color-propagation, the GUI looks like this:\
-![](../assets/images/2025-08-21-11-03-15.png)
-
-If you set a background-color for specific elements, they automatically disable background-color-propagation for themselves:
-```py
-layout:list[list[sg.BaseElement]] = [
-    [
-        sg.Listbox(
-            range(10)
-        ),
-        sg.LabelFrame(
-            inner_layout,
-            no_label=True,
-            background_color="green"    # Specified, so no bg-color-propagation from the window
-        )
-    ],[
-        sg.T("Below Frames", background_color="lightblue")  # Here too
-    ]
-]
-
-w = sg.Window(layout, alignment="left", background_color="red")
-```
-![](../assets/images/2025-08-21-11-09-17.png)
-
-However, **when using `.update(background_color = ...)`, the color-propagation won't be disabled**.
-The background-color will still change, when a containing frame updates:
-```py
-layout:list[list[sg.BaseElement]] = [
-    [
-        sg.Listbox(
-            range(10)
-        ),
-        myFrame := sg.LabelFrame(
-            inner_layout,
-            no_label=True,
-        )
-    ],[
-        sg.T("Below Frames")
-    ]
-]
-
-w = sg.Window(layout, alignment="left")
-myFrame.update(background_color = "lightblue")  # Frame is blue now
-w.update(background_color = "red")  # Frame is red again :C
-```
-You can disable that behaviour manually by setting `apply_parent_background_color = False`:
-```py
-layout:list[list[sg.BaseElement]] = [
-    [
-        sg.Listbox(
-            range(10)
-        ),
-        myFrame := sg.LabelFrame(
-            inner_layout,
-            no_label=True,
-            apply_parent_background_color= False,   # No pg-color-propagation for this element
-        )
-    ],[
-        sg.T("Below Frames")
-    ]
-]
-
-w = sg.Window(layout, alignment="left")
-myFrame.update(background_color = "lightblue")  # Frame is blue now
-w.update(background_color = "red")  # Frame doesn't change
-```
-![](../assets/images/2025-08-21-11-21-06.png)\
-(That blue line next to the frame is a very niche, known bug I'm going to fix sooner or later, version 0.5.3 atm.)
-
-For frames, you could also disable changing the color of containing elements by setting `pass_down_background_color= False`:
-```py
-    myFrame := sg.LabelFrame(
-        inner_layout,
-        no_label=True,
-        pass_down_background_color= False,  # Don't update contained elements
-    )
-```
-![](../assets/images/2025-08-21-11-22-10.png)\
-You'll probably never need to do that, but hey, free will and stuff.
+This part of the tutorial was moved to its own advanced tutorial.
 
 # Notebook (Tabview)
-**Notebooks look A LOT better now (version 0.10.3), compared to the following images**. 
+**Notebooks look A LOT better now (version 0.10.3), compared to back when I wrote this tutorial.
 
 The `sg.Notebook`, (`sg.Tabview` in PySimpleGUI) helps to deal with too many elements by not showing all at once:\
 ![](../assets/images/2025-08-21-11-39-21.png)\
@@ -397,7 +281,7 @@ right_tab = sg.Frame([
 layout:list[list[sg.BaseElement]] = [
     [
         sg.Notebook(
-            left_tab,   # Put tabs into the notebook
+            left_tab,   # Put the tabs into the notebook
             right_tab,
         )
     ]
@@ -405,54 +289,14 @@ layout:list[list[sg.BaseElement]] = [
 
 w = sg.Window(layout)
 ```
-As you can see, `sg.Notebook` takes frames (Any type of frame, `sg.LabelFrame` works aswell) and organizes them in tabs.
+As you can see, `sg.Notebook` takes frames and organizes them in tabs.
+The key of that frame becomes the text on the tab.
 
-To set proper names for the tabs, the containing frames need keys.
-If a key is available, it will be used for the name:
-```py
-### Layout ###
-left_tab = sg.Frame([
-    [
-        sg.Listbox(
-            range(10)
-        ),
-    ]
-], key= "left")
+## TabFrame
+The `sg.TabFrame` is a type of frame that makes working with `sg.Notebook` much easier.
+You should always use `sg.TabFrame` for notebooks.
 
-right_tab = sg.Frame([
-    [sg.T("Smaller element")],
-    [sg.Button("Another smaller element")],
-    [sg.T("<-- sg.Listbox")]
-], key= "right")
-
-layout:list[list[sg.BaseElement]] = [
-    [
-        sg.Notebook(
-            left_tab,
-            right_tab,
-        )
-    ]
-]
-```
-![](../assets/images/2025-08-21-11-45-59.png)
-
-Since this might be a little "unconfortable", you can overwrite the name.
-To do that, pass a dictionary containing which frames to "rename":
-```py
-    sg.Notebook(
-        left_tab,
-        right_tab,
-        tab_texts= {
-            "left": "Fancy left tab-name"
-        }
-    )
-```
-![](../assets/images/2025-08-21-11-49-47.png)
-
-There will be a better way to set names, I promise (version 0.5.3).\
-1-2 month later: There is a better way now called `sg.TabFrame` (version 0.10.3).
-
-An `sg.TabFrame` takes the option `text`, which will be used as the tab-text, independent of its key:
+An `sg.TabFrame` accepts the option `text`, which will be used as the tab-text, independent of its key:
 ```py
 left_tab = sg.TabFrame([
     [
@@ -460,7 +304,7 @@ left_tab = sg.TabFrame([
             range(10)
         ),
     ]
-], key= "left_frame", text= "left")
+], key= "left_frame", text= "left") # Specify the text right here in the element
 
 right_tab = sg.Frame([
     [sg.T("Smaller element")],
@@ -480,13 +324,16 @@ layout:list[list[sg.BaseElement]] = [
 ![](../assets/images/2025-10-19-20-57-19.png)\
 (Told you notebooks looked better now)
 
+It you don't want the tab-frame to register its key, don't define `key`, but `fake_key`.
+The notebook won't see a difference, but the element still has no key.
+
 `sg.TabFrame` features more useful functionality when working with notebooks, which won't be covered by this tutorial.
 
 `sg.Notebook` also has an event-system.
 It can throw an event when the tab changes, but also throw specific events depending on the selected tab.
 You may also change the opened tab manually.
 
-Since this tutorial is ment to be mainly about layouts, this is explained in the element-tutorial for `sg.Notebook`.
+Since this tutorial is ment to be mainly about layouts, you'll find the details in the element-tutorial for `sg.Notebook`.
 
 # Separators
 `sg.HorizontalSeparator` and `sg.VerticalSeparator` are basically just horizontal/vertical lines:\
@@ -600,7 +447,7 @@ w = sg.Window(layout)
 
 There is no "native" way of aligning elements to the bottom of a frame (yet, version 0.5.3)
 
-However, if there were an invisible element that took as much vertical (y) space as possible, it would push all other elements down.
+However, if there was an invisible element that took as much vertical (y) space as possible, it would push all other elements down.\
 You probably already know what I am getting at:
 ```py
 inner_layout = [
@@ -669,121 +516,4 @@ What a mess.
 
 This is just a proof of concept, don't do that.
 
-# Separate event-loops (Sub-layouts)
-GUIs with more elements don't only get crowded visually, but also in their code.
-
-Especially when using a lot of keys, new/unused keys are harder and harder to find.
-Your keys will get longer and longer, which kinda defies the purpose of using an event-loop all together.
-
-That's why SwiftGUI offers a way to divide the main layout into sub-layouts (different to frames), which each have their own key-system and event-loop.
-
-This way, you can use the same key multiple times in an application and un-clutter your event-loop.
-
-Pro-tipp: If you want to copy/reuse parts of the layout, the best way to do so is to create a custom combined element.\
-This topic has its own tutorial under the advanced topics: [Custom combined elements](https://github.com/CheesecakeTV/SwiftGUI-Docs/blob/0dfa1a40be07e0345a5e8e3817a9d66ecb58168b/03%20Advanced%20tutorials/Custom%20combined%20elements.md)
-
-Other event-loops are not actually a loop, but a function:
-```py
-def other_loop(e, v):
-    ...
-```
-To assign the loop to some part of your layout, put that part in some type of frame and surround it by an `sg.SubLayout`:
-```py
-import SwiftGUI as sg
-
-sg.Themes.FourColors.Emerald()
-
-def other_loop(e, v):
-    print("Other loop:", e, v)
-
-other_layoutpart = sg.LabelFrame([
-    [
-        sg.Button("Button1", key="Button1"),
-        sg.Button("Button2", key="Button2"),
-        sg.Button("Button3", key="Button3"),
-    ]
-], text= "Other layout-part")
-
-layout = [
-    [
-        sg.SubLayout(
-            other_layoutpart,
-            event_loop_function= other_loop,
-        )
-    ],[
-        sg.Spacer(height= 15)
-    ],[
-        sg.Button("Button1", key="Button1"),    # Same keys as the buttons above
-        sg.Button("Button2", key="Button2"),
-        sg.Button("Button3", key="Button3"),
-    ]
-]
-
-w = sg.Window(layout)
-
-for e,v in w:
-    print("Loop:", e, v)
-```
-![](../assets/images/2025-09-19-17-23-03.png)
-
-When pressing buttons in the sub-layout, `other_layout` will be called.
-Pressing other buttons, executes the main loop (`for e,v in w`), like you're already used to.
-
-## Accessing elements and values inside sub-layouts
-Remember, `w[key]` returns the element with that key.
-
-With sub-layouts, you have to use the sub-layout-element instead of `w`:
-```py
-        my_sublayout := sg.SubLayout(
-            other_layoutpart,
-            event_loop_function= other_loop,
-        )
-
-...
-
-w = sg.Window(layout)
-my_sublayout["Button2"].value = "Works like a charm!"
-```
-![](../assets/images/2025-09-19-17-32-33.png)
-
-Access the value-dict of the sub-layout by calling `my_sublayout.value`.
-
-If you don't want to use an additional variable for the sub-layout, just set a key for it like with any other element:
-```py
-        sg.SubLayout(
-            other_layoutpart,
-            event_loop_function= other_loop,
-            key= "Sublayout"
-        )
-
-...
-
-w = sg.Window(layout)
-w["Sublayout"]["Button2"].value = "Works like a charm!"
-```
-This way, the main value-dict also contains the value-dict of the sub-layout.
-
-In this example, `v` of the main loop looks like this:\
-`{'Button1': 'Button1', 'Sublayout': {'Button1': 'Button1', 'Button3': 'Button3', 'Button2': 'Works like a charm!'}, 'Button3': 'Button3', 'Button2': 'Button2'}`.
-
-Notice that the sub-layout provided its own value-dict as its "value".
-
-## Chaining sub-layouts
-As you might have guessed, you can place sub-layouts inside other sub-layouts.
-
-This way, you could utilize a tree-like key structure:
-```py
-w["sublayout"]["additional_sublayout"]["subsubsublayout"]["Button1"].value = "Why would anyone do that?"
-```
-Not saying you should, but you could.
-
-## Using a function as the main event-loop
-If you like these "event-loop-functions" better than the normal event-loop, you may pass a function to the main window too:
-```py
-w = sg.Window(layout, event_loop_function= other_loop)
-```
-Now, the main-loop is disabled and only `other_loop` will be used.
-
-The main-loop still blocks, but won't react to events.
-When the window is closed, the loop terminates like usual.
 

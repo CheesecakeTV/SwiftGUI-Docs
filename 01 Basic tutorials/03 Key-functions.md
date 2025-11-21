@@ -9,9 +9,13 @@ Every event needs its own entry inside the single, giant event-loop, so everythi
 
 Example: You'd like to create an input-field with a small button on the side that clears the input.
 The only purpose of the button is to clear the input, yet it enlarges the event-loop.\
-It also needs its own unique key, which makes things complicated when you want to copy that part of the layout.
+It also needs its own unique key, which is quite annoying. 
+To have a proper key-structure, you'd need to create very long keys, like `"LeftColumn.TablePart.NameInput.ClearButton"`.\
+Don't like that.
 
 The solution: Define the action (function) to do when creating the element, using key-functions.
+
+There is actually another solution presented in basic tutorial 06 (bigger layouts).
 
 # Basic concept
 When creating elements, or binding events, you don't actually need to specify a key to throw events.
@@ -34,7 +38,7 @@ layout:list[list[sg.BaseElement]] = [
     [
         sg.Button(
             "Print hello World!",
-            key_function= hello_world
+            key_function= hello_world   # This gets called when the event occurs
         )
     ]
 ]
@@ -50,9 +54,9 @@ for e,v in w:
 ### After window was closed ###
 ```
 That's all you need.\
-The main loop is empty, yet the `hello_world` is called when the button is pressed.
+The main loop is empty, yet `hello_world` is called when the button is pressed.
 
-No "occupied" key, no enlarging the event-loop, perfect.
+No "occupied" key, no enlarging the event-loop, good readability.
 
 For a small functionality like this you might want to use a lambda-function instead:
 ```py
@@ -72,8 +76,8 @@ All of them are called when the event occurs:
 sg.Button(
     "Print hello World!",
     key_function=[
-        lambda: print("Hello World"),
-        lambda: print("Another key-function!"),
+        lambda: print("Hello World"),   # This gets called
+        lambda: print("Another key-function!"), # This also gets called
     ]
 )
 ```
@@ -93,7 +97,7 @@ If you create parameters with the following names, they will be passed according
 - `v`     - Value-"dict" (Same as `v` in the for-loop)
 - `val`   - Value (Value of the event-throwing-element, same as `w[e].value`)
 - `elem`  - Element (Element that caused the event, same as `w[key]`)
-- `args` - The tkinter-event-arguments (if you don't know what this is, ignore it.), its type is always `tuple`.
+- `args`  - The tkinter-event-arguments (if you don't know what this is, ignore it.), its type is always `tuple`.
 
 Example: Let's create an input-element that prints its value to the console when being changed:
 ```py
@@ -109,10 +113,26 @@ layout:list[list[sg.BaseElement]] = [
 ```
 Because the parameter of the lambda-function is called `val`, the current value (`element.value`) is passed and can be printed.
 
+For anyone not so firm with lambda-functions, this is the exact same functionality without lambdas:
+```py
+def my_fct(val):
+    print("New value:", val)
+
+### Layout ###
+layout:list[list[sg.BaseElement]] = [
+    [
+        sg.In(
+            default_event=True,
+            key_function=my_fct,
+        )
+    ]
+]
+```
+
 Another example: Let's change the inputs background-color depending on weather an input number is odd or even:
 ```py
 ### Global options ###
-def change_if_value_is_even(val, elem):
+def change_if_value_is_even(val, elem): # val: current value of the input. elem: the sg.Input-element causing the event
     try:
         if int(val) % 2 == 0:   # Even
             elem.update(background_color = sg.Color.sea_green)
@@ -134,7 +154,7 @@ layout:list[list[sg.BaseElement]] = [
 ```
 Try it yourself, it works perfectly.
 
-The best part is, we can simply duplicate the input-element while preserving its functionality:
+The best part is that we can simply duplicate the input-element while preserving its functionality:
 ```py
 ### Layout ###
 layout:list[list[sg.BaseElement]] = [
@@ -145,21 +165,22 @@ layout:list[list[sg.BaseElement]] = [
     [sg.In(default_event=True, key_function=change_if_value_is_even)],
 ]
 ```
-
 ![](../assets/images/2025-08-05-14-52-03.png)
 
-Keep in mind that the actual event-loop is still empty and we did not use up any keys so far.
+With keys, you'd need to define a unique key for every copy.
+
+Keep in mind that the actual event-loop is still empty.
+Very powerful feature.
 
 # Pre-made KeyFunctions
-
 Some key-functions are pretty common (at least for me).
 You will likely write them over and over again for different projects.
 
-That's why `SwiftGUI` includes a bunch of common key-functions and "key-function-templates".
+That's why SwiftGUI includes a bunch of common key-functions and "key-function-templates".
 
-Every one of them has its own docstring, you can find them [here](https://github.com/CheesecakeTV/SwiftGUI/blob/c573a78ee0fa9ea5565a76556aeba9d930dc98f4/src/SwiftGUI/KeyFunctions.py).
+Every one of them has its own docstring, you can find them [here](https://github.com/CheesecakeTV/SwiftGUI/blob/main/src/SwiftGUI/KeyFunctions.py).
 
-Example: We can use a pre-made key-function to implement the example mentioned at the beginning of this tutorial.
+Example: We can use a pre-made key-function to implement the example mentioned at the beginning of this tutorial.\
 Let's create an input-element that can be cleared by pressing a button:
 ```py
 ### Layout ###
@@ -170,20 +191,19 @@ layout:list[list[sg.BaseElement]] = [
         ),
         sg.Button(
             "Clear",
-            key_function=sg.KeyFunctions.set_value_to(elem_key="Input")
+            key_function=sg.KeyFunctions.set_value_to("", elem_key="Input") # Set w["Input"].value = ""
         )
     ]
 ]
 ```
-If we look at `sg.KeyFunctions.set_value_to`, we can see that it is a function returning another function.\
+Looking at `sg.KeyFunctions.set_value_to`, we can see that it is a function returning another function.
+This might be confusing for beginners, so read the docstring of the specific function if you are unsure.\
 The returned function is the actual key-function and looks like this:
 ```py
 def temp(v):
     v[elem_key] = new_value
 ```
-Simple, yet elegant and very useful.
-
-Get used to using key-functions, it makes things sooo much easier.
+Simple, yet very useful.
 
 # Chaining key-functions
 Instead of a single key-function, you may pass a list (or any iterable) of multiple functions, as mentioned above.
@@ -204,7 +224,7 @@ Thanks to [yunlo](https://github.com/yunluo) for this idea!
 I tried really hard to find any advantage of this method over standard key-functions, but couldn't.
 It's just a different way to structure your code, which you might like better.
 
-Using a certain decorator, you can assign key-functions to a key in the event-loop.
+Using the decorator `sg.attach_function_to_key(key)`, you may assign key-functions to a key in the event-loop.
 When the event-loop receives that key in an event, the key function will be called **instead of running through the loop**:
 ```py
 import SwiftGUI as sg
@@ -249,12 +269,12 @@ def do_something(e):
     v[e] = "Pressed"
 ```
 
-Some things to keep in mind when using this feature though:
+Some important things to keep in mind when using this feature though:
 - All "decorations" must be done before creating the window (`w = sg.Window(layout)`)
 - The decorator only applies to the main event-loop.
-Since SwiftGUI version 0.8.0, it is possible to create separated event-loops.
-Keys for these loops are not "captured" by the decorator.
+It is possible to create multiple event-loops, as explained in basic tutorial 06 (bigger layouts).
+**Keys for these loops are not "captured" by the decorator.**
 - If you create multiple windows using `sg.SubWindow`, the decorator only works for the main window.
-- Don't decorate multiple functions with the same key. Only the last declared function will be called.
+- Don't decorate multiple functions with the same key. Only the last decorated function will be called.
 
 
