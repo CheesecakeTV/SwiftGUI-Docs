@@ -770,8 +770,8 @@ If you don't specify an option for headings, the row-option will be applied inst
 ### Colors
 There are also a couple of colors:
 ```py
-    background_color_rows: str | Color = None,
-    background_color_active_rows: str | Color = None,
+    background_color: str | Color = None,   # Row and background-color
+    background_color_active: str | Color = None, # Row-color of selected rows
     background_color_headings: str | Color = None,
     background_color_active_headings: str | Color = None,
 
@@ -780,14 +780,8 @@ There are also a couple of colors:
     text_color_headings: str | Color = None,
     text_color_active_headings: str | Color = None,
 ```
-Pretty self-explanitory in my opinion, or maybe I'm just getting lazy after writing 660 lines of documentation.
-
 "Active" means selected/clicked.
 When headings are clicked, they change color while the mouse is being held down. 
 That color is the active one.
-
-The option `background_color` determines the actual background color of the widget.
-This color shows inside the element-padding and "behind" rows.
-When there are not enough rows to cover the whole element, remaining space is filled with `background_color`.
 
 
