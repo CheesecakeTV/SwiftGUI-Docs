@@ -218,6 +218,18 @@ So, to return something other than `None` in that case, pass `default` to `super
 Just note that `default` will be returned, even if you intentionally try to "return" `None`.
 To clarify, **`self.done(None)` won't return `None`, but the default value!**
 
+## Non-blocking popups
+The return-functionality of popups is only possible because the code "gets stuck" when the popup opens.
+The code "waits" for the popup to generate a return-value.
+
+However, creating popups that can't return anything can be useful too.
+That's why, `sg.BasePopupNonblocking` is available since SwiftGUI version 0.10.17.
+
+It works the same as `sg.BasePopup`, but without the return-functionality.
+
+That means, "calling" the popup doesn't return a value, but an instance of `sg.BasePopupNonblocking`, like you'd expect.
+Also, `self.done()` doesn't work and the option `default` isn't available.
+
 ## Some considerations
 Popups created this way are still `sg.SubWindow`s.
 As with other subwindows, when creating one before creating `sg.Window`, the popup will turn into the main window.

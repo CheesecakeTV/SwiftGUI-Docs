@@ -7,6 +7,10 @@ Write something in the note, when you close the window, it gets saved.
 
 I will publish an example of this program in every "difficulty-level".
 
+# Demonstrated concepts
+- Basic usage of SwiftGUI
+- Saving values to a file (not SwiftGUI native)
+
 # Full code
 Written in SwiftGUI version 0.8.4.
 ```py

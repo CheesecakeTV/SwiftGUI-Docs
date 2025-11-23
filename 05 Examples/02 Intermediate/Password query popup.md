@@ -11,6 +11,11 @@ If you are unsure on how uncommented parts work, refer to the simple example.
 ![](../../assets/images/2025-10-24-13-04-08.png)\
 Looks the same as before.
 
+# Demonstrated concepts
+- Creating basic popups using `sg.BasePopup`
+  - Returning values
+- Using custom popups
+
 # Full code
 Written in SwiftGUI version 0.10.16:
 ```py

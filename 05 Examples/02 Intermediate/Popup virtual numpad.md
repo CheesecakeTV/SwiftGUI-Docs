@@ -11,6 +11,13 @@ This way, you don't need to worry about accidently returning a string.
 (This time on linux debian)\
 ![](../../assets/images/2025-10-27-13-13-45.png)
 
+# Demonstrated concepts
+- Creating more complex popups using `sg.BasePopup`
+  - Returning values
+- Using custom popups
+- Element-template-functions
+- Abstract usage of keys
+
 # Full Code
 Written in SwiftGUI 0.10.7.
 
@@ -24,10 +31,10 @@ sg.Themes.FourColors.SlateBlue()
 class virtual_numpad(sg.BasePopup, float):
     """Open a virtual numpad to enter numbers"""
 
-    @staticmethod
+    @staticmethod   # No "self" for this method
     def _button(text):
-        """Create a single number-button, so I don't need to copy everything"""
-        text = str(text)
+        """Create a single number-button-template, so I don't need to copy everything"""
+        text = str(text)    # Numbers should be converted to string
         return sg.Button(
             text,
             key= text,
@@ -53,7 +60,7 @@ class virtual_numpad(sg.BasePopup, float):
                     highlightthickness= 0,
                 )
             ],[
-                self._button(1),    # Glad I made that additional method
+                self._button(1),    # Glad I made that template
                 self._button(2),
                 self._button(3),
             ],[
