@@ -15,6 +15,11 @@ Changing the function automatically updates the graph:\
 I wanted to add a navbar, but it just looked too bad...\
 Feel free to add it yourself.
 
+# Demonstrated concepts
+- Basic usage of the addon `SwiftGUI_Matplot`
+- Working completely without an event-loop
+- Key-functions
+
 # Full code
 Using SwiftGUI version 0.10.7, SwiftGUI_Matplot version 0.1.0.
 ```py

@@ -8,6 +8,11 @@ When you copy something new, it will be added to the history.
 
 Click an item in the history, to copy it to clipboard again.
 
+# Demonstrated concepts
+- Basic usage of SwiftGUI
+- Working with listboxes
+- Clipboard-observer
+
 # Full code
 Written in SwiftGUI version 0.8.4.
 ```py

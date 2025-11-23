@@ -12,6 +12,12 @@ In contrast to the simple version, this version lets you manage multiple notes, 
 
 ![](../../assets/images/2025-09-27-16-17-44.png)
 
+# Demonstrated concepts
+- Basic usage of SwiftGUI
+- Key-functions
+- The event-loop
+- sg.Combobox
+
 # Full code
 This code is written in SwiftGUI version 0.9.6, Python version 3.10.
 ```py
@@ -21,8 +27,7 @@ import os
 
 _foldername = "notes"  # Where the note is saved
 _foldername = Path(_foldername)
-
-_foldername.mkdir(exist_ok= True)
+_foldername.mkdir(exist_ok= True)   # Create the folder if it doesn't exist yet
 
 all_filenames = list(os.listdir(_foldername))
 

@@ -9,6 +9,13 @@ The code did not only become more readable, it also got way easier to expand.
 
 ![](../../assets/images/2025-09-23-19-42-53.png)
 
+# Demonstrated concepts
+- Abstract/dynamic usage of keys
+- Key-functions
+  - Assigning multiple key-functions to one element
+- Element-template-functions
+- Advanced layouts using frames
+
 # Full code
 Using SwiftGUI version 0.8.5.
 ```py

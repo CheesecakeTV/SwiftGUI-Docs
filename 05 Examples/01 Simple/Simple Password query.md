@@ -8,6 +8,10 @@ The user has x tries to enter the correct password, or the program exits.
 
 To submit the password, the user may click "Submit", or press enter.
 
+# Demonstrated concepts
+- Basic usage of SwiftGUI
+- Binding custom events to existing keys (Pressing "enter" in the input)
+
 # Full code
 Written in SwiftGUI version 0.10.7:
 ```py

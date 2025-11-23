@@ -175,7 +175,7 @@ These other options change the attributes of the font:
 - `fontsize`: Height of the font in pixels
 - `font_bold`: **Bold**
 - `font_italic`: *Italic*
-- `font_underline`: __Underline__
+- `font_underline`: <ins>Underline</ins>
 - `font_overstrike`: ~~Overstrike~~
 
 ## underline
