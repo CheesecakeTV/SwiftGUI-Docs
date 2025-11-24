@@ -9,6 +9,8 @@ It's implemented quite abstract, so you can easily change it into something else
 This is the basic window:\
 ![](../../assets/images/2025-11-23-20-58-23.png)
 
+(And yes, after hyperfocused programming for 2 hours, I switched up "age" with "name" in some cases. That's politics for you.)
+
 # Features
 ## Basic
 Select an entry on the left and edit it through the input-elements on the right.
