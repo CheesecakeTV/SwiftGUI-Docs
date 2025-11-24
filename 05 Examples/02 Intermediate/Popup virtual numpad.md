@@ -12,7 +12,7 @@ This way, you don't need to worry about accidently returning a string.
 ![](../../assets/images/2025-10-27-13-13-45.png)
 
 # Demonstrated concepts
-- Creating more complex popups using `sg.BasePopup`
+- Creating popups using `sg.BasePopup`
   - Returning values
 - Using custom popups
 - Element-template-functions
