@@ -20,12 +20,12 @@ It is especially interesting since the code is quite short for what it can do:
 - Updating options
 
 # Full code
-Written in SwiftGUI version 0.10.17:
+Written in SwiftGUI version 0.10.18:
 ```py
 import SwiftGUI as sg
 from SwiftGUI import ValueDict
 
-sg.Themes.FourColors.SinCity()
+sg.Themes.FourColors.TransgressionTown()
 
 class create_password(sg.BasePopup, str):
     def __init__(self, title: str = "Create your password", **kwargs):
