@@ -16,7 +16,7 @@ layout = [
     ]
 ]
 
-w = sg.SubWindow(layout, padx= 50, pady= 50)
+w = sg.Window(layout, padx= 50, pady= 50)
 
 for e,v in w:
     print(e,v)
