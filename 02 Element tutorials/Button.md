@@ -127,7 +127,14 @@ To be precise, these options are explained in the element-tutorial of `sg.Text`:
 
 
 # Methods
-WIP
+## .flash()
+Flashes the button.
+
+Flashing means, the button changes color with its active color and back a couple of times.
+
+## .push_once()
+Simulates a button-press, throwing the default event as if the user pressed the button.
+
 
 # Button as a pure "value-display"
 While pressing/holding down the button, it looks like you'd push it down.
