@@ -93,7 +93,7 @@ My personal favorites are:
 sg.Themes.FourColors.FourColors.Emerald
 sg.Themes.FourColors.FourColors.DarkTeal
 sg.Themes.FourColors.FourColors.DarkCoffee
-sg.Themes.FourColors.FourColors.SinCity
+sg.Themes.FourColors.FourColors.TransgressionTown
 sg.Themes.FourColors.FourColors.Jungle
 sg.Themes.FourColors.FourColors.DarkGold
 ```
