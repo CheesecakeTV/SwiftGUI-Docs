@@ -1,6 +1,6 @@
 
 # sg.Button
-Displays a button that can be clicked:\
+A button that can be clicked:\
 ![](../assets/images/2025-12-01-13-52-51.png)
 
 ```py
