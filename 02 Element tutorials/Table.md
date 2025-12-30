@@ -239,7 +239,7 @@ del table[0]
 
 If you can't use `del table[index]` for any reason (e.g. inside a lambda-function), use `table.__delitem__(index)` instead.
 
-# Sorting the list
+# Sorting the table
 
 SwiftGUI's Table can actually be sorted simmilar to normal lists.
 Selections will be preserved.
@@ -628,7 +628,7 @@ layout = [
 ]
 ```
 
-## Other treaded methods
+## Other threaded methods
 Besides `.overwrite_table_threaded`, the following methods are available as a threaded version of their "normal" counterpart:
 - `insert_multiple_threaded`
 - `extend_threaded`
@@ -636,9 +636,9 @@ Besides `.overwrite_table_threaded`, the following methods are available as a th
 Tipp: To append to the front of the list, use `insert_multiple_threaded` with `index= 0`.
 
 ## Important! "Interrupting" threaded methods
-There is a big downside to using these "threaded methods", so handle them with care.
+There is a risk to using these "threaded methods", so handle them with care.
 
-What do you think happens, when the table is currently adding values with these methods and you add some row using a non-threaded method like `.append`?
+What do you think happens, when the table is currently adding values with these methods and you add a new row using a non-threaded method like `.append`?
 
 The results are predictable, but not in an easy way, so I'll only present them simplified.
 While the thread is running, these effects might/will occur:
@@ -646,15 +646,15 @@ While the thread is running, these effects might/will occur:
 - **Threaded methods are safe to be used together and will run one after another**
 - If the thread crashes, added rows might not actually be added
 - Deleting rows might mess up the row-order, or crash the thread in rare cases
-- Clearing the table (deleting all rows), crashes the thread in most cases
+- Clearing the table (deleting all rows) crashes the thread in most cases
 - Sorting ignores all rows that didn't get added yet
 - Filtering has a good chance of crashing the thread and ignores all rows that weren't added yet
 - Persisting the filter-view doesn't stop pending rows to be added
 - Moving rows should be safe
-- Updating the look (colors, font, ...) of the table is safe
-- The scrollbar might act somewhat strange while rows are being added
+- Updating the look (colors, font, ...) of the table is perfectly safe
+- The scrollbar might act somewhat strange while rows are being added, but is safe
 
-While the thread is running, `table.thread_running` is `True`.
+Tipp: While the thread is running, `table.thread_running` is `True`.
 
 Follow these rules and you'll be fine using threaded methods:
 - If row-order is important, only use threaded methods to append rows.
@@ -784,4 +784,8 @@ There are also a couple of colors:
 When headings are clicked, they change color while the mouse is being held down. 
 That color is the active one.
 
+### Hide headings
+Set `hide_headings = True` to well, hide the headings.
+
+The table will look more like a list but with all the functionality of a table.
 
