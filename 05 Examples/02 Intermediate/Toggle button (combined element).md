@@ -2,9 +2,9 @@
 # Toggle button
 Checkboxes are cool, but let's create a button that does the same as a checkbox.
 
-You can actually turn checkboxes into looking like a button, but it can't change its color and text automatically when toggled.
+You can actually turn checkboxes into looking like a button (`check_type = "button"`), but it can't change its color and text automatically when toggled.
 
-This can be achieved by creating a custom combined element, which is a bit misleading, since the toggle-button only consists of one element.
+This functionality can be implemented by creating a custom combined element, which is a bit misleading, since the toggle-button only consists of one element.
 Well, combined elements can be used to create extended elements too.
 
 This example looks a little complicated, but it's just long.

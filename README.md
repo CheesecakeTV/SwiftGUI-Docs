@@ -4,6 +4,14 @@
 
 Find the main repository here: https://github.com/CheesecakeTV/SwiftGUI
 
+# Structure of this documentation
+1. Basic tutorials: Every user of SwiftGUI should have read all of them. They give a good overview over the most important features provided.
+2. Element tutorials: Seperate tutorials for each element.
+3. Advanced tutorials: Not necessarely harder, just more in-depth explanations for advanced users.
+4. Application notes: "Practical tutorials". These provides tricks to improve your programs.
+5. Examples: Small applications, sorted by their difficulty. Theory is good, but examples can clear up concepts better. Each file contains a list of concepts shown in the example.
+6. References: Short explanations and links to applications developed using SwiftGUI. (Mostly mine ones at the moment...).
+
 # Does your GUI look bad?
 `import SwiftGUI as sg`
 
@@ -12,13 +20,6 @@ Call `sg.Themes.FourColors.Emerald()` before creating the layout.
 This applies the `Emerald`-theme, my personal favorite.
 
 See which themes are available by calling `sg.Examples.preview_all_themes()`.
-
-# 30 different elements
-(Version 0.9.0)
-
-`import SwiftGUI as sg`
-
-Call `sg.Examples.preview_all_elements()` for an overview.
 
 # installation
 Install using pip:
