@@ -1,12 +1,15 @@
 
 # The GUI isn't everything
-There is more to a good program than its user-interface.
+There is more to a good program than its user-interface (Who would have thought...).
 
 Most programs have program files to save data.
 Especially inexperienced programmers like to just throw these files into the same folder the program was executed from.
 This is even more annoying when the python-script was converted to an exe file.
 
-Fortunately, SwiftGUI provides an easy solution which is explained in this tutorial.
+SwiftGUI transforms your text-based script into an actual program.\
+That's why it also contains features not directly related to GUIs.
+
+This tutorial explains how to set up and use a program-directory where you can save all of your internal program files to.
 
 # Root-folder
 SwiftGUI offers an easy way of creating and maintaining a "root-directory".
