@@ -145,7 +145,7 @@ print(my_section.get("something else", "Default"))   # Default
 This part is important.
 
 Imagine trying to configure a program and being greeted by this configuration-file:
-```bash
+```ini
 [Appearance]
 
 [Text settings]
