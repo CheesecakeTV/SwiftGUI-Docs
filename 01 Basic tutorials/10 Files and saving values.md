@@ -108,3 +108,136 @@ my_instance.print_object()
 There are ways around this problem, but I'm not gonna cover those here.
 Just keep in mind that this problem exists and can kill old save-files if you're not careful.
 
+# Dict-files
+SwiftGUI's dict-files work like Python-dictionaries, but let you easily save its content to an actual file.
+
+Currently (Version 0.11.0), there is a json- and a pickle-version of dict-files.
+
+They save the values differently, but you can use them almost exactly the same way.
+It's also quite easy to create a dict-file-version for your own encoder, but that's not covered by this tutorial.
+
+I'll only show the json-version.
+Just remember that Pickle works the same.
+
+Keep the advantages of json/pickle in mind when choosing the type.
+Json is humanly-readable while pickle lets you save non-basic types.
+
+## Creating the file
+Create the file like this:
+```py
+import SwiftGUI as sg
+
+my_file = sg.Files.DictFileJSON(
+    "My File.json",
+)
+```
+Instead of a filename you can also pass a more complex path, like `assets/json/My File.json`.
+Missing sub-folders are automatically created.
+
+## Saving values
+You can use `my_file` like a normal dict:
+```py
+import SwiftGUI as sg
+
+my_file = sg.Files.DictFileJSON(
+    "My File.json",
+)
+
+my_file["Hello"] = "World"
+my_file["Foo"] = "Bar"
+```
+The file was instantly created and looks like this:
+```json
+{
+    "Hello": "World",
+    "Foo": "Bar"
+}
+```
+
+You can also use `.set("Hello", "World")`, which has no advantage over the other way.
+
+### Saving multiple values
+(With auto-save on) Each value-change updates the file, which can cause lag-spikes.
+File-operations are slow.
+
+So if possible, save multiple values at once.
+
+Like normal dicts, you can use `.update`:
+```py
+my_file.update({
+    "Hello": "World",
+    "Foo": "Bar"
+})
+```
+
+Or, if you prefer a different notation, use `.set_many`:
+```py
+my_file.set_many(
+    Hello= "World",
+    Foo= "Bar",
+)
+```
+...but that only lets you use strings as keys.
+
+Your decision.
+
+### auto-save
+By default, every "write-operation" writes over the file.
+
+Disable this behavior when creating the file:
+```py
+my_file = sg.Files.DictFileJSON(
+    "My File.json",
+    auto_save= False,
+)
+```
+However, you'll need to save manually now by calling `my_file.save()`.
+
+## Loading values
+Read values like you'd read them from a dictionary:
+```py
+print(my_file["Foo"])
+```
+Of course, if the key (`Foo` in this case) isn't found, a `KeyError` is thrown.
+
+Alternatively, you may use `.get()`, which returns `None` instead of throwing a `KeyError`.
+
+It also allows you to specify a default-return which returns instead of `None`:
+```py
+print(my_file.get("Foo", "Value not found"))
+```
+
+### Loading values from the file
+When created, the file is read once and only written after that.
+If an external source changes the file, your program won't notice by itself.
+
+So, to read the file again, use `.load()`.
+
+Keep in mind that this operation applies all values included in the file.
+If you don't use auto-save and forget to save before, this might overwrite changes you made.
+
+## Default values
+Instead of using `.get` with a default-return, you should define default values.
+
+Pass these values to the `default`-parameter when creating the file:
+```py
+import SwiftGUI as sg
+
+my_file = sg.Files.DictFileJSON(
+    "My File.json",
+    defaults={
+        "Number": 15,
+    }
+)
+
+my_file["Hello"] = "World"
+my_file["Foo"] = "Bar"
+
+print(my_file["Number"])    # 15
+```
+The file still looks like this:
+```json
+
+## Saving/loading to different locations
+
+
