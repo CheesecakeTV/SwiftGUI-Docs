@@ -181,7 +181,7 @@ my_file.set_many(
 
 Your decision.
 
-### auto-save
+### Auto-save
 By default, every "write-operation" writes over the file.
 
 Disable this behavior when creating the file:
@@ -237,7 +237,125 @@ print(my_file["Number"])    # 15
 ```
 The file still looks like this:
 ```json
+{
+    "Hello": "World",
+    "Foo": "Bar"
+}
+```
 
-## Saving/loading to different locations
+## Saving/loading from different locations
+Sometimes, it's necessary to save to a different file, like when creating a backup.
+
+That's why you can pass a different path to `.save()`:
+```py
+my_file = sg.Files.DictFileJSON(
+    "My File.json", # Default location
+)
+
+my_file.save("backups/file_backup.json")    # Saving to a different file
+my_file.save()  # Saving to "My File.json"
+```
+
+Simmilarely, you can load from different files by passing a path to `.load()`.
+
+## Changing the default path
+Change the path like so:
+```py
+my_file.path = "New path.json"
+```
+Note that the values DO NOT automatically refresh like when using `.load()`.
+If you also want to load the new file, you need to call `.load()` afterwards.
+
+# Saving/restoring user-entries
+Since SwiftGUI version 0.11.0, it's possible to "gather" and restore all values of layout-parts at once.
+
+However, this only works for elements with a key.
+Elements without keys are ignored.
+
+## Saving values
+Value dicts are instances of custom classes, so they can't be saved in json files.
+**Using pickle is not an option**, since it would save the whole objects instead of their values.
+
+Using `.to_json()` on value-dicts returns all of its contained values as a dictionary that can be json-encoded.
+
+So, saving values can be done like this:
+```py
+import SwiftGUI as sg
+
+my_file = sg.Files.DictFileJSON("Values.json")
+
+layout = ...
+
+w = sg.Window(layout)
+
+for e,v in w:
+    ...
+```
+```py
+my_file.update(w.value.to_json())
+my_file.save()  # Only necessary if auto-save is disabled
+```
+... or inside the for-loop:
+```py
+my_file.update(v.to_json())
+my_file.save()  # Only necessary if auto-save is disabled
+```
+
+Tipp: You can also use `.to_json()` on most elements, which returns its value in a format json-files support.
+
+## Restoring values
+The opposite of `to_json` is `from_json`.
+
+`from_json` requires a `dict` in the form like created by `to_json`:
+```py
+# Save:
+save_state = w.value.to_json()
+
+# Load:
+w.value.from_json(save_state)
+```
+
+To save and load from a dict-file:
+```py
+# Save:
+my_file.update(w.value.from_json())
+my_file.save()
+
+# Load:
+w.value.from_json(my_file.to_dict())
+```
+
+## Sub-layouts
+Remember that sub-layouts have their own value-dict.
+
+You can use this to divide value-saves into parts.
+
+Consider this example:
+```py
+layout = [
+    [
+        sg.In(key= "Input"),
+        sg.Combobox(["Choice 1", "Choice 2"], key= "Combo"),
+    ],[
+        my_sublayout := sg.SubLayout([
+            [
+                sg.Checkbutton("Check!", key= "Check"),
+            ]
+        ])
+    ]
+]
+
+w = sg.Window(layout)
+```
+`w.value.to_json()` does not contain the sublayout or its parts.
+
+You can convert only the sublayout and its parts by calling `my_sublayout.to_json()`.
+
+To include the sublayout in `w.value.to_json()`, you need to give it a key:
+```py
+    my_sublayout := sg.SubLayout([
+        ...
+    ], key= "Sublayout")
+```
 
 
