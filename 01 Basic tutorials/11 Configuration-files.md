@@ -145,7 +145,7 @@ print(my_section.get("something else", "Default"))   # Default
 This part is important.
 
 Imagine trying to configure a program and being greeted by this configuration-file:
-```bash
+```ini
 [Appearance]
 
 [Text settings]
@@ -312,18 +312,6 @@ form_texts = [
 	]
 ```
 Run the script yourself and play around with the values to see what they do.
-
-## Saving to the root-folder
-Small note at the end:\
-It's best to save the config-file in the root directory, as explained in the previous tutorial:
-```py
-import SwiftGUI as sg
-from SwiftGUI.Files import root_path
-
-sg.Files.set_root("SwiftGUI Tutorial")
-
-config_file = sg.Files.ConfigFile(root_path("Main config.ini"))
-```
 
 
 

@@ -1,12 +1,15 @@
 
 # The GUI isn't everything
-There is more to a good program than its user-interface.
+There is more to a good program than its user-interface (Who would have thought...).
 
 Most programs have program files to save data.
 Especially inexperienced programmers like to just throw these files into the same folder the program was executed from.
 This is even more annoying when the python-script was converted to an exe file.
 
-Fortunately, SwiftGUI provides an easy solution which is explained in this tutorial.
+SwiftGUI transforms your text-based script into an actual program.\
+That's why it also contains features not directly related to GUIs.
+
+This tutorial explains how to set up and use a program-directory where you can save all of your internal program files to.
 
 # Root-folder
 SwiftGUI offers an easy way of creating and maintaining a "root-directory".
@@ -18,11 +21,11 @@ import SwiftGUI as sg
 
 sg.Files.set_root("SwiftGUI Tutorial")
 ```
-Strange, after running the script, no folder was created:\
+Strangely, after running the script, no folder was created:\
 ![](../assets/images/2026-01-01-18-07-35.png)
 
 That's because by default, the folder will be created inside the "home-folder".
-Where exactly this is is dependant on your operating system.\
+Where exactly this depends on your operating system.\
 Under Windows, it's usually `C:\Users\<username>`.
 
 To find out where the new folder was created, print `root_path`:
@@ -40,7 +43,7 @@ To create paths inside your root-directory, just pass the relative path to `.roo
 ```py
 import SwiftGUI as sg
 
-sg.Files.set_root("SwiftGUI Tutorial") # Usually it's the application name
+sg.Files.set_root("SwiftGUI Tutorial") # It's the application's name in most cases
 
 print(sg.Files.root_path("Testfile.txt")) # C:\Users\chees\SwiftGUI Tutorial\Testfile.txt
 print(sg.Files.root_path("assets/image.png")) # C:\Users\chees\SwiftGUI Tutorial\assets\image.png
@@ -53,7 +56,7 @@ C:\Users\chees\SwiftGUI Tutorial>tree /f
 C:.
 └───assets
 ```
-And of course, you can avoid this behavior by setting `create_subfolders = False` when calling `root_path`.
+And of course, you can avoid this behavior by setting `create_subfolders = False` when calling `root_path`, but I can't think of a reason why.
 
 The function returns a `Path`-object from the builtin package `pathlib`.
 If you don't know that package, you really should.
@@ -72,7 +75,7 @@ with open(filepath, "w") as f:  # This should be well known for you
 ```
 
 ```bash
-C:\Users\chees\SwiftGUI Tutorial>tree /f
+C:\Users\chees\SwiftGUI Tutorial>tree /f        ::Shows the folder/file-structure
 C:.
 └───assets
     └───More assets
@@ -81,7 +84,7 @@ C:.
 
 ## Simplifying the imports
 Small sidenote:
-When working with files a lot, you'll use `root_path` a lot.
+When working with files a lot, you'll often use `root_path`.
 
 That's why, going forward, it's imported directly:
 ```py
@@ -93,10 +96,11 @@ sg.Files.set_root("SwiftGUI Tutorial")
 with open(root_path("Testfile.txt"), "w") as f:
     f.write("Hello World")
 ```
+Much better.
 
 ## Root-folder outside the home-folder
 For debug reasons, I like to save program-files in the current directory.
-However, when the program is done, it should be saved in the actual root.
+However, when the program is ran as the user, it should be saved in the actual root.
 
 To do that, set `ignore_parent = True` in `set_root(...)`:
 ```py
