@@ -1,19 +1,19 @@
 
 # Config-files
-Even though you might like your program a certain way, your users might not feel the same.
+Even though you like your program in a certain way, your users might not feel the same.
 
-E.g.: If my grandma used programs I wrote, she'd not be able to read anything, because the text is too small.
+E.g.: If my grandma used programs I wrote, she'd not be able to read anything, because the texts were too small.
 Without configuration-options, I'd have to change the program itself, making the font bigger for all users.\
 Not ideal.
 
-A configuration-file is the easiest (proper) option to make programs configurable.
-This way, you can add a ton of options with little to no additional effort.
+A configuration-file is the easiest (proper) way to make programs configurable.
+Using configuration-files, you can add a ton of options with little to no additional effort.
 
-SwiftGUI offers a way to implement these fairly easily.\
-It looks complicated at first, but is honestly a lot easier than the stuff explained in other basic tutorials.
+SwiftGUI offers a way to implement them easily.
+It looks complicated at first, but is much easier than the stuff explained in most other basic SwiftGUI tutorials.
 
 To be honest, the heavy lifting is all done by the builtin package `configparser`: https://docs.python.org/3/library/configparser.html#configparser.ConfigParser \
-SwiftGUI only made it easier to use.
+SwiftGUI only adapts the package and makes it more suited for its usecase.
 
 # .ini files
 In SwiftGUI, configuration-files have the `ini`-format.
@@ -41,10 +41,10 @@ import SwiftGUI as sg
 config_file = sg.Files.ConfigFile("Main config.ini")
 ```
 Make sure to choose the name of that file very carefully.
-If users already made configuration, using a different name would make the prior file useless.
+A different name means a different (or new) file, so all user-configurations in the old file are ignored.
 
 **It is crucial that each configuration-file only has one corresponding `ConfigFile`-object.**
-If more `ConfigFile`-objects access the same file, they could overwrite themselves.
+If more `ConfigFile`-objects access the same file, they could overwrite each other.
 
 # Creating sections
 Remember that `ini`-files are divided into sections.
@@ -56,7 +56,7 @@ config_file = sg.Files.ConfigFile("Main config.ini")
 
 my_section = config_file.section("Some section")
 ```
-You can create multiple sections in the same file:
+You can create multiple sections for the same file:
 ```py
 import SwiftGUI as sg
 
@@ -78,11 +78,11 @@ my_section = config_file.section("Some section")
 my_other_section = config_file.section("Another section")
 last_section = config_file.section("Last one")
 
-my_section.set("my_value", "Hello")
-my_section["another_value"] = "World"
+my_section.set("my_value", "Hello") # Changing "my_value" to "Hello"
+my_section["another_value"] = "World"   # Changing "another_value" to "World"
 ```
-The changes are saved automatically.
-This is what the file looks like afterwards:
+The changes are saved to the file automatically.\
+This is what "Main config.ini" looks like afterwards:
 ```ini
 [Some section]
 my_value = Hello
@@ -106,8 +106,16 @@ my_section.set_many(
 ```
 Sets multiple values, but saves only once.
 
+For naming consistency, there is also `.update`, which requires a dict as argument:
+```py
+my_section.set_many({
+    "my_value": "Hello",
+    "another_value": "World",
+})
+```
+
 ## Auto-save
-...or you can disable auto-save:
+Alternatively, you can disable auto-save to prevent lags when writing a lot of values.
 ```py
 config_file = sg.Files.ConfigFile("Main config.ini", auto_save= False)
 ```
@@ -115,11 +123,12 @@ config_file = sg.Files.ConfigFile("Main config.ini", auto_save= False)
 However, now you have to save manually using `.save()` on any object related to `config_file`:
 ```py
 config_file.save()  # Save to file
-my_section.save()   # Does the same
+my_section.save()   # Does the same as config_file.save()
 ```
+Note that `.save()` on any section saves the whole file, not just that particular section.
 
 # Reading values
-Read values like you'd do with dictionaires:
+Read values like with dictionaires:
 ```py
 import SwiftGUI as sg
 
@@ -129,7 +138,7 @@ my_section = config_file.section("Some section")
 
 print(my_section["my_value"])   # Hello
 ```
-Make sure that your key is lowercase only and the value is included in the config-file.
+Make sure that your key is lowercase only and the value is included in the config-file (or its defaults, which is discussed later).\
 If it's not included, a `KeyError` occurs, so same as with dictionaries.
 
 Also like dictionaries, you can use `.get()` instead, which doesn't cause a `KeyError`:
@@ -152,7 +161,10 @@ Imagine trying to configure a program and being greeted by this configuration-fi
 
 [Translations settings]
 ```
-Aparrently, the program expects you to know all of the parameter names, because the programmer only used `.get(...)`.
+Aparrently, the program expects you to look up all of the parameter names.
+Very inconvenient.
+
+This is what happens when you only use `.get(...)` to handle default-values.
 
 A proper way to set default values looks like this:
 ```py
@@ -166,7 +178,7 @@ my_section = config_file.section("Some section", defaults={
     "title": "SwiftGUI Config test",
 })
 ```
-If any of these values are missing in the config-file, they are added instantly:
+If any of these values are missing, they are added instantly:
 ```ini
 [Some section]
 text_color = red
@@ -181,18 +193,7 @@ my_section.add_defaults(
     title = "SwiftGUI Config test"
 )
 ```
-
-# Bools as values
-Bools are absolutely not compatible with this format.
-Any non-empty string is considered as `True` by Python.
-
-SwiftGUI offers a workaround: Using `.get_bool` instead of `.get`.
-
-This way, the following strings represent `True` (Not case-sensitive):
-- `1`
-- `True`
-- `Yes`
-- `Y`
+This has no benefit and should be avoided.
 
 # Numbers as values
 As discussed earlier, only strings are permitted as values.
@@ -208,10 +209,28 @@ Keep in mind that the user can access the file...
 
 Since a lot of values are gonna be ints/floats, the methods `.get_int` and `.get_float` can be used to save a bit of typing.
 
+# Bools as values
+Bools are absolutely not compatible with this format.\
+Any non-empty string is considered as `True` by Python.
+
+So when calling `my_section.get("some_bool", to_type= bool)`, any value except for an empty string would be `True`.
+
+SwiftGUI offers a workaround: Using `.get_bool` instead of `.get`.
+
+This way, the following strings represent `True` (Not case-sensitive):
+- `1`
+- `True`
+- `Yes`
+- `Y`
+
+Anything else is `False`.
+
 # More complex values (JSON)
 For structures like lists, dicts and sets, SwiftGUI offers another workaround:
-Saving the values as a JSON-string.\
-Note that I don't fully trust this feature, but none of my tests failed so far, so you'll probably be fine.
+Saving the values as a JSON-string.
+
+Note that this is very unclean and should only be utilized in small scales.
+It works well, but feels wrong.
 
 For most methods of the section-object, there is a json-version:
 ```py
@@ -231,8 +250,6 @@ my_list = [
 	    5
 	]
 ```
-It could look better, but does get the job done.
-
 The following json-methods are available:
 - `set_json`
 - `set_json_many`
@@ -240,78 +257,22 @@ The following json-methods are available:
 - `add_json_defaults`
 
 I know this isn't ideal.
-A different pure file-format, like TOML might be better suited, but I don't want to rely on external libraries too much.\
-However, there will be a simmilar implementation for json-files in the future.
+A different pure file-format, like TOML might be better suited, but that would require an additional package to be installed.
+
+## Pure json-configuration
+If you need to include a lot of json-objects in your configuration, consider using a json-dict-file instead.
+Setting `add_defaults_to_values=True`, the file functions almost exactly like a configuration-section:
+```py
+sg.Files.DictFileJSON("My configuration.json", defaults=..., add_defaults_to_values=True)
+```
+
+# Configuration-elements
 
 # Conclusion: The proper way of using config-files
-Since this tutorial is very theoretical, here's an example combining some of the concepts.
+I know the concept of user-configurability might sound a bit strange at first.
+But trust me on this, if you want people to use your program, you need to make it configurable. 
+Especially if those people are computer-literate, or even, god forbid, use Linux.
 
-I know it looks very messy, since I included some higher concepts too.
-```py
-import SwiftGUI as sg
-
-# Init the file
-main_config = sg.Files.ConfigFile("Config.ini")
-
-general_section = main_config.section("General", defaults={
-    "four_colors_theme": "Emerald",
-    "title": "SwiftGUI example",
-})
-
-layout_section = main_config.section("Layout", defaults={
-    "font_size": 12,    # Will be converted to string automatically
-    "submit_button": True,
-}, json_defaults={
-    "form_texts": [
-        "Name",
-        "Age",
-        "Occupation",
-    ]
-})
-
-theme = getattr(sg.Themes.FourColors, general_section["four_colors_theme"]) # Get a reference to the theme
-theme() # Apply the theme
-
-sg.GlobalOptions.Common_Textual.fontsize = layout_section.get_int("font_size")  # Apply font-size
-sg.GlobalOptions.Button.fontsize = None # Remove the overwritten value
-
-layout = [
-    [
-        sg.T("Please enter your information:"),
-    ], [
-        sg.Form(
-            layout_section.get_json("form_texts"),  # Ideally, this is a list.
-        )
-    ]
-]
-
-if layout_section.get_bool("submit_button"):
-    layout.append([ # Add a row with the button to the end
-        sg.Button("Submit")
-    ])
-
-w = sg.Window(layout, title= general_section["title"])  # Apply the title
-
-for e,v in w:
-    ...
-```
-
-After starting the script, the config-file looks like this:
-```ini
-[General]
-four_colors_theme = Emerald
-title = SwiftGUI example
-
-[Layout]
-font_size = 12
-submit_button = True
-form_texts = [
-	    "Name",
-	    "Age",
-	    "Occupation"
-	]
-```
-Run the script yourself and play around with the values to see what they do.
 
 
 
