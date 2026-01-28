@@ -266,13 +266,115 @@ Setting `add_defaults_to_values=True`, the file functions almost exactly like a 
 sg.Files.DictFileJSON("My configuration.json", defaults=..., add_defaults_to_values=True)
 ```
 
-# Configuration-elements
+# Editing config-files from the gui
+Opening a file to change some configuration is kinda annoying.
 
-# Conclusion: The proper way of using config-files
-I know the concept of user-configurability might sound a bit strange at first.
-But trust me on this, if you want people to use your program, you need to make it configurable. 
-Especially if those people are computer-literate, or even, god forbid, use Linux.
+That's why SwiftGUI offers two elements to integrate configuration-files into the layout: `sg.Files.ConfigSectionEditor` and `sg.Files.ConfigFileEditor`.
 
+As you might have guessed, the section-editor lets you edit a section:
+```py
+import SwiftGUI as sg
+
+config_file = sg.Files.ConfigFile("Main config.ini")
+
+my_section = config_file.section(
+    "Some section",
+    defaults= {
+        "foo": "Bar",
+        "hello":"",
+        "another_option":"",
+    }
+)
+
+sg.Themes.FourColors.DarkGold()
+
+layout = [
+    [
+        sg.Files.ConfigSectionEditor(my_section),
+    ]
+]
+
+w = sg.Window(layout=layout)
+
+for e,v in w:
+    ...
+```
+![](../assets/images/2026-01-28-12-25-57.png)\
+(On linux Ubuntu this time)
+
+As you can see, the default values appear as a form an can be edited by the user.
+Clicking `Save` actually applies the values to the file and throws the default-event.
+`Reset` re-applies the current state of the config-section.
+
+There is also `sg.Files.ConfigFileEditor`, which adds a section-editor for every section of a file in an `sg.Notebook`:
+```py
+import SwiftGUI as sg
+
+config_file = sg.Files.ConfigFile("Main config.ini")
+
+my_section = config_file.section(
+    "Some section",
+    defaults= {
+        "foo": "Bar",
+        "hello":"",
+        "another_option":"",
+    }
+)
+
+my_other_section = config_file.section(
+    "Another section",
+    defaults= {
+        "food": "",
+        "world": "hello"
+    }
+)
+
+last_section = config_file.section("Last one")
+
+sg.Themes.FourColors.DarkGold()
+
+layout = [
+    [
+        sg.Files.ConfigFileEditor(config_file),
+    ]
+]
+
+w = sg.Window(layout=layout, padx=30, pady=30)
+
+for e,v in w:
+    ...
+```
+![](../assets/images/2026-01-28-12-32-21.png)\
+![](../assets/images/2026-01-28-12-32-33.png)
+
+Note that `last_section` is not shown since it does not have default values.
+
+## Config-editor as a popup
+Since these two elements are combined elements, they can be used as a popup:
+```py
+import SwiftGUI as sg
+
+config_file = sg.Files.ConfigFile("Main config.ini")
+
+my_section = config_file.section(
+    "Some section",
+    defaults= {
+        "foo": "Bar",
+        "hello":"",
+        "another_option":"",
+    }
+)
+
+
+sg.Themes.FourColors.DarkGold()
+sg.Files.ConfigSectionEditor(my_section).popup(title= "Configuration")
+```
+![](../assets/images/2026-01-28-12-44-08.png)
+
+This works for configuration-file-editors too.
+
+**Just remember that it is not possible to re-use elements that were already part of a layout.**
+That means, to re-open the popup, you need to create a new `ConfigSectionEditor`.
 
 
 
