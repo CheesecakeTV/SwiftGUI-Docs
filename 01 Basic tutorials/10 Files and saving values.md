@@ -7,7 +7,7 @@ It's not particularely difficult, just soooo off-putting.
 This tutorial explains how SwiftGUI makes saving data less annoying.
 
 It also explains how to "collect"/"restore" all current element-values.\
-This way, it's easy to let the user save what their doing and restore it later.
+This way, it's easy to let the user save what they're doing and restore it later.
 
 # File-types
 Before getting to the interesting part, you need to know these two common file-types: `json` and `pickle`.
@@ -33,35 +33,36 @@ Such a string looks a lot like python-objects:
 You could just copy and paste it to the script to recreate the saved dict.
 
 A big disadvantage is that **json only lets you save (most) builtin types**.\
-You can not save instances of classes you created yourself.
-Same goes for objects from external packages.
+That means, you can store `list`, `dict`, `set`, `int`, and so on, but not instances of classes you created yourself.
+Same goes for most objects from other packages.
 
 ## Pickle
 Pickle is the Python-equivalent of json.
-It lets you save whatever you want, even objects of self-created classes.\
+It lets you save whatever type of object you want, even objects of self-created classes.\
 However, it is not humanly-readable like json.
+You can't open a pickle-file with a text editor.
 
-The basic usage of pickle is the same as json, but it has room for a couple of major mistakes:
+Pickle has a couple of benefits that also pose a risk:
 
 ### Preserving references
-All referenced objects from any object are saved with the object.
+All referenced objects from any object are saved together with that object.
 
-Let's say you want to save the value-dict of your window (Which doesn't work, don't do it):
+Example: Let's say you want to save the value-dict of your window (Which doesn't work, don't do it!):
 ```py
 my_values = w.value
 
 pickle_save(my_values)    # Placeholder, doesn't work
 ```
-But `my_values` contains a hidden reference to the window:`my_values._window`.\
+But `my_values` contains a hidden reference to the window: `my_values._window`.\
 That means, pickle will **also save the window-object**.
 
 Guess what, the window contains references to every element in the layout.
 These will also be collected and saved.
 
-So instead of saving some values to the file, you just saved your whole layout.
+So, instead of saving some values to the file, you just saved your whole layout.
 
 ### Missing attributes
-This is more advanced and only important for anyone creating their own classes.
+This is more advanced and only important when saving self-made classes (instances).
 
 Objects loaded from a pickle file do not run `__init__` when being restored.\
 That means, any attribute you create in `__init__` is either saved in the file or doesn't exist.
@@ -103,24 +104,21 @@ What do you think happens, when a user loads his save from the prior version?
 my_instance = pickle_load() # Still a placeholder
 my_instance.print_object()
 ```
-`my_instance.print_object()` generates and `AttributeError`, because `my_instance` does not know `updated_hello`.
+`my_instance.print_object()` generates an `AttributeError`, because `my_instance` does not know `updated_hello`, since it was not saved in that file.
 
-There are ways around this problem, but I'm not gonna cover those here.
-Just keep in mind that this problem exists and can kill old save-files if you're not careful.
+There are ways to work around this problem, but I'm not gonna cover those here.
+Just keep in mind that this problem exists and can potentially kill old save-files.
 
 # Dict-files
-SwiftGUI's dict-files work like Python-dictionaries, but let you easily save its content to an actual file.
+SwiftGUI's dict-files basically work like Python-dictionaries, but let you easily save its content to an actual file.
 
 Currently (Version 0.11.0), there is a json- and a pickle-version of dict-files.
 
-They save the values differently, but you can use them almost exactly the same way.
-It's also quite easy to create a dict-file-version for your own encoder, but that's not covered by this tutorial.
+You can use them exactly the same way, even though they save in different formats.
+It's also quite easy to create your own version of dict-files, but that's not covered by this tutorial.
 
-I'll only show the json-version.
-Just remember that Pickle works the same.
-
-Keep the advantages of json/pickle in mind when choosing the type.
-Json is humanly-readable while pickle lets you save non-basic types.
+Keep the advantages of json/pickle in mind when choosing which to use.\
+Json is humanly-readable, while pickle lets you save non-basic types.
 
 ## Creating the file
 Create the file like this:
@@ -157,12 +155,12 @@ The file was instantly created and looks like this:
 You can also use `.set("Hello", "World")`, which has no advantage over the other way.
 
 ### Saving multiple values
-(With auto-save on) Each value-change updates the file, which can cause lag-spikes.
+(With auto-save enabled) Each value-change updates the file, which can cause lag-spikes.
 File-operations are slow.
 
 So if possible, save multiple values at once.
 
-Like normal dicts, you can use `.update`:
+Like normal dicts, you may use `.update`:
 ```py
 my_file.update({
     "Hello": "World",
@@ -179,12 +177,10 @@ my_file.set_many(
 ```
 ...but that only lets you use strings as keys.
 
-Your decision.
-
 ### Auto-save
-By default, every "write-operation" writes over the file.
+By default, every "write-operation" overwrites the file.
 
-Disable this behavior when creating the file:
+You can disable this behavior when creating the file:
 ```py
 my_file = sg.Files.DictFileJSON(
     "My File.json",
@@ -206,6 +202,7 @@ It also allows you to specify a default-return which returns instead of `None`:
 ```py
 print(my_file.get("Foo", "Value not found"))
 ```
+You might already know that `.get` works exactly the same as `dict.get`.
 
 ### Loading values from the file
 When created, the file is read once and only written after that.
@@ -214,7 +211,7 @@ If an external source changes the file, your program won't notice by itself.
 So, to read the file again, use `.load()`.
 
 Keep in mind that this operation applies all values included in the file.
-If you don't use auto-save and forget to save before, this might overwrite changes you made.
+If you don't use auto-save and forgot to save before, this might overwrite changes you made.
 
 ## Default values
 Instead of using `.get` with a default-return, you should define default values.
@@ -243,6 +240,52 @@ The file still looks like this:
 }
 ```
 
+## Counters
+I found that I often need to save "counted values".
+These are numeric values that, well, count something.
+
+You don't actually need to create a counter, just use `.increment()`.
+
+Example: Let's print how often the python-script was executed:
+```py
+import SwiftGUI as sg
+
+my_file = sg.Files.DictFileJSON(
+    "My File.json",
+    defaults={
+        "times_executed": 0,
+    }
+)
+
+print(my_file.increment("times_executed"))
+```
+`.increment` adds `1` to the current value and returns the new value.
+
+You can also remove the default-value, just remember that `my_file["times_executed"]` might generate a key-error if `.increment` wasn't called before:
+```py
+import SwiftGUI as sg
+
+my_file = sg.Files.DictFileJSON(
+    "My File.json",
+)
+
+print(my_file.increment("times_executed"))
+```
+You may also specify how much the value should increment by passing `amount`:
+```py
+print(my_file.increment("money", amount=gained_money))
+```
+
+This doesn't only work with `int`, but with any value-types that can be added together.
+The implementation of `.increment` is supendously simple:
+```py
+    def increment(self, key, amount = 1, initial = 0):
+        new_val = self.get(key, default=initial) + amount   # Add the amount to the value
+        self.set(key, new_val) # Save that value
+        return new_val  # Return that value
+```
+As you can see, you can also pass `initial`, which does the same as defining the key in `default`.
+
 ## Saving/loading from different locations
 Sometimes, it's necessary to save to a different file, like when creating a backup.
 
@@ -266,11 +309,17 @@ my_file.path = "New path.json"
 Note that the values DO NOT automatically refresh like when using `.load()`.
 If you also want to load the new file, you need to call `.load()` afterwards.
 
-# Saving/restoring user-entries
-Since SwiftGUI version 0.11.0, it's possible to "gather" and restore all values of layout-parts at once.
+Alternatively, you may use `.set_path`:
+```py
+my_file.set_path("New path.json", reload= True)
+```
+If that file already exists, `reload=True` calls `.load()` after updating the path.
 
-However, this only works for elements with a key.
-Elements without keys are ignored.
+# Saving/restoring user-entries
+Since SwiftGUI version 0.11.0, it's possible to "gather" and restore all values of full layout-parts at once.
+
+**However, this only works for elements with a key.
+Elements without keys are ignored.**
 
 ## Saving values
 Value dicts are instances of custom classes, so they can't be saved in json files.
@@ -301,7 +350,9 @@ my_file.update(v.to_json())
 my_file.save()  # Only necessary if auto-save is disabled
 ```
 
-Tipp: You can also use `.to_json()` on most elements, which returns its value in a format json-files support.
+Tipp: You can also use `.to_json()` on most elements, which returns its value in a format json-files support.\
+Some elements return more information than the current value (E.g.: `sg.List`).
+So when saving a value, you should stick to `.to_json()`.
 
 ## Restoring values
 The opposite of `to_json` is `from_json`.
@@ -325,8 +376,11 @@ my_file.save()
 w.value.from_json(my_file.to_dict())
 ```
 
+Tipp: Like `to_json` can be used on most elements, `from_json` also works.
+Just keep in mind that `from_json` always requires a format fitting to `to_json`.
+
 ## Sub-layouts
-Remember that sub-layouts have their own value-dict.
+Remember that each sub-layout has its own value-dict.
 
 You can use this to divide value-saves into parts.
 
@@ -347,15 +401,16 @@ layout = [
 
 w = sg.Window(layout)
 ```
-`w.value.to_json()` does not contain the sublayout or its parts.
-
-You can convert only the sublayout and its parts by calling `my_sublayout.to_json()`.
+`w.value.to_json()` does not contain the sublayout or its elements, because the sublayout has no key.
 
 To include the sublayout in `w.value.to_json()`, you need to give it a key:
 ```py
     my_sublayout := sg.SubLayout([
-        ...
+        [
+            sg.Checkbutton("Check!", key= "Check"),
+        ]
     ], key= "Sublayout")
 ```
 
+Or you can convert only the sublayout and its contained elements by calling `my_sublayout.to_json()`.
 
