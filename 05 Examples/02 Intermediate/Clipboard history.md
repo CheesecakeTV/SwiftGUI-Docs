@@ -10,6 +10,7 @@ Click an item in the history, to copy it to clipboard again.
 
 # Demonstrated concepts
 - Basic usage of SwiftGUI
+- Binding custom events
 - Working with listboxes
 - Clipboard-observer
 
@@ -21,7 +22,7 @@ import SwiftGUI as sg
 _max_characters = 50    # How many characters should be displayed maximum
 _TextField_height = 5   # How many rows are shown in the text-field
 _Listbox_height = 5     # How many rows the listbox has
-_max_history = 30    # How many previous clipboards are saved
+_max_history = 50    # How many previous clipboards are saved
 
 sg.Themes.FourColors.Emerald()  # Use a different theme, as you please
 
@@ -39,6 +40,17 @@ layout = [
     ],[
         sg.Spacer(height=15),   # Some space, looks better
     ],[
+        sg.T("Copy this text (press enter):"),
+    ], [
+        sg.In(
+            key="CopyText",
+            expand=True,
+        ).bind_event(
+            sg.Event.KeyEnter,
+        )
+    ], [
+        sg.Spacer(height=15),
+    ], [
         sg.T("History")
     ], [
         lb := sg.Listbox(
@@ -49,13 +61,22 @@ layout = [
     ]
 ]
 
-w = sg.Window(layout, title="Clipboard history", alignment="left")
+w = sg.Window(
+    layout,
+    title="Clipboard history",
+    alignment="left", # All elements should place themselves as far left as they can
+    keep_on_top=True, # Don't hide this window behind other windows
+)
+
 sg.clipboard_observer(w, key="ClipboardChanged", throw_initial_value=True)  # Throws an event every time the clipboard changes
 
 previous_clp = None # Clipboard previous loop
 
 for e,v in w:
     #print(e,v)
+    if e == "CopyText" and v["CopyText"]:   # If the user pressed enter (return) in the input and there is text in there
+        sg.clipboard_copy(v["CopyText"])    # Copy the text
+        v["CopyText"] = ""  # Empty the input-field
 
     if e == "ClipboardChanged" and previous_clp != v[e]:    # previous_clp gets important later
         previous_clp = v[e] # Read the new clipboard from the observer
