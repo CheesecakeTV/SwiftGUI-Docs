@@ -14,11 +14,11 @@ Click an item in the history, to copy it to clipboard again.
 - Clipboard-observer
 
 # Full code
-Written in SwiftGUI version 0.8.4.
+Written in SwiftGUI version 0.8.4, updated to 0.11.4.
 ```py
 import SwiftGUI as sg
 
-_max_characters = 150    # How many characters should be displayed maximum
+_max_characters = 50    # How many characters should be displayed maximum
 _TextField_height = 5   # How many rows are shown in the text-field
 _Listbox_height = 5     # How many rows the listbox has
 _max_history = 30    # How many previous clipboards are saved
@@ -77,7 +77,7 @@ for e,v in w:
         lb.index = 0    # Select the first element
         v["CurrentCLP"] = previous_clp    # Display the current clp
 
-        if len(lb.list_elements) > _max_history:    # History "full"
+        if len(lb.all_elements) > _max_history:    # History "full"
             del lb[-1]  # Delete oldest history-entry
 
     if e == "History":
