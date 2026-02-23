@@ -64,7 +64,7 @@ You could easily integrate it into an existing application.
 - Using a popup as the main window
 
 # Full code
-Written in SwiftGUI version 0.10.17:
+Written in SwiftGUI version 0.10.17, updated to version 0.11.5:
 ```py
 from typing import Hashable, Any, Callable
 import SwiftGUI as sg
@@ -114,7 +114,7 @@ class SingleAddress(sg.BasePopupNonblocking):
 
     def _event_loop(self, e: Hashable, v: sg.ValueDict):
         if e == "Form":
-            self._table_row.overwrite(self.form.value.values())  # Overwrite "my" table-row. It automatically refreshes its table.
+            self._table_row.overwrite(self.form.values())  # Overwrite "my" table-row. It automatically refreshes its table.
             self.w.update(title= self._table_row[0])    # Change the title of this window
             self._save_function()   # Save to file
 
@@ -164,7 +164,7 @@ class Addressbook(sg.BasePopupNonblocking):
                     default_event= True,
                 ),
                 sg.T(expand= True), # This way, the other expanded element only covers roughly half the row. Leave it out and see how it looks
-                                    # The proper way to do this would be a separate frame for table and searchbar, but the layout is complicated enough.
+                # The proper way to do this would be a separate frame for table and searchbar, but the layout is complicated enough.
             ],[
                 sg.Spacer(height= 10)    # Some space between the rows
             ], [
@@ -254,7 +254,7 @@ class Addressbook(sg.BasePopupNonblocking):
 
         if e == "Form" and self._selected_row is not None:
             # Overwrite the whole row without breaking the reference
-            self._selected_row.overwrite(self.form.value.values())  # self.form.value.values() returns all input-values as an iterable
+            self._selected_row.overwrite(self.form.values())  # self.form.value.values() returns all input-values as an iterable
             self._save_to_file()
 
             # Also update the pinned window

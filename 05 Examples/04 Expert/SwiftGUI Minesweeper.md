@@ -44,6 +44,11 @@ import SwiftGUI as sg
 import itertools
 import random
 from enum import Enum
+import sys
+
+# If there are too many empty fields, the recursion-limit could crash the program.
+# This is prevented by increasing the limit
+sys.setrecursionlimit(10000)
 
 sg.Themes.FourColors.FrostyBlue()
 

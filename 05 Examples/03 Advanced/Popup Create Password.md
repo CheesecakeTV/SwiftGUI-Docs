@@ -23,11 +23,11 @@ It is especially interesting since the code is quite short for what it can do:
 Written in SwiftGUI version 0.10.18:
 ```py
 import SwiftGUI as sg
-from SwiftGUI import ValueDict
+from typing import Hashable
 
 sg.Themes.FourColors.TransgressionTown()
 
-class create_password(sg.BasePopup, str):
+class create_password(sg.BasePopup, str):   # The popup "returns" an str, so inherit from str too for type-checking.
     def __init__(self, title: str = "Create your password", **kwargs):
 
         layout = [
@@ -36,7 +36,7 @@ class create_password(sg.BasePopup, str):
                 password := sg.In(
                     key= "PW",
                     default_event= True,
-                    pass_char= "*", # Hidden characters
+                    pass_char= "*", # Hidden characters (all characters are replaced with "*")
                 ).bind_event(
                     sg.Event.KeyEnter,
                     key_function= lambda w:w["Confirm"].set_focus() # Jump to next input-element
@@ -45,7 +45,7 @@ class create_password(sg.BasePopup, str):
                 sg.Checkbox(
                     "Show password",
                     default_event= True,
-                    key_function= lambda val: password.update(pass_char = "" if val else "*"),  # If the box is checked, reveal characters. Else hide them
+                    key_function= lambda val: password.update(pass_char = "" if val else "*"),  # If the box is checked, reveal characters. Else, hide them
                     takefocus= False,   # Pressing tab should ignore this element
                 )
             ],[
@@ -72,14 +72,14 @@ class create_password(sg.BasePopup, str):
                 )
             ]
         ]
-        self.password = password    # Save these two for later
+        self.password = password    # Save these two elements for later
         self.confirm = confirm
 
-        super().__init__(layout, title=title, **kwargs)
+        super().__init__(layout, title=title, **kwargs) # Create the window
         password.set_focus()    # Start with the focus on the password-input-field
 
     def _event_loop(self, e: Hashable, v: sg.ValueDict):
-        pws_match = self.password.value == self.confirm.value
+        pws_match = self.password.value == self.confirm.value   # Do the passwords match?
 
         if e == "Done" and pws_match:
             self.done(self.password.value)  # "Return" the password
@@ -93,7 +93,7 @@ class create_password(sg.BasePopup, str):
             self.confirm.update(background_color="#A52A2A")
 
 
-# Using the popup
+# Use the popup
 print("Created password:", create_password())
 ```
 

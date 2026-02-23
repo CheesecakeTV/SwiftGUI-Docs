@@ -53,12 +53,13 @@ def refresh(v):
     """Calculate and refresh the plot, if valid input was made"""
     try:
         y = eval(v["In"])   # Apply the formula. Not really secure though...
-    except:  # Sue me
-        ...
-    else:
-        my_plot.clear() # Delete current plot
-        my_plot.update(title=v["In"]) # Apply title
-        my_plot.plot(x, y)
+
+        if x.shape == y.shape:
+            my_plot.clear() # Delete current plot
+            my_plot.update(title=v["In"]) # Apply title
+            my_plot.plot(x, y)
+    except:  # Yes yes, I know
+        return  # If the execution fails, stop refreshing
 
 
 configuration = [

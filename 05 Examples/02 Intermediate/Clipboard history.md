@@ -1,8 +1,9 @@
 
 # Clipboard history
-This program let's you see the last n clipboard-elements and recalls them if clicked:
+This program lets you see the last n clipboard-elements and recalls them if clicked:
 
-![](../../assets/images/2025-09-23-15-08-41.png)
+![](../../assets/images/2025-09-23-15-08-41.png)\
+(The image is not up to date)
 
 When you copy something new, it will be added to the history.
 
@@ -81,18 +82,18 @@ for e,v in w:
     if e == "ClipboardChanged" and previous_clp != v[e]:    # previous_clp gets important later
         previous_clp = v[e] # Read the new clipboard from the observer
 
-        try:    # Filter out images and such
+        try:    # Filter out images and such, which can also be copied to clipboard
             previous_clp  = str(previous_clp)
-        except (ValueError, TypeError):  # This clipboard can't be converted to str, tragic...
+        except (ValueError, TypeError):  # This clipboard can't be converted to str
             v["CurrentCLP"] = "Can't be converted to string..."
-            continue
+            continue    # Skip the rest
 
         if len(previous_clp) > _max_characters * 10:    # If something too long is copied, don't allow it or it might crash the application
             v["CurrentCLP"] = "Too many characters..."
             continue
 
         lb.delete_element(previous_clp) # If the clipboard-content is already in the listbox, remove it
-        # This way, it looks as if the row moved to the top
+        # This way, it looks as if the corresponding row moved to the top
 
         lb.append_front(previous_clp)   # Add the clp to the history-list
         lb.index = 0    # Select the first element

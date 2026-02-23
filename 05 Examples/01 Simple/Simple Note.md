@@ -11,6 +11,9 @@ I will publish an example of this program in every "difficulty-level".
 - Basic usage of SwiftGUI
 - Saving values to a file (not SwiftGUI native)
 
+Note that SwiftGUI offers a way of saving/loading files.
+The example only shows the "normal" Python-way to not confuse beginners.
+
 # Full code
 Written in SwiftGUI version 0.8.4.
 ```py
