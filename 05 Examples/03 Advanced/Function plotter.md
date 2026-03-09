@@ -22,6 +22,7 @@ Feel free to add it yourself.
 
 # Full code
 Using SwiftGUI version 0.10.7, SwiftGUI_Matplot version 0.1.0.
+Updated for SwiftGUI version 0.11.9.
 ```py
 import SwiftGUI as sg
 from numpy import * # This way, sin/cos/... refer to their numpy variants in eval(...)
@@ -39,8 +40,8 @@ def update_x(v, val):
     """Update x-axxs"""
 
     # Get the configuration input by the user
-    x_min = to_float(val["x min"], default= -10)
-    x_max = to_float(val["x max"], default= 10)
+    x_min = to_float(val["x_min"], default= -10)
+    x_max = to_float(val["x_max"], default= 10)
     n = int(to_float(val["n"], default= 200))
 
     # Change x-values
@@ -65,7 +66,11 @@ def refresh(v):
 configuration = [
     [
         sg.Form(
-            ["x min", "x max", "n"],
+            {
+                "x_min": "x min",
+                "x_max": "x max",
+                "n": "n",
+            },
             default_values= [-10, 10, 200],
             default_event= True,
             key_function= update_x,
