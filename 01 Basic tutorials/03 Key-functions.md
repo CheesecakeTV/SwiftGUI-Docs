@@ -4,25 +4,27 @@ This is one of the most useful feature of `SwiftGUI` I really missed in `PySimpl
 
 It's actually the feature which first inspired me to create SwiftGUI.
 
-Don't get me wrong, the event-loop-system is great for smaller windows, but for bigger ones, you don't want to set and handle each and every tiniest tiny action by running through the whole loop.
-Every event needs its own entry inside the single, giant event-loop, so everything gets real messy real quick.
+Don't get me wrong, the event-loop-system is great for smaller windows, but for bigger ones, you don't want to set and handle each and every tiniest tiny action by running through the whole event-loop.
+In PySimpleGUI, every event needs its own entry inside the single, giant event-loop, so everything gets really messy real quick.
 
-Example: You'd like to create an input-field with a small button on the side that clears the input.
-The only purpose of the button is to clear the input, yet it enlarges the event-loop.\
+Example: You'd like to create an input-field with a small button on the side which clears that input.
+The only purpose of that button is to clear the input, yet it enlarges the event-loop.\
 It also needs its own unique key, which is quite annoying. 
 To have a proper key-structure, you'd need to create very long keys, like `"LeftColumn.TablePart.NameInput.ClearButton"`.\
 Don't like that.
 
-The solution: Define the action (function) to do when creating the element, using key-functions.
+The solution: Skip the whole event-loop-tingy and tell the element directly what to do.
+No extra key and no going through the event-loop.
 
-There is actually another solution presented in basic tutorial 06 (bigger layouts).
+Since version 0.8.0, there is a very elegant way to reduce clutter in the event-loop.
+This is explained in basic tutorial 07 (Seperate key-systems).\
+However, its usecase is a lot different from key-functions.
+Both are incredibly useful.
 
 # Basic concept
 When creating elements, or binding events, you don't actually need to specify a key to throw events.
 
 If you define a "key-function", that function will be called when the event occurs.
-
-You do not need to define a key if you define at least one key-function.
 
 Example: Let's create a button that prints "hello world" when pressed:
 ```py
@@ -56,15 +58,13 @@ for e,v in w:
 That's all you need.\
 The main loop is empty, yet `hello_world` is called when the button is pressed.
 
-No "occupied" key, no enlarging the event-loop, good readability.
-
-For a small functionality like this you might want to use a lambda-function instead:
+For a small functionality like this, you might want to use a lambda-function instead:
 ```py
 layout:list[list[sg.BaseElement]] = [
     [
         sg.Button(
             "Print hello World!",
-            key_function=lambda :print("Hello World")
+            key_function=lambda: print("Hello World")
         )
     ]
 ]
@@ -81,8 +81,7 @@ sg.Button(
     ]
 )
 ```
-
-**You may add key-functions to custom events calling `.bind_event(..., key_function= ...)` on the element.** (Remember this, it's important)
+You may add key-functions to custom events calling `.bind_event(..., key_function= ...)` on the element.
 
 # Parameters
 This feature looks pretty basic so far.
@@ -92,11 +91,11 @@ Here's where the best part about key-functions comes in:\
 You can "request" certain information about the GUI by using parameters.
 
 If you create parameters with the following names, they will be passed accordingly:
-- `w`     - Window (the window, usually called `w`)
+- `w`     - Window (the window that event was called from, usually called `w`)
 - `e`     - Event (Event-key, if you did define it. Same as `e` in the for-loop)
-- `v`     - Value-"dict" (Same as `v` in the for-loop)
-- `val`   - Value (Value of the event-throwing-element, same as `w[e].value`)
-- `elem`  - Element (Element that caused the event, same as `w[key]`)
+- `v`     - Value-"dict" (Value-dict, Same as `v` in the for-loop)
+- `val`   - Value (Value of the event-throwing element, same as `w[e].value`)
+- `elem`  - Element (Element that caused the event, same as `w[e]`)
 - `args`  - The tkinter-event-arguments (if you don't know what this is, ignore it.), its type is always `tuple`.
 
 Example: Let's create an input-element that prints its value to the console when being changed:
@@ -106,7 +105,7 @@ layout:list[list[sg.BaseElement]] = [
     [
         sg.In(
             default_event=True,
-            key_function=lambda val:print("New value:",val),
+            key_function=lambda val: print("New value:",val),
         )
     ]
 ]
@@ -137,9 +136,9 @@ def change_if_value_is_even(val, elem): # val: current value of the input. elem:
         if int(val) % 2 == 0:   # Even
             elem.update(background_color = sg.Color.sea_green)
         else:   # Odd
-            elem.update(background_color=sg.Color.light_blue)
+            elem.update(background_color = sg.Color.light_blue)
     except ValueError: # Not a number
-        elem.update(background_color=sg.Color.orange)
+        elem.update(background_color = sg.Color.orange)
 
 
 ### Layout ###
@@ -154,7 +153,7 @@ layout:list[list[sg.BaseElement]] = [
 ```
 Try it yourself, it works perfectly.
 
-The best part is that we can simply duplicate the input-element while preserving its functionality:
+This way, we can easily duplicate that functionality without additional effort:
 ```py
 ### Layout ###
 layout:list[list[sg.BaseElement]] = [
@@ -167,9 +166,9 @@ layout:list[list[sg.BaseElement]] = [
 ```
 ![](../assets/images/2025-08-05-14-52-03.png)
 
-With keys, you'd need to define a unique key for every copy.
+With keys, you would need to define a unique key for every copy and change the event-loop accordingly.
 
-Keep in mind that the actual event-loop is still empty.
+Keep in mind that the actual event-loop is still empty.\
 Very powerful feature.
 
 # Pre-made KeyFunctions
@@ -196,27 +195,14 @@ layout:list[list[sg.BaseElement]] = [
     ]
 ]
 ```
-Looking at `sg.KeyFunctions.set_value_to`, we can see that it is a function returning another function.
+Looking at the definition of `sg.KeyFunctions.set_value_to`, we can see that it is a function returning another function.
 This might be confusing for beginners, so read the docstring of the specific function if you are unsure.\
 The returned function is the actual key-function and looks like this:
 ```py
 def temp(v):
     v[elem_key] = new_value
 ```
-Simple, yet very useful.
-
-# Chaining key-functions
-Instead of a single key-function, you may pass a list (or any iterable) of multiple functions, as mentioned above.
-These functions will be called one after the other.
-
-**There is a nasty trap to this:** `val` will only be refreshed, after all key-functions of an element are executed (for performance reasons).
-
-So, if your first key-function multiplies `val` by 2 and the next one divides it by 10, the division uses the same "starting-value" as the multiplication.
-That means, the multiplication has no effect.
-
-**This can only occur when a single element has multiple key-functions.**
-
-But there's hope! If a key_function returns anything but `None`, the value will be refreshed before the next key-function is executed.
+Simple, yet useful.
 
 # Decorating functions to turn them into a key-functions
 Thanks to [yunlo](https://github.com/yunluo) for this idea!
