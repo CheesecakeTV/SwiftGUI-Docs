@@ -83,15 +83,19 @@ SwiftGUI's main logger is called `SwiftGUI`.
 And by "a lot", I mean a whooooooooole lot.
 I barely scratched the surface.
 
-The logging-structure is not partucularely hard to understand, it's just a lot more complex than you think.
+The logging-structure is not particularely hard to understand, just a lot more complex than you think.
 
 You can not only print logs to the console, you can also save them to a file, or even send them via mail (there are like 10 other "handlers").
 
-You can create filters to specify exactly which report to include.
+Any you can create filters to specify exactly which report to include.
 
 So if you are like me and these boring topics are interesting to you, check out the documentation of the `logging`-module.
 
 # SwiftGUI-Logging (Crashlogs)
+**IMPORTANT: The following features work fine with normal Python-scripts.
+However, they don't seem to work for programs converted to `.exe`-Files.
+Keep that in mind.**
+
 Since the following functionality is also useful without GUIs, `SwiftGUI_Logging` became its own package.
 However, its intended use is still together with SwiftGUI.
 
@@ -143,7 +147,7 @@ The file is called `Crash_2026-02-26_12-45-03.log` (located in the new directory
     ~~^~~
 ZeroDivisionError: division by zero
 ```
-As you can see, all recent log-entries and the full traceback is included.
+As you can see, all recent log-entries and the full traceback are included.
 
 The function also "triggers" a log if anything with a log-level of error or above is reported:
 ```py

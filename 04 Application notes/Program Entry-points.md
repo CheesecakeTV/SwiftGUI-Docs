@@ -9,7 +9,7 @@ The entry-point is the part of code you need to start manually to open the progr
 This application note shows a couple of useful things you can to do using entry-points.
 
 # Introduction
-Probably the best known program-entry looks like this:
+A decent program-entry looks like this:
 
 `main.py`
 ```py
@@ -24,9 +24,10 @@ if __name__ == "__main__":
     main()
 ```
 Running `main.py` directly executes `main()`.\
-However, `import main` does not, even though it runs through the script.
+However, `import main` does not, even though it runs through the script once.\
+`if __name__ == "__main__"` makes sure the main-function only executes if the script is executed directly.
 
-Note that the file does not need to be named `main.py` to work.
+Note that the file does not need to be called `main.py` to work.
 
 ## Why use a main-function
 Couldn't you just write the code like this?
@@ -38,7 +39,7 @@ if __name__ == "__main__":
     # Functional code starts here
     ...
 ```
-You can do whatever you want.\
+Firstly, you may do whatever you want.\
 Using a main function has two major advantages though.
 
 1. You can run it from different files:
@@ -46,7 +47,7 @@ Using a main function has two major advantages though.
 ```py
 import main
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # Different program-entry
     main.main()
 ```
 This is great if your program contains multiple modules (parts).
@@ -73,8 +74,8 @@ def fct():
     ...
 ```
 
-A minor advantage is that you can declare non-global variables in functions.
-All variables outside of functions are global.
+A minor advantage is that you can declare non-global variables in the main function.
+Remember that all variables outside of functions/classes are global.
 
 # Multiple program-entries
 `if __name__ == "__main__"` basically tests if you started that script directly or through a different source.
@@ -104,14 +105,13 @@ if __name__ == "__main__":
     main.main()
 ```
 
-Starting `main.py` defines the program-directory inside the home-folder.
-Starting `debug.py` on the other hand puts it inside the script-folder.
-That's useful for debugging.
+Starting `main.py` defines the program-directory inside the home-folder, where it usually should be.\
+Starting `debug.py` puts it inside the script-folder, which is useful for debugging.
 
 # Entry-point with error-log
 I often convert my program from Python-files to exe using auto-py-to-exe, so users with no Python-knowledge can use them too.
 
-For these users, I usually create another entry-point with a crude error-log:\
+For these users, I used to create another entry-point with a crude error-log:\
 `user_entry.py`
 ```py
 import SwiftGUI as sg
@@ -124,7 +124,9 @@ if __name__ == "__main__":
         with open("Errorlog.txt", "w") as f:
             f.write(f"{ex.__class__.__name__} \n\n{ex}")
 ```
-There are probably many better ways to report errors, but it's enough for me.
+This works very well and reliable, but doesn't contain too much information about the error.
+
+I recommend checking out the advanced tutorial "Logging", which explains error-logging more in-depth.
 
 
 
