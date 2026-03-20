@@ -1,6 +1,6 @@
 
 # Saving data is annoying
-Unfortunately, saving data is essential for most programs.
+Unfortunately, it is also essential for most programs.
 
 It's not particularely difficult, just soooo off-putting.
 
@@ -314,6 +314,52 @@ Alternatively, you may use `.set_path`:
 my_file.set_path("New path.json", reload= True)
 ```
 If that file already exists, `reload=True` calls `.load()` after updating the path.
+
+## Password-protected dict-files
+Since SwiftGUI version 0.11.9, you can password-protect dict-files.
+
+However, this is it's own package called `SwiftGUI_Encryption`, which you need to install seperately (via pip).
+A lot of that package can be used without SwiftGUI, so you can use it to encrypt things without GUIs too.
+
+`SwiftGUI_Encryption` contains a class called `PasswordJSONDictFile", which works exactly like a normal `JSONDictFile`, but can only be accessed if the correct password is passed:
+```py
+import SwiftGUI_Encryption as sge
+
+my_file = sge.sg.PasswordJSONDictFile(
+    "secrets/ConfidentialInformation", # Choose a file-ending if you like
+    "Password", # This is the password to acces the file
+)
+
+my_file["SecretHello"] = "Secret world"
+```
+If you tried to open that file with a different password, a value-error occurs.
+
+Asking the user for a password could look like this:
+```py
+while True:
+    try:
+        user_entry = input("Enter your password: ")
+
+        if user_entry == "":
+            # If the user entered nothing
+            exit()
+        
+        my_file = sge.sg.PasswordJSONDictFile(  # "Try" to unlock the file
+            "secrets/ConfidentialInformation",
+            user_entry,
+        )
+
+        break   # Stop the loop
+
+    except ValueError:  # If the password is wrong, a value-error happens
+        print("Wrong password!")
+```
+
+### Not just "security-by-obscurity"
+Keep in mind that the file is actually encrypted.
+**If you forget your password, that file is useless.**
+
+If you chose a decent password (not just 4 digits), probably not even the best supercomputers could break into that file (at the moment).
 
 # Saving/restoring user-entries
 Since SwiftGUI version 0.11.0, it's possible to "gather" and restore all values of full layout-parts at once.
