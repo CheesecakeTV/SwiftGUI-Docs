@@ -31,7 +31,7 @@ You could adjust it in every single element manually, but there is a better way:
 
 ## Changing global options for a single element-type
 Most types of Element have their own global-option-class.
-These class is usually called exactly like the Element.
+These classes are usually called exactly like the corresponding Element.
 
 To change a global option, just change the fitting attribute of its global-option-class:
 ```py
@@ -47,7 +47,7 @@ layout:list[list[sg.BaseElement]] = [
     ],[
         sg.T("Another big text"),
     ],[
-        sg.T("Small text", fontsize=8)  # fontsize is defined, so global option won't apply
+        sg.T("Small text", fontsize=8)  # fontsize is defined, so the global option won't apply
     ]
 ]
 
@@ -63,9 +63,7 @@ for e,v in w:
 
 ![](../assets/images/2025-08-05-15-11-36.png)
 
-The class-attribute is ALWAYS called the same as the option it belongs to.
-
-There is a downside to this: If we add an element with a different type, like `sg.Checkbox`, it won't be affected by the change:
+If we add a different element, like `sg.Checkbox`, it won't be affected by the change:
 ```py
 ### Global options ###
 sg.GlobalOptions.Text.fontsize = 14
@@ -85,7 +83,7 @@ layout:list[list[sg.BaseElement]] = [
 ```
 ![](../assets/images/2025-08-05-15-16-23.png)
 
-Of course, you could go ahead and change the fontsize for every used element-type separately, but that defies the whole purpose of global options:
+Of course, you could go ahead and change the fontsize for every used element-type separately, but that kinda defies the whole purpose of global options:
 ```py
 ### Global options ###
 sg.GlobalOptions.Text.fontsize = 14
@@ -172,10 +170,10 @@ This is the actual go-button-class:\
 ![](../assets/images/2025-08-05-15-54-28.png)\
 From the little blue dots on the left, you can see that fontsize is already defined in a parent-class (`Common_Textual`) and overwritten by the button.
 
-That's because the default fontsize makes the button as tall as Input-elements with fontsize (10).
-It just looks better if buttons have a smaller fontsize than inputs.
+That's because buttons are a bit taller than input-elements when they have the same fontsize.
+For most cases, it looks better if buttons have a smaller fontsize than inputs.
 
-To make the button apply `go.Common_Textual`'s `fontsize`, we need to remove it from `go.Button`, or set it to None:
+To make the button apply `go.Common_Textual`'s `fontsize`, we need to remove it from `go.Button`, or set it to `None`:
 ```py
 ### Global options ###
 sg.GlobalOptions.Common_Textual.fontsize = 14
@@ -196,12 +194,18 @@ sg.Button.defaults.fontsize = 14
 The window has its own global option called `go.Window`.
 SwiftGUI offers a lot of functionality for handling multiple windows, so this is actually useful.
 
-Elements that look like their background was invisible (like `sg.Text`, `sg.Checkbox`, but not `sg.Input`) mostly derive `background_color` from `Common_Background`.
-Most other elements derive it from `Common_Field_Background`.
+Elements that look like their background was invisible (like `sg.Text`, `sg.Checkbox`, but not `sg.Input`) mostly derive `background_color` from `go.Common_Background`.
+Most other elements derive it from `go.Common_Field_Background`.
 
-Go-classes do not act like you'd expect classes to act.
-There is a very complicated set of SwiftGUI-magic running in the background.\
+Go-classes do not act like you'd expect classes to act in Python.
+There is a complicated set of SwiftGUI-magic running in the background.\
 Therefore, you should really not read the value of an attribute by calling `.attributeName`.
 It usually returns nonsense.\
 Use `.single("attributeName")` instead.\
 This has performance-reasons.
+```py
+sg.GlobalOptions.Text.fontsize = 24
+print(sg.GlobalOptions.Text.fontsize)   # This prints 10 (nonsense)
+print(sg.GlobalOptions.Text.single("fontsize")) # This prints 24 (correct)
+```
+

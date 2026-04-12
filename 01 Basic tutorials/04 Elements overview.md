@@ -166,13 +166,13 @@ If you know tkinter, you can use this element to add a tkinter widget into the S
 ## TextField
 Aliases: Multiline
 
-The Multiline is basically an input but with multiple lines of text:\
+The Textfield is basically an input but with multiple lines of text:\
 ![](../assets/images/2025-11-12-12-43-25.png)
 
 The tkinter-widget behind this has a loooooot of additional functionality.
-For now (version 0.10.13), these are not implemented in SwiftGUI yet.
+For now (SwiftGUI version 0.10.13), these are not implemented in SwiftGUI yet.
 
-One cool thing that is implemented already is the undo-stack.
+One cool thing that's already implemented is the undo-stack.
 When setting `undo = True`, the user can reset previous changes by pressing `Ctrl + z` inside the element.
 
 ## Treeview (WIP)
@@ -218,26 +218,23 @@ The vertical version is called `sg.ProgressbarVertical`:\
 ![](../assets/images/2025-11-12-13-32-27.png)
 
 # Extended elements
-SwiftGUI offers a couple of elements that contain a single tkinter-widget, but change/extend its functionality drastically.
-
-The definition is up to interpretation.
-E.g. sg.Table is actually made from a ttk.Treeview but modified to something completely different, so it should be categorized as extended.
-It's still closer to a widget-element in my opinion.
+SwiftGUI offers a couple of elements that contain a single tkinter-widget, but change its intended usage.
+These elements are called "extended elements".
 
 ## Table
-A table with one or more columns.\
-My absolute, personaly favorite element of SwiftGUI.
+A table with one or more columns.
+My favorite element of SwiftGUI.
 
-It has a ton of high-level functionality that is pretty unique to SwiftGUI.
+It has a ton of high-level functionality that is unique to SwiftGUI, as far as I know (You can implement all of it yourself, but SwiftGUI offers it with little to no effort).
 
 Example: By default, clicking on a column header sorts the table alphabetically by that column.
 
 ![](../assets/images/2025-08-06-12-16-53.png)
 
-I do have to admit that PySimpleGUI's Table has a lower startup-time when adding a lot of rows.
-However, SwiftGUI's table exceeds at everything else and has a much lower runtime-performance than PySimpleGUI's.
+I do have to admit that PySimpleGUI's tables have a lower startup-time when adding a lot of rows.
+However, SwiftGUI's table surpasses at everything else and has a much lower runtime-performance than PySimpleGUI's table.
 
-You should really check out the detailed documentation on Tables.
+You should really check out the detailed element-tutorial on this.
 
 ## Spacer
 Aliases: S
@@ -264,7 +261,7 @@ The menu is part of your operating system.
 This is how it looks on (German) windows 10:\
 ![](../assets/images/2025-11-13-19-09-48.png)
 
-When you pick a color, the color of that color-chooser-button changes:\
+When you pick a color, it is applied to that button (besides throwing an event):\
 ![](../assets/images/2025-11-13-19-11-53.png)
 
 ## Image
@@ -290,13 +287,13 @@ Can also have text next to the image:\
 ![](../assets/images/2025-11-13-19-28-02.png)
 
 ## TabFrame
-Just a frame that makes a lot of things easier dealing with `sg.Notebook`s.
+A frame that has functionality for using it together with `sg.Notebook`s.
 
 # Combined elements
 SwiftGUI offeres a couple of "combined" elements that consist of multiple SwiftGUI-elements.
 
-Tipp: It's amazingly simple to create your own custom elements.
-There is a tutorial on it under "Advanced Tutorials".
+It's amazingly simple to create your own custom elements.
+There is a tutorial on it under "Advanced Tutorials", I highly recommend it.
 
 ## Form
 One or more rows of text-input-combinations, with a bit of higher functionality:\
@@ -320,7 +317,7 @@ You can input text on the bottom and send it by pressing `enter`:\
 
 The console has a print-function that can be used pretty much the same as the normal `print(...)`.
 
-You can even go one step further and overwrite the builtin print function:
+You can even go one (very unholy) step further and replace the builtin print function:
 ```py
 import SwiftGUI as sg
 

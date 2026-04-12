@@ -192,8 +192,7 @@ It has pretty much the same options as normal `sg.Button` combined with `sg.Imag
 (This part was written in SwiftGUI version 0.8.2, much later than the rest of this tutorial.)
 
 Image-buttons are quite useful, but displaying no text on a button might be hard for the user to understand. 
-
-Sure, you could edit the image adding text manually, but that's quite an annoyance.
+Sure, you could edit the image itself, adding text manually, but that's annoying for many reasons.
 
 That's why the image-button has the option `text`, which lets you add text next to the image:
 ```py
@@ -231,7 +230,7 @@ layout = [
 We talked about resizing the image, but what about the actual button around the image?
 
 Usually, `width` represents the number of characters in a row and `height` the number of rows.
-For image-buttons, both of these values are given in pixels:
+For image-buttons, both of these values are given in the number of pixels instead:
 ```py
 layout = [
     [

@@ -39,7 +39,7 @@ for e,v in w:
 ### After window was closed ###
 
 ```
-You can always find that template here: [`Templates/_GeneralTemplate.py`](https://github.com/CheesecakeTV/SwiftGUI/Templates/_GeneralTemplate.py) (SwiftGUI-Repo).
+You can always find that template here: [`Templates/_GeneralTemplate.py`](https://github.com/CheesecakeTV/SwiftGUI/blob/main/Templates/_GeneralTemplate.py) (SwiftGUI-Repo).
 
 # Layout
 The layout contains all elements to be shown inside the GUI.
@@ -294,7 +294,7 @@ for e,v in w:
 ```
 This functionality is the basic idea behind SwiftGUI (and PySimpleGUI, to be fair).
 
-However, **buttons are the only types of (builtin) element that has threir event enabled by default!**.
+However, **buttons are the only types of (builtin) element that has threir event enabled by default!**
 For every other element, you'll have to specifically ask for it, by setting `default_event = True`:
 ```py
 import SwiftGUI as sg
@@ -488,20 +488,20 @@ That means, in PySimpleGUI, changing the value of elements won't update `v`.
 This turned out to be so annoying that I spent like 4 hours to implement the value-dict class.
 
 # Updating the layout
-You can change most of the options (configurations) of elements after the element already exists.
-This way, you could e.g. make buttons change color, disable/enable Input-elements, make text jump from one side to the other, etc.
+You can change most of the options (configurations) of elements, even when it exists already.
+You'll most likely use this to change the color of elements, or disable them.
 
-To update an option, get the reference to the element (you could use `w[key]`) and call `.update` on it.
-`.update` accepts most of the parameters the element itself accepts and if not, Python will tell you gladly...
+To update an option, get the reference to that element (you could use `w[key]`) and call `.update` on it.
+`.update` accepts most of the parameters the element itself accepts and if not, Python will gladly tell you...
 
 **Examples:**
 
-Change the background-color of an `sg.Input`-Element from before:
+To change the background-color of an `sg.Input`-Element from an earlier example:
 ```py
 w["Input"].update(background_color = sg.Color.red)
 ```
 
-Disable a button (button can't be clicked anymore):
+To disable a button so it can't be clicked anymore:
 ```py
 w["ButtonKey"].update(disabled = True)
 ```
@@ -512,7 +512,7 @@ The "opposite" of `.update(option= ...)` is `.get_option(option)`.
 
 `.get_option` returns whatever value you set that option to earlier.
 
-But wait, why you would use that, if you could just remember what you put in `.update` earlier?\
+But wait, why would you use that, if you could just remember what you put in `.update` earlier?\
 Well, `.get_option` also returns values that are set by default.
 
 E.g.: Not sure about the standard background-color?
@@ -525,7 +525,7 @@ E.g.: The option for background-color is called `background_color` in SwiftGUI, 
 That means, `.get_option("bg")` will return that configuration directly from the underlying tkinter-widget using `tk_widget.cget("bg")`.
 
 ## Resetting values to its default
-Let's say you changed some text-color to red (`w["MyButton"].update(text_color = "red")`) and want to reset it to its original value now.
+Let's say you changed some text-color to red (`w["MyButton"].update(text_color = "red")`) and want to reset it to its original value again.
 
 Only using `.update` would require you to "remember" the default text-color, which is kinda annoying.
 

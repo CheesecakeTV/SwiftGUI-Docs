@@ -23,6 +23,7 @@ Both are incredibly useful.
 
 # Basic concept
 When creating elements, or binding events, you don't actually need to specify a key to throw events.
+Defining keys is only necessary for throwing events to the event-loop.
 
 If you define a "key-function", that function will be called when the event occurs.
 
@@ -84,7 +85,7 @@ sg.Button(
 You may add key-functions to custom events calling `.bind_event(..., key_function= ...)` on the element.
 
 # Parameters
-This feature looks pretty basic so far.
+Key-functions look pretty basic so far.
 The key-functions only seem to be able to handle the most basic, unchanging operations.
 
 Here's where the best part about key-functions comes in:\
@@ -195,8 +196,19 @@ layout:list[list[sg.BaseElement]] = [
     ]
 ]
 ```
-Looking at the definition of `sg.KeyFunctions.set_value_to`, we can see that it is a function returning another function.
-This might be confusing for beginners, so read the docstring of the specific function if you are unsure.\
+Looking at the definition of `sg.KeyFunctions.set_value_to`, you'll see that it is a function returning another function:
+```py
+def set_value_to(new_value: Any = "", elem_key: str = None) -> Callable:
+    if elem_key is not None:
+        def temp(v):
+            v[elem_key] = new_value
+    else:
+        def temp(elem):
+            elem.value = new_value
+
+    return temp
+```
+This might be confusing for Python-beginners, so read the docstring (left out of the prior code-snippet) of the specific function if you are unsure.\
 The returned function is the actual key-function and looks like this:
 ```py
 def temp(v):
@@ -258,9 +270,8 @@ def do_something(e):
 Some important things to keep in mind when using this feature though:
 - All "decorations" must be done before creating the window (`w = sg.Window(layout)`)
 - The decorator only applies to the main event-loop.
-It is possible to create multiple event-loops, as explained in basic tutorial 06 (bigger layouts).
+It is possible to create multiple event-loops, as explained in basic tutorial 07 (Separate key-systems).
 **Keys for these loops are not "captured" by the decorator.**
-- If you create multiple windows using `sg.SubWindow`, the decorator only works for the main window.
 - Don't decorate multiple functions with the same key. Only the last decorated function will be called.
 
 
