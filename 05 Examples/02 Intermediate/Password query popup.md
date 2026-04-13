@@ -15,6 +15,7 @@ Looks the same as before.
 - Creating basic popups using `sg.BasePopup`
   - Returning values
 - Using custom popups
+- Converting the main window into a popup
 
 # Full code
 Written in SwiftGUI version 0.10.16:

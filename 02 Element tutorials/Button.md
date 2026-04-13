@@ -37,6 +37,7 @@ Set `disabled = True` to make the button unresponsive to the user.
 
 While being disabled, the text color is `text_color_disabled`, not the normal `text_color`.
 
+Disabled, the default-event is also disabled, since the button can't be clicked.
 Manually bound events (`.bind_event`) still trigger.
 
 ## background_color_active, text_color_active
@@ -45,7 +46,7 @@ In this case, "active" means being held down by the user.
 Through these options, you can make the button change color while held down.
 
 ## relief, overrelief
-Reliefs are generally explained in the element-tutorial of `sg.Text`.
+Reliefs are explained in-depth in the element-tutorial of `sg.Text`.
 
 `relief` correspondents to the normal relief that is visible by default:\
 ![](../assets/images/2025-12-01-14-53-17.png)
@@ -56,10 +57,10 @@ Reliefs are generally explained in the element-tutorial of `sg.Text`.
     )
 ```
 
-`overrelief` is the type of relif while the mouse **hovers over** the button, not when it's pressed.
+`overrelief` is the type of relif shown while the mouse **hovers over** the button, not when it's pressed.
 
 Unfortunately, there is no decent way of changing the relief when the button is pressed.
-Tkinter doesn't support it, which makes absolutely no sense at all.
+Tkinter doesn't support it, which makes absolutely no sense to me.
 
 ## width, height
 Width in characters, height in rows of the button(-text).
@@ -68,15 +69,15 @@ Width in characters, height in rows of the button(-text).
 `padx` defines the padding left/right of the text, `pady` above and below.
 The border (relief) is enlarged too.
 
-A more detailed explanation of padding is given in the element-tutorial `sg.Text`, I have no idea why buttons have two options for padding and text only has one.
+A more detailed explanation of padding is given in the element-tutorial of `sg.Text`. I have no idea why buttons have two options for padding and text only has one.
 Tkinter is a mystery.
 
 ## repeatdelay, repeatinterval
-By default, when pressing and holding the button, only one event occurs.
+By default, when pressing and holding down the button, only one event occurs.
 
-Using these options, you can make the button "spam" events as long as the button is held down.
+Using these options, you can make the button "spam" events while the button is held down.
 
-`repeatdelay` specifies how long the button must be held down for spamming to start.\
+`repeatdelay` specifies how long the button must be held down for the spamming to start.\
 `repeatinterval` specifies how long to wait between events.\
 Important: Both options are given in milliseconds, so seconds multiplied by 1000.
 
@@ -130,7 +131,7 @@ To be precise, these options are explained in the element-tutorial of `sg.Text`:
 ## .flash()
 Flashes the button.
 
-Flashing means, the button changes color with its active color and back a couple of times.
+Flashing means, the button changes color to its active color and back a couple of times.
 
 ## .push_once()
 Simulates a button-press, throwing the default event as if the user pressed the button.
@@ -140,9 +141,9 @@ Simulates a button-press, throwing the default event as if the user pressed the 
 While pressing/holding down the button, it looks like you'd push it down.
 If you like the look of buttons and only want to use it to display some text, this functionality might be annoying.
 
-I can think of 2 ways to avoid it:
+I can think of 2 ways to avoid it.
 
-Disable the button by setting `disabled = True`:
+1. Disabling the button by setting `disabled = True`:\
 ![](../assets/images/2025-12-01-14-31-18.png)
 ```py
 sg.Themes.FourColors.Chocolate()
@@ -159,7 +160,7 @@ layout = [
 ```
 However, as you can see, you'll need to specify `text_color_disabled` (for most themes).
 
-The alternative: Use a text and make it look like a button:\
+2. The alternative: Use a text and make it look like a button:\
 ![](../assets/images/2025-12-01-14-17-42.png)
 ```py
 sg.Themes.FourColors.Chocolate()

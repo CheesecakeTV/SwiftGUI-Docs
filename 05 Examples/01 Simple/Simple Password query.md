@@ -11,6 +11,7 @@ To submit the password, the user may click "Submit", or press enter.
 # Demonstrated concepts
 - Basic usage of SwiftGUI
 - Binding custom events to existing keys (Pressing "enter" in the input)
+- Very basic usage of key-functions
 
 # Full code
 Written in SwiftGUI version 0.10.7:
@@ -51,7 +52,7 @@ layout = [
     ]
 ]
 
-w = sg.Window(layout, title= "Enter password", padx= 5, pady= 5)
+w = sg.Window(layout, title= "Enter password", padx= 5, pady= 5)    # Create the window and add make it a bit bigger than it has to be (padding)
 w["In"].set_focus() # This way, the input-element is selected from the start
 
 for e,v  in w:
@@ -66,7 +67,7 @@ for e,v  in w:
 
         else:
             _NumTries -= 1
-            if _NumTries == 0:
+            if _NumTries == 0:  # No more tries left :C
                 print("Too many wrong tries, self destruction imminent")
                 exit()
 

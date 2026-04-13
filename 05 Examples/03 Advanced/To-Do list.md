@@ -21,6 +21,9 @@ It's not optimized or particularely beautiful, but demonstrates the intended con
 - Using keys dynamically
 - Combining keys
 
+Note that since version 0.11.0, it is possible to save layout-values more elegantly.
+This example exists mainly to show how to add/remove elements dynamically.
+
 # Full code
 Written in SwiftGUI version 0.10.25:
 ```py

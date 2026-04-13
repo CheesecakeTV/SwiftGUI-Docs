@@ -22,6 +22,7 @@ Feel free to add it yourself.
 
 # Full code
 Using SwiftGUI version 0.10.7, SwiftGUI_Matplot version 0.1.0.
+Updated for SwiftGUI version 0.11.9.
 ```py
 import SwiftGUI as sg
 from numpy import * # This way, sin/cos/... refer to their numpy variants in eval(...)
@@ -39,8 +40,8 @@ def update_x(v, val):
     """Update x-axxs"""
 
     # Get the configuration input by the user
-    x_min = to_float(val["x min"], default= -10)
-    x_max = to_float(val["x max"], default= 10)
+    x_min = to_float(val["x_min"], default= -10)
+    x_max = to_float(val["x_max"], default= 10)
     n = int(to_float(val["n"], default= 200))
 
     # Change x-values
@@ -53,18 +54,23 @@ def refresh(v):
     """Calculate and refresh the plot, if valid input was made"""
     try:
         y = eval(v["In"])   # Apply the formula. Not really secure though...
-    except:  # Sue me
-        ...
-    else:
-        my_plot.clear() # Delete current plot
-        my_plot.update(title=v["In"]) # Apply title
-        my_plot.plot(x, y)
+
+        if x.shape == y.shape:
+            my_plot.clear() # Delete current plot
+            my_plot.update(title=v["In"]) # Apply title
+            my_plot.plot(x, y)
+    except:  # Yes yes, I know
+        return  # If the execution fails, stop refreshing
 
 
 configuration = [
     [
         sg.Form(
-            ["x min", "x max", "n"],
+            {
+                "x_min": "x min",
+                "x_max": "x max",
+                "n": "n",
+            },
             default_values= [-10, 10, 200],
             default_event= True,
             key_function= update_x,

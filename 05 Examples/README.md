@@ -8,6 +8,7 @@ Examples are divided into categories:
 - Intermediate: You have read all the basic tutorials of this documentation
 - Advanced: You have some experience in using SwiftGUI and Python
 - Expert: Anything above "advanced". Pushes the boundaries of SwiftGUI
+- Deprecated: These examples show concepts you don't need to know anymore and are not kept up-to-date
 
 These categories are less about how advanced the subjects are, but how complicated the script is.\
 Simple examples are easy to understand, intermediate ones are a bit more complicated.

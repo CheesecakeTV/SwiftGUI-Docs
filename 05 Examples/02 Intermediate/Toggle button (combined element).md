@@ -79,7 +79,7 @@ class ToggleButton(sg.BaseCombinedElement):
             if self._my_value:  # If button is currently "active"
                 self.button.update_to_default_value("background_color") # Reset these values to their defaults
                 self.button.update_to_default_value("text_color")
-                self.button.update_to_default_value("relief")
+                self.button.update(relief = "raised")
                 self.button.value = self._normaltext    # Reset the text to normal
                 self._my_value = False   # I am now inactive/False
             else:   # If button is currently "inactive"
@@ -135,6 +135,4 @@ for e,v in w:
     if e == "Toggle":
         print("The toggle-state is now", v["Toggle"])
 ```
-
-
 

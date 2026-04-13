@@ -8,7 +8,7 @@ Your keys will get longer and longer, which kinda defies the purpose of using an
 
 That's why SwiftGUI offers ways to divide the main layout into sub-layouts (different to frames), which each have their own key-system and event-loop.
 
-This way, you can use the same key multiple times in an application and effectively un-clutter your event-loop.
+This way, you can use the same key multiple times in the same application without conflicts.
 
 Pro-tipp: If you want to copy/reuse parts of the layout, the best way to do so is to create a custom combined element.\
 This topic has its own tutorial under the advanced topics: [Custom combined elements](https://github.com/CheesecakeTV/SwiftGUI-Docs/blob/main/03%20Advanced%20tutorials/Custom%20combined%20elements.md)
