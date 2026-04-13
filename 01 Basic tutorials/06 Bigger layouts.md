@@ -5,7 +5,7 @@ There comes a time when a basic "row-layout", as described in tutorial "01 Getti
 Like when you have too many elements.
 The GUI gets too crowded and is neither good looking, nor user-friendly.
 
-Or when you want to place multiple smaller elements besides a single bigger one (like `sg.Listbox`):\
+Or when you want to place multiple smaller elements next to a single bigger one (like `sg.Listbox`):\
 ![](../assets/images/2025-08-21-10-08-22.png)\
 Since the `sg.Listbox` is only one element in one row, this is not possible without utilizing the functionalities described in this tutorial.
 You can't add "multiple rows into a single row" without using frames.
@@ -13,7 +13,7 @@ You can't add "multiple rows into a single row" without using frames.
 # Frames
 The previous example was created using the element `sg.Frame`.
 
-A frame allows you to handle a whole layout like a single element.
+A frame allows you to treat a whole layout like a single element.
 
 The above example consists of two layouts, the "outer"/main one (green) and a smaller "inner" one (red):\
 ![](../assets/images/2025-08-21-10-13-47.png)
@@ -37,7 +37,7 @@ layout:list[list[sg.BaseElement]] = [   # Main layout
     ]
 ]
 
-w = sg.Window(layout)
+w = sg.Window(layout)   # Pack the outer layout into the window
 ```
 As you can see, we just created a second layout in the same way the first one was created, then packed it into `sg.Frame`.
 
@@ -104,7 +104,7 @@ As you can see, `Upper left` is centered above `Hii`.
 They form a column.
 
 In row-oriented (normal) layouts, the tallest element specifies the height of its row.
-This is also true for grids, but in addition, the broadest element in each column decides the width of its column:
+This is also true for grids, but in addition, the broadest element in each column decides the width of its column:\
 ![](../assets/images/2025-09-10-14-17-02.png)
 ```py
 grid_contents = [
@@ -122,9 +122,9 @@ grid_contents = [
 The elements are still aligned vertically and horizontally.
 
 ## Expanding elements
-In SwiftGUI, elements can only "expand" using `expand` and `expand_y`, so far until it needs to resize its "container".
+In SwiftGUI, elements can "expand" using `expand` and `expand_y`, but only so far until the element needs to resize its "container".
 The container is whatever the layout of that element is inside.\
-Usually, the main window.
+Without frames, the container is the window.
 Put the layout in a frame and that frame is its container.
 
 E.g. take a look at the previous example (Scrollbar different due to newer version):\
@@ -176,11 +176,11 @@ layout:list[list[sg.BaseElement]] = [
 ```
 ![](../assets/images/2025-09-10-14-22-00.png)
 
-As you can see, the elements can't expand beyond their row/colum, because this would resize the container (`sg.GridFrame`).
+As you can see, the elements can't expand further than their row/colum, because this would resize the container (`sg.GridFrame`).
 
 ## Horizontal alignment
 Elements are aligned "center" by default.
-To allign them differently, pass the option `alignment` to the container/frame:\
+To allign them differently, pass the option `alignment` to the container/frame:
 ```py
     sg.LabelFrame(
         inner_layout,
@@ -253,12 +253,15 @@ w = sg.Window(layout)
 ![](../assets/images/2025-08-21-10-45-12.png)
 
 ## Background color propagation
+Background color propagation is the reason elements with a "transparent" background actually look like their background was transparent.\
+Spoiler: It's not.
+
 This part of the tutorial was moved to its own advanced tutorial.
 
 # Notebook (Tabview)
-**Notebooks look A LOT better now (version 0.10.3), compared to back when I wrote this tutorial.
+**Notebooks look A LOT better now (version 0.10.3), compared to back when I wrote this tutorial.**
 
-The `sg.Notebook`, (`sg.Tabview` in PySimpleGUI) helps to deal with too many elements by not showing all at once:\
+The `sg.Notebook`, (`sg.Tabview` in PySimpleGUI) helps to deal with too many elements by organizing them into pages/tabs:\
 ![](../assets/images/2025-08-21-11-39-21.png)\
 Other tab:\
 ![](../assets/images/2025-08-21-11-39-55.png)
@@ -291,12 +294,13 @@ w = sg.Window(layout)
 ```
 As you can see, `sg.Notebook` takes frames and organizes them in tabs.
 The key of that frame becomes the text on the tab.
+You also need the key to know which tab is currently selected and to select a different tab by code.
 
 ## TabFrame
 The `sg.TabFrame` is a type of frame that makes working with `sg.Notebook` much easier.
 You should always use `sg.TabFrame` for notebooks.
 
-An `sg.TabFrame` accepts the option `text`, which will be used as the tab-text, independent of its key:
+An `sg.TabFrame` accepts the option `text`, which is used as the tab-text, independent of its key:
 ```py
 left_tab = sg.TabFrame([
     [
@@ -324,8 +328,8 @@ layout:list[list[sg.BaseElement]] = [
 ![](../assets/images/2025-10-19-20-57-19.png)\
 (Told you notebooks looked better now)
 
-It you don't want the tab-frame to register its key, don't define `key`, but `fake_key`.
-The notebook won't see a difference, but the element still has no key.
+It you don't want the tab-frame to have an actual key, don't define `fake_key` instead.
+The notebook won't see a difference, but the element has no key.
 
 `sg.TabFrame` features more useful functionality when working with notebooks, which won't be covered by this tutorial.
 
@@ -333,7 +337,7 @@ The notebook won't see a difference, but the element still has no key.
 It can throw an event when the tab changes, but also throw specific events depending on the selected tab.
 You may also change the opened tab manually.
 
-Since this tutorial is ment to be mainly about layouts, you'll find the details in the element-tutorial for `sg.Notebook`.
+Since this tutorial is ment to be mainly about layouts, you'll find the rest in the element-tutorial for `sg.Notebook`.
 
 # Separators
 `sg.HorizontalSeparator` and `sg.VerticalSeparator` are basically just horizontal/vertical lines:\
@@ -394,11 +398,8 @@ Default `weight` is 2.
 You may change these options using `.update` too, even though you'll probably never need to do that.
 
 # Spacer
-A `sg.Spacer` is a pseudo-invisible element with a certain size.
-
-You can use it to add some space inbetween elements/rows.
-
-At this time (version 0.5.3), it is the only element without its own global-options-class.
+A `sg.Spacer` is an invisible element with a certain size.
+Use it to add some space inbetween elements/rows.
 
 Example:
 ```py
@@ -406,10 +407,10 @@ Example:
 layout:list[list[sg.BaseElement]] = [
     [
         sg.T("Normal text"),
-        sg.Spacer(width=50),
+        sg.Spacer(width=50),    # Horizontal space
         sg.T("Text far to the right"),
     ],[
-        sg.Spacer(height=50)
+        sg.Spacer(height=50)    # Vertical space
     ],[
         sg.T("Text far below")
     ]
@@ -512,8 +513,8 @@ layout:list[list[sg.BaseElement]] = [
 ```
 ![](../assets/images/2025-09-10-14-34-26.png)
 
-What a mess.
+What a messy code.
 
-This is just a proof of concept, don't do that.
+This is just a proof of concept, don't actually do that.
 
 

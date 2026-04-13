@@ -1,12 +1,15 @@
 
+# Additional windows
+One of SwiftGUI's best features is that you can create multiple windows with ease.
+
+This tutorial teaches the main ways to do this.
+It might look complicated in the beginning, but I can assure you, it is not.
 
 # Very basic popups and such
-(There are other ways to create popups which are explained later.)
+This way to create windows is the most simmilar to creating normal windows.
+However, the other ways are much better.
 
-To not "take a sledgehammer to crack a nut", I'll explain the easiest (to understand) way to handle additional windows first.
-
-It works for windows that allow a maximum of one single key-event.
-Sounds useless, but it's perfect for something like a small popup.
+It's fine for popups that exit after the first key-event, even though I'd use another way.
 
 Create another window using `sg.SubWindow` instead of `sg.Window`:
 ```py
@@ -241,6 +244,13 @@ This way, you could remove the titlebar, set an icon, etc.
 
 # Full, additional windows
 In SwiftGUI, sub-windows can do anything normal windows can (except an event-loop that uses `for`).
+
+However, I usually use `sg.BasePopupNonblocking` instead of sub-windows, even for full windows.
+
+This has a neat side-effect:
+To preview themes, you can pass the popup-class to `sg.Examples.preview_all_themes(take_a_closer_look=...)`.
+Then, in the preview-window, you can click on "take a closer look" to open your popup with that theme.
+Makes it very easy to choose a fitting theme.
 
 ## Somewhat-event-loop
 You can still have a fully functional event-"loop" for sub-windows, but it's a function now:

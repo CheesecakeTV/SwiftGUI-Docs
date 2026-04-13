@@ -36,7 +36,7 @@ sg.Files.set_root("SwiftGUI Tutorial")
 print(sg.Files.root_path()) # C:\Users\chees\SwiftGUI Tutorial
 ```
 You don't actually need to know where it is.
-Just know that it is in a good location and works for pretty much all operating-systems.
+Just know that it is in a good location and works on pretty much any operating-system.
 
 ## Working with the root-path
 To create paths inside your root-directory, just pass the relative path to `.root_path(...)`:
@@ -56,7 +56,7 @@ C:\Users\chees\SwiftGUI Tutorial>tree /f
 C:.
 └───assets
 ```
-And of course, you can avoid this behavior by setting `create_subfolders = False` when calling `root_path`, but I can't think of a reason why.
+And of course, you can avoid this behavior by setting `create_subfolders = False` when calling `root_path`, but I can't think of any reason why you'd do that.
 
 The function returns a `Path`-object from the builtin package `pathlib`.
 If you don't know that package, you really should.
@@ -98,7 +98,7 @@ with open(root_path("Testfile.txt"), "w") as f:
 ```
 Much better.
 
-## Root-folder outside the home-folder
+## Root-folder outside of the home-folder
 For debug reasons, I like to save program-files in the current directory.
 However, when the program is ran as the user, it should be saved in the actual root.
 

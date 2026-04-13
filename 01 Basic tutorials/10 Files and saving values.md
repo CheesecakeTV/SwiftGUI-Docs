@@ -1,13 +1,12 @@
 
 # Saving data is annoying
 Unfortunately, it is also essential for most programs.
-
 It's not particularely difficult, just soooo off-putting.
 
 This tutorial explains how SwiftGUI makes saving data less annoying.
 
 It also explains how to "collect"/"restore" all current element-values.\
-This way, it's easy to let the user save what they're doing and restore it later.
+This way, it's easy to save/load the user-entries of the whole layout.
 
 # File-types
 Before getting to the interesting part, you need to know these two common file-types: `json` and `pickle`.
