@@ -2,14 +2,15 @@
 # Config-files
 Even though you like your program in a certain way, your users might not feel the same.
 
-E.g.: If my grandma used programs I wrote, she'd not be able to read anything, because the texts were too small.
+E.g.: If my grandma used programs I wrote, she'd not be able to read anything, because the text was too small.
 Without configuration-options, I'd have to change the program itself, making the font bigger for all users.\
 Not ideal.
 
-A configuration-file is the easiest (proper) way to make programs configurable.
+A configuration-file is the easiest (somewhat-proper) way to make programs configurable.
 Using configuration-files, you can add a ton of options with little to no additional effort.
 
 SwiftGUI offers a way to implement them easily.
+It also provides an element to edit configurations.
 It looks complicated at first, but is much easier than the stuff explained in most other basic SwiftGUI tutorials.
 
 To be honest, the heavy lifting is all done by the builtin package `configparser`: https://docs.python.org/3/library/configparser.html#configparser.ConfigParser \
@@ -19,7 +20,7 @@ SwiftGUI only adapts the package and makes it more suited for its usecase.
 In SwiftGUI, configuration-files have the `ini`-format.
 
 These files are divided in sections.
-Each section has their own parameters:
+Each section has a name and some parameters:
 ```ini
 [Some section]
 parameter1 = hi
@@ -28,10 +29,8 @@ parameter2 = hi2
 [Another section]
 hello = world
 ```
-A major disadvantage of this format is that values can only be strings.
+A major disadvantage of this format is that values can only be __lowercase__ strings.
 We'll get to that later.
-
-Also, note that the parameter-names can only be set in lowercase.
 
 # Creating the config-file
 Config-files are handled through `ConfigFile`-objects:
@@ -106,9 +105,9 @@ my_section.set_many(
 ```
 Sets multiple values, but saves only once.
 
-For naming consistency, there is also `.update`, which requires a dict as argument:
+For naming consistency, there is also `.update`, which requires a `dict` as its argument:
 ```py
-my_section.set_many({
+my_section.update({
     "my_value": "Hello",
     "another_value": "World",
 })
@@ -161,9 +160,8 @@ Imagine trying to configure a program and being greeted by this configuration-fi
 
 [Translations settings]
 ```
-Aparrently, the program expects you to look up all of the parameter names.
+Aparrently, the program expects you to know all of the option-names.
 Very inconvenient.
-
 This is what happens when you only use `.get(...)` to handle default-values.
 
 A proper way to set default values looks like this:
@@ -364,7 +362,6 @@ my_section = config_file.section(
         "another_option":"",
     }
 )
-
 
 sg.Themes.FourColors.DarkGold()
 sg.Files.ConfigSectionEditor(my_section).popup(title= "Configuration")

@@ -41,12 +41,13 @@ It lets you save whatever type of object you want, even objects of self-created 
 However, it is not humanly-readable like json.
 You can't open a pickle-file with a text editor.
 
-Pickle has a couple of benefits that also pose a risk:
+Pickle has a couple of benefits that also pose a risk.
+Do not ignore those, they can really mess up your project.
 
 ### Preserving references
 All referenced objects from any object are saved together with that object.
 
-Example: Let's say you want to save the value-dict of your window (Which doesn't work, don't do it!):
+Example: Let's say you want to save the value-dict of your window (Which doesn't work like this, don't do it!):
 ```py
 my_values = w.value
 
@@ -58,13 +59,13 @@ That means, pickle will **also save the window-object**.
 Guess what, the window contains references to every element in the layout.
 These will also be collected and saved.
 
-So, instead of saving some values to the file, you just saved your whole layout.
+So, instead of saving some values, you just saved the whole layout.
 
 ### Missing attributes
 This is more advanced and only important when saving self-made classes (instances).
 
 Objects loaded from a pickle file do not run `__init__` when being restored.\
-That means, any attribute you create in `__init__` is either saved in the file or doesn't exist.
+That means, any attribute you create in `__init__` is either saved in the file, or doesn't exist.
 
 Consider this example:
 ```py
@@ -88,7 +89,7 @@ my_instance.print_object()
 ```
 It runs without any errors.
 
-Now, you'd like to release an update for your class:
+Now, you're releasing an update for your class:
 ```py
 class Test:
     def __init__(self):
@@ -112,8 +113,9 @@ Just keep in mind that this problem exists and can potentially kill old save-fil
 SwiftGUI's dict-files basically work like Python-dictionaries, but let you easily save its content to an actual file.
 
 Currently (Version 0.11.0), there is a json- and a pickle-version of dict-files.
+There is also [an addon for SwiftGUI with an encrypted version of json-dict-files](https://github.com/CheesecakeTV/SwiftGUI-Encryption), which is explained later.
 
-You can use them exactly the same way, even though they save in different formats.
+The usage is the same for all of these different types.
 It's also quite easy to create your own version of dict-files, but that's not covered by this tutorial.
 
 Keep the advantages of json/pickle in mind when choosing which to use.\
@@ -196,12 +198,13 @@ print(my_file["Foo"])
 Of course, if the key (`Foo` in this case) isn't found, a `KeyError` is thrown.
 
 Alternatively, you may use `.get()`, which returns `None` instead of throwing a `KeyError`.
-
 It also allows you to specify a default-return which returns instead of `None`:
 ```py
 print(my_file.get("Foo", "Value not found"))
 ```
 You might already know that `.get` works exactly the same as `dict.get`.
+
+Word of advice: In most cases, setting default values is much better than using `.get` (explained later).
 
 ### Loading values from the file
 When created, the file is read once and only written after that.
@@ -210,7 +213,7 @@ If an external source changes the file, your program won't notice by itself.
 So, to read the file again, use `.load()`.
 
 Keep in mind that this operation applies all values included in the file.
-If you don't use auto-save and forgot to save before, this might overwrite changes you made.
+If you don't use auto-save and forget to save your changes, this might undo them.
 
 ## Default values
 Instead of using `.get` with a default-return, you should define default values.
@@ -300,6 +303,8 @@ my_file.save()  # Saving to "My File.json"
 
 Simmilarely, you can load from different files by passing a path to `.load()`.
 
+Note that the next time you call `.save()`, it will still overwrite the original file.
+
 ## Changing the default path
 Change the path like so:
 ```py
@@ -320,7 +325,7 @@ Since SwiftGUI version 0.11.9, you can password-protect dict-files.
 However, this is it's own package called `SwiftGUI_Encryption`, which you need to install seperately (via pip).
 A lot of that package can be used without SwiftGUI, so you can use it to encrypt things without GUIs too.
 
-`SwiftGUI_Encryption` contains a class called `PasswordJSONDictFile", which works exactly like a normal `JSONDictFile`, but can only be accessed if the correct password is passed:
+`SwiftGUI_Encryption` contains a class called `PasswordJSONDictFile`, which works exactly like a normal `JSONDictFile`, but can only be accessed if the correct password is passed:
 ```py
 import SwiftGUI_Encryption as sge
 
@@ -336,13 +341,13 @@ If you tried to open that file with a different password, a value-error occurs.
 Asking the user for a password could look like this:
 ```py
 while True:
-    try:
-        user_entry = input("Enter your password: ")
+    user_entry = input("Enter your password: ")
 
-        if user_entry == "":
-            # If the user entered nothing
-            exit()
+    if user_entry == "":    # I'd usually write this: if not user_entry:
+        # If the user entered nothing
+        exit()
         
+    try:
         my_file = sge.sg.PasswordJSONDictFile(  # "Try" to unlock the file
             "secrets/ConfidentialInformation",
             user_entry,
@@ -358,10 +363,10 @@ while True:
 Keep in mind that the file is actually encrypted.
 **If you forget your password, that file is useless.**
 
-If you chose a decent password (not just 4 digits), probably not even the best supercomputers could break into that file (at the moment).
+If you choose a decent password (not just 4 digits), even the best supercomputers probably couldn't break into that file (at the moment).
 
 # Saving/restoring user-entries
-Since SwiftGUI version 0.11.0, it's possible to "gather" and restore all values of full layout-parts at once.
+Since SwiftGUI version 0.11.0, it's possible to collect/restore all values of full layout-parts at once.
 
 **However, this only works for elements with a key.
 Elements without keys are ignored.**
@@ -396,7 +401,7 @@ my_file.save()  # Only necessary if auto-save is disabled
 ```
 
 Tipp: You can also use `.to_json()` on most elements, which returns its value in a format json-files support.\
-Some elements return more information than the current value (E.g.: `sg.List`).
+Some elements return more information than the current value (E.g.: `sg.Listbox`).
 So when saving a value, you should stick to `.to_json()`.
 
 ## Restoring values
@@ -426,8 +431,7 @@ Just keep in mind that `from_json` always requires a format fitting to `to_json`
 
 ## Sub-layouts
 Remember that each sub-layout has its own value-dict.
-
-You can use this to divide value-saves into parts.
+You can take advantage of this to divide value-saves into parts.
 
 Consider this example:
 ```py
