@@ -406,4 +406,93 @@ Any initialization related to the actual GUI should be done inside `init_window_
 # (Interacting with the SwiftGUI event-system)
 This will get its own tutorial soon.
 
+# Full code of the example
+In case you were curious how `ModifiedInput` looks after all of these examples, here you go:
+```py
+from typing import Any
+import SwiftGUI as sg
+from SwiftGUI.Compat import Self    # Version of typing.Self that is compatible with Python 3.10
 
+class ModifiedInputOptions(sg.GlobalOptions.Input):
+    correct_color: str = "green"
+    wrong_color: str = "red"
+
+class ModifiedInput(sg.Input):
+    defaults = ModifiedInputOptions
+
+    def __init__(
+            self,
+            *args,
+            correct_color: str = None,
+            wrong_color: str = None,
+            **kwargs,
+    ):
+        super().__init__(*args, **kwargs)
+
+        self._update_initial(
+            correct_color = correct_color,
+            wrong_color = wrong_color,
+        )
+
+    def set_value(self, val: int, throw_event: bool = False) -> Self:   # This is not really necessary, but I've added it for the typehints
+        super().set_value(str(val), throw_event)
+        return self
+
+    _last_correct_value: int = 0
+    def _get_value(self) -> int:
+        value = super()._get_value()    # Get the actual value
+
+        try:    # Try to convert it to int
+            value = int(value)
+        except ValueError:  # If conversion fails return the last correct value
+            return self._last_correct_value
+
+        # Otherwise, save that value and return it
+        self._last_correct_value = value
+        return value
+
+    def _event_callback(self, *_):  # Don't forget *_
+        value = super()._get_value()    # We modified self._get_value earlier, so use super()._get_value() for the acutal value
+
+        try:
+            int(value)
+        except ValueError:  # If conversion fails
+            self.update(background_color = self._wrong_color)
+        else:   # If conversion succeeds
+            self.update(background_color = self._correct_color)
+
+        super()._event_callback(*_)   # Make sure the event isn't totally ignored
+
+    _correct_color: str = "green"
+    _wrong_color: str = "red"
+    def _update_special_key(self, key: str, new_val: Any) -> bool|None:
+        if key in ["someKey", "someOtherKey"]:
+            self.update_after_window_creation(**{key: new_val})
+            return True
+
+        match key:
+            case "correct_color":
+                self._correct_color = new_val
+            case "wrong_color":
+                self._wrong_color = new_val
+            case _:
+                return super()._update_special_key(key, new_val)
+
+        return True
+
+sg.Themes.FourColors.Emerald()
+
+layout = [
+    [
+        ModifiedInput(
+            key="MyInput",
+            default_event=True,
+        )
+    ]
+]
+
+w = sg.Window(layout)
+
+for e,v in w:
+    print(e,v)
+```
