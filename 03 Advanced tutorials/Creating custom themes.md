@@ -4,19 +4,20 @@ Themes are a way to apply pre-made sets of global options (see basic tutorial 02
 
 In SwiftGUI version 0.10.2, there are 46 pre-made themes.
 
-To apply a theme, simple "call" it:
+To apply a theme, simply "call" it:
 ```py
 ### Global options ###
 sg.Themes.Hacker()
 ```
-![](../assets/images/2025-08-05-16-12-52.png)
+![](../assets/images/2025-08-05-16-12-52.png)\
+(The image is old...)
 
 See all available themes by calling `sg.Examples.preview_all_themes()`:\
 ![](../assets/images/2025-10-19-19-00-04.png)
 
 ## Creating custom themes
 It's very easy to create your own themes, so feel free to do so.
-I'd love to see what you came up with, feel free to post it in the [GitHub-discussions](https://github.com/CheesecakeTV/SwiftGUI/discussions/26#discussion-8779746).
+I'd love to see what you came up with, so you are welcome to post it in the [GitHub-discussions](https://github.com/CheesecakeTV/SwiftGUI/discussions/26#discussion-8779746).
 
 Let's take a look at an implementation of the `Hacker`-theme (version 0.5.x):
 ```py
@@ -56,7 +57,7 @@ class Hacker(sg.Themes.BaseTheme):
 
         go.Separator.color = "red"
 ```
-As you can see, you only need to derive the class from `sg.Themes.BaseTheme` and set all of your global options in `apply`.
+As you can see, you only need to derive the class from `sg.Themes.BaseTheme` and set all of your global options in the `apply`-method.
 
 As an example, let's create a simple theme and apply it:
 ```py
@@ -117,17 +118,17 @@ class Jungle(sg.Themes.FourColors.BaseFourColors):
     
 Jungle()    # Apply theme
 ```
-You can't enter color-names like `"blue"`, only color-codes.
+With FourColors-themes, you can't enter names like `"blue"`, only color-codes.
 Also, don't add `#` in front of the color-code.
 
 Using this template is a lot easier than creating a full theme.
 Not to forget, if elements are added to SwiftGUI, I'll update the template for you.
 
 ### Well looking color-combinations
-Not all good looking color-combination also work well using the template.
+Not all good looking color-combination also look good using this template.
 In fact, most of them don't.
 
 Follow these guidelines when chosing the colors to maximize your chance of creating something good-looking:
-- col3 and col4 should both have a good contrast to col1 and col2. Text colored col3 or col4 should be readable on both, col1 and col2.
-- col3 should really stand out from the rest.
-- col1 and col2 should look somewhat simmilar. This is not as important as the other points, but helps a lot.
+- col3 and col4 should both have a good contrast to col1 and col2. Text colored col3 or col4 should be readable on either, col1 and col2.
+- col3 should stand out from the rest.
+- col1 and col2 should look somewhat simmilar, even though this is less important than the other points
