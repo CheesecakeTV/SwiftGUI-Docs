@@ -27,15 +27,22 @@ for e, v in w:
     print(e, v)
 ```
 
-# Updating the list
-The option under which the choices are added onto the element is called `choices`.
-
-That means you can change the choices like this:
+# Updating the list/choices
+The elements of the drop-down-menu can be accessed through the property `choices`:
 ```py
-my_combo.update(choices= ["New", "Choice"])
+my_combo.choices = ["New", "Choices"]
 ```
-However, that does not update the previous selection.
-You'll have to do that manually:
+Or use the setter-method:
+```py
+my_combo.set_choices(["New", "Choices"])
+```
+You may also use the update-routine:
+```py
+my_combo.update(choices= ["New", "Choices"])
+```
+
+Overwriting the choices will not affect the text inside the combobox, even if the current choice no longer exists.
+You'll have to change that manually:
 ```py
 my_combo.value = "New"
 ```
