@@ -1,5 +1,5 @@
 
-Written in SwiftGUI version 0.11.17.
+Written in SwiftGUI version 0.11.17, updated for 0.11.18.
 
 # sg.Calendar
 Lets the user choose a date from a comprehensive calendar.
@@ -9,7 +9,7 @@ Lets the user choose a date from a comprehensive calendar.
 The current date (dark blue in the image) and the selected day (light blue) are marked.
 
 Using the elements above the "day-buttons", the user can navigate to different months in different years.
-Clicking "today" jumps to the current month/year.
+Clicking "today" jumps to the current month/year, and selects the current day, depending on the options.
 The two arrow-buttons on the side are used to jump to the next/previous month.
 
 # Popup
@@ -76,6 +76,11 @@ You may customize the following colors:
 - `today_background_color`: Background-color of the day-button corresponding to the current day
 - `background_color_active`: Background-color of the selected day-button
 - `text_color_active`: Text-color of the selected day-button
+
+## today_selects
+The "today"-button always shows the current month.
+
+If you set `today_selects = True`, the button also selects the current day.
 
 # Global options
 The global-options-class linked to `sg.Calendar` is called `sg.GlobalOptions.Calendar`.
