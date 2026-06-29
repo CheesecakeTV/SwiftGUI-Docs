@@ -175,7 +175,7 @@ This option specifies the color of the "checkbox":\
 The following options work exactly as the same option from other elements, so they won't be explained here.
 Each option is listed only once, even if it relates to multiple elements.
 
-Options related to `sg.Checkbutton`:
+Options related to `sg.Checkbox`:
 - check_type
 - offrelief
 

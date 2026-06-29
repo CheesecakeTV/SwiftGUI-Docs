@@ -8,17 +8,18 @@ This tutorial explains these functionalities and the risks that come with it.
 
 There will be examples showing how powerful these features are in the future.
 
-Note that this feature was a pain to implement.
-In SwiftGUI, elements are connected to a couple of other elements through references.
-Also, different types of elements need to be handled differently.
-Adding/deleting elements, SwiftGUI needs to create/destroy these references properly.
+Note that this feature was a pain to implement.\
+In SwiftGUI, elements are connected in multiple ways.
+On top of that, different types of elements need to be handled differently.
+It was quite tricky to not mess up these connections.
 
-Long story short, if you encounter any bugs regarding this feature, please, please, please, report it.
+Long story short, if you encounter any bug regarding this feature, please, please, please, report it.
 
 ## Window are frame too
-Keep in mind that things working for frames work for windows/subwindows too.
+Keep in mind that windows/subwindows are basically frames with some extra flare.
+But most of the functionality of frames is also true for the window.
 
-These actually contain only a single element:
+These "window-frames" contain only a single element:
 A big frame containing all other elements of that window.
 
 Access that frame by using `.frame` on the window/subwindow:
@@ -31,7 +32,7 @@ window_frame = w.frame
 Before getting into these topics, let's first recall some methods of sg.Frame that are very useful in this context:
 
 ### Length
-`len(frame_object)` returns how many rows are that frame has.
+`len(frame_object)` returns how many rows that frame has.
 
 ### row-index
 `frame_object.get_row_index(element)` returns the index of the row the passed element is in.
@@ -43,11 +44,11 @@ Example:
 ```py
 my_frame = sg.Frame([
     [
-        sg.Button("Hello"),
+        sg.Button("Hello"), # Directly in the frame
     ],[
         sg.Frame([
             [
-                sg.Button("World")
+                sg.Button("World")  # Not directly in the (outer) frame
             ]
         ])
     ]
@@ -57,7 +58,7 @@ Even though the button "World" technically is inside `my_frame`, that doesn't co
 
 # Deleting single elements
 **Important!**\
-This does NOT delete the row this element is in, even if it's empty.
+This does __NOT__ delete the row this element is in, even if it's empty.
 If you add and delete an element 50000 times, there will be 50000 empty rows.
 Performance desaster.
 
@@ -114,7 +115,7 @@ To delete a row, you'll need to call `.delete_row(row_index)` on its containing 
 
 **This does not work for grid-frames (yet, version 0.10.24)**.
 
-The indexes are given like indexes of normal list, so `0` means the first row.\
+The indexes are given like indexes of a normal list, so `0` means the first row.\
 Negative indexes work as usual. E.g.: `-1` (default value) references the last row.
 
 Example:
@@ -143,8 +144,8 @@ for e,v in w:
     window_frame.delete_row(-1) # Delete last row
 ```
 
-This is the best way to delete elements, since it leaves nothing behind.
-So you can create and delete the same row as often as you like without any residue.
+This is the best way to delete elements, since it leaves actually nothing behind.
+So you can create and delete the same row as often as you like without any residue clogging up your RAM.
 
 ## Deleting the row of a certain element
 Something you'll probably do often is to delete a row that has a certain element in it.

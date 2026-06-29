@@ -295,6 +295,12 @@ SwiftGUI offeres a couple of "combined" elements that consist of multiple SwiftG
 It's amazingly simple to create your own custom elements.
 There is a tutorial on it under "Advanced Tutorials", I highly recommend it.
 
+## Calendar
+Brand new! (Version 0.11.15)
+
+Many buttons that let the user choose a day:\
+![](../assets/images/2026-05-14-14-24-37.png)
+
 ## Form
 One or more rows of text-input-combinations, with a bit of higher functionality:\
 ![](../assets/images/2025-11-13-19-39-36.png)
