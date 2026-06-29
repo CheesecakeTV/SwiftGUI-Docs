@@ -107,7 +107,7 @@ layout = [
 ]
 
 w = sg.Window(layout, title= "String hasher")
-w.throw_event("Textfield")  # The hasing should be executed once at start, so let's tell SwiftGUI the textfield changed
+w.throw_event("Textfield")  # The hashing should be executed once at start, so let's tell SwiftGUI the textfield changed
 w["Textfield"].set_focus()  # Set the focus to this element so the user can directly start writing
 
 for e, v in w:

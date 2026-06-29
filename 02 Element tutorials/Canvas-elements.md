@@ -55,7 +55,7 @@ You can use all of those variants before and after creating the window.
 ## Element-states
 Most sgc-elements have 3 different states: "normal", "hidden" and "disabled".
 
-The normal mode is pretty self-explanitory.
+The normal mode is pretty self-explanatory.
 
 In "disabled" state, the element does not respond to events.
 
@@ -189,7 +189,7 @@ There are a couple of pre-made dash-patterns to choose from:
 ```
 ![](../assets/images/2025-10-05-15-29-53.png)
 
-Example for dottet line:
+Example for dotted line:
 ```py
 canv = sg.Canvas(
     sgc.Line(  # Add an element directly
@@ -610,7 +610,7 @@ canv = sg.Canvas(
 ```
 ![](../assets/images/2025-10-08-15-38-31.png)
 
-SwiftGUI (or Tkinter in this case) tries its best to not cut the line inbetween words:
+SwiftGUI (or Tkinter in this case) tries its best to not cut the line between words:
 ```py
 canv = sg.Canvas(
     sgc.Text(
@@ -672,7 +672,7 @@ What I find pretty cool is that you may set `bitmap_active` and `bitmap_disabled
 
 You may also define `color`, `background_color`, `anchor` and `state`.
 
-`anchor` is explained under `sgc.Text` and the other options seem to be pretty self-explanitory to me.
+`anchor` is explained under `sgc.Text` and the other options seem to be pretty self-explanatory to me.
 So let's leave it at that...
 
 # sgc.Image
@@ -687,7 +687,7 @@ canv = sg.Canvas(
 ```
 ![](../assets/images/2025-10-08-15-53-21.png)
 
-If the fileformat features transparency, the transparent parts of the image will actually be transparent:
+If the file-format features transparency, the transparent parts of the image will actually be transparent:
 ```py
 canv = sg.Canvas(
     sgc.Line(
@@ -709,7 +709,7 @@ You don't have to pass the image as a filename, everything `sg.Image` accepts is
 The options `image_width` and `image_height` are also available and work the same.
 
 However, unlike `sg.Image`, `sgc.Image` accepts `image_active` and `image_disabled` too.\
-Caution: These images will also be resized by `image_width` and `image_height`, there is no `image_width_active` or simmilar.
+Caution: These images will also be resized by `image_width` and `image_height`, there is no `image_width_active` or similar.
 
 You may also set `anchor`, which works the same as with `sgc.Text`.
 

@@ -14,7 +14,7 @@ It also provides an element to edit configurations.
 It looks complicated at first, but is much easier than the stuff explained in most other basic SwiftGUI tutorials.
 
 To be honest, the heavy lifting is all done by the builtin package `configparser`: https://docs.python.org/3/library/configparser.html#configparser.ConfigParser \
-SwiftGUI only adapts the package and makes it more suited for its usecase.
+SwiftGUI only adapts the package and makes it more suited for its intended use.
 
 # .ini files
 In SwiftGUI, configuration-files have the `ini`-format.
@@ -127,7 +127,7 @@ my_section.save()   # Does the same as config_file.save()
 Note that `.save()` on any section saves the whole file, not just that particular section.
 
 # Reading values
-Read values like with dictionaires:
+Read values like with dictionaries:
 ```py
 import SwiftGUI as sg
 
@@ -160,7 +160,7 @@ Imagine trying to configure a program and being greeted by this configuration-fi
 
 [Translations settings]
 ```
-Aparrently, the program expects you to know all of the option-names.
+apparently, the program expects you to know all of the option-names.
 Very inconvenient.
 This is what happens when you only use `.get(...)` to handle default-values.
 
@@ -205,7 +205,7 @@ print(my_section.get("text_size", to_type=int))
 If the conversion fails, the default value is returned.\
 Keep in mind that the user can access the file...
 
-Since a lot of values are gonna be ints/floats, the methods `.get_int` and `.get_float` can be used to save a bit of typing.
+Since a lot of values are gonna be `int`/`float`, the methods `.get_int` and `.get_float` can be used to save a bit of typing.
 
 # Bools as values
 Bools are absolutely not compatible with this format.\

@@ -155,7 +155,7 @@ At the moment (version 0.10.4), this option can't be modified using `.update(...
 Usually, the tabs are docked on the upper edge to the left.
 This is represented by the string "nw" ("north-west").
 
-You should be familliar with a simmilar naming-convention used for the `anchor`-option in other elements.
+You should be familiar with a similar naming-convention used for the `anchor`-option in other elements.
 
 However, in this case, the first character always specifies the edge, while the second one defines the direction.
 
@@ -180,7 +180,7 @@ But oh well, Windows 11. Great os. So glad.
 
 
 ## Colors
-There are several options for coloring available, which should be self explanitory:
+There are several options for coloring available, which should be self explanatory:
 - `background_color`
 - `background_color_tabs`
 - `text_color_tabs`

@@ -13,7 +13,7 @@ The best part: Simple Python-logging is very easy, but you can do more complicat
 This tutorial covers the very basics of the builtin `logging`-Module and also shows you how to set up crash-log-files using `SwiftGUI-Logging`.
 
 # Basics of Python-logging
-This is independant of SwiftGUI and can be used everywhere.
+This is independent of SwiftGUI and can be used everywhere.
 
 Reports (entries in a log) are essentially fancy print-statements.
 You put a text in them and they are passed onto Python's magic.
@@ -22,7 +22,7 @@ Each report has a so-called log-level, which tells you (or Python) how important
 - `debug`: Message only important for debugging (e.g. element-value changed)
 - `info`: Good to know (e.g. new window opened)
 - `warning`: Something that might cause a problem (e.g. a key was used multiple times)
-- `error`: Something went wrong (e.g. an exception occured)
+- `error`: Something went wrong (e.g. an exception occurred)
 - `critical`: A serious error. The program is unable to function correctly (e.g. an exception was unhandled and therefore crashed the program)
 
 Create a report by calling its log-level directly on the logging-module:
@@ -32,7 +32,7 @@ import logging
 logging.info("Starting program")
 logging.warning("Something doesn't feel right")
 ```
-Running the script, you'll get this colsole output (written in red):
+Running the script, you'll get this console output (written in red):
 ```bash
 WARNING:root:Something doesn't feel right
 ```
@@ -83,7 +83,7 @@ SwiftGUI's main logger is called `SwiftGUI`.
 And by "a lot", I mean a whooooooooole lot.
 I barely scratched the surface.
 
-The logging-structure is not particularely hard to understand, just a lot more complex than you think.
+The logging-structure is not particularly hard to understand, just a lot more complex than you think.
 
 You can not only print logs to the console, you can also save them to a file, or even send them via mail (there are like 10 other "handlers").
 
@@ -142,7 +142,7 @@ The file is called `Crash_2026-02-26_12-45-03.log` (located in the new directory
 2026-02-26 12:45:03,773 - Tutorial - WARNING - Something doesn't feel right
 2026-02-26 12:45:03,773 - root - INFO - This is reported to the root
 2026-02-26 12:45:03,780 - root - ERROR - Traceback (most recent call last):
-  File "C:\Users\Eric.Dessel\PycharmProjects\SwiftGUI\tests\tutorial.py", line 12, in <module>
+  File "C:\Users\cheese\PycharmProjects\SwiftGUI\tests\tutorial.py", line 12, in <module>
     1 / 0   # ZeroDivisionError
     ~~^~~
 ZeroDivisionError: division by zero
@@ -171,7 +171,7 @@ The function has other parameters, I suggest checking out its docstring.
 This method has one big disadvantage, which I wasn't able to avoid (yet):
 The configuration of the root-logger is overwritten.
 
-With no additional configuration, warnings/errors/criticals aren't printed to the console anymore.
+With no additional configuration, warnings/errors/critical entries aren't printed to the console anymore.
 
 The function overwrites the log-level to include all reports, which is why doing a basic configuration before will cause all reports to be printed to the console:
 ```py
@@ -233,7 +233,7 @@ my_logger.info("Starting program")
 my_logger.warning("Something doesn't feel right")
 logging.info("This is reported to the root")
 ```
-One small hickup: Now red messages are also printed in white:\
+One small hiccup: Now red messages are also printed in white:\
 ![](../assets/images/2026-02-26-13-44-54.png)
 
 That could be avoided, but let's not overdo it.
@@ -241,7 +241,7 @@ That could be avoided, but let's not overdo it.
 ## Different program-entry-points (Recommended)
 This is all a bit too much effort in my opinion.
 
-My prefered way to handle this is to create multiple program-entry-points:
+My preferred way to handle this is to create multiple program-entry-points:
 One for me when programming and another one for users.
 
 This way, you don't need to mix two different logging-configurations.

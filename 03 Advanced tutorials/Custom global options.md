@@ -20,12 +20,12 @@ import SwiftGUI as sg
 import SwiftGUI.GlobalOptions as go
 ```
 
-To create a GO-class, simply inherrit another GO-class.
+To create a GO-class, simply inherit another GO-class.
 As explained in the above mentioned tutorial, all options from that parent-GO-class will also be options in the new one.
 
 If your class doesn't provide that option or sets it `None`, the parent option will be applied.
 
-If you want to start "blank", inherrit from `go.DEFAULT_OPTIONS_CLASS`:
+If you want to start "blank", inherit from `go.DEFAULT_OPTIONS_CLASS`:
 ```py
 class Example(go.DEFAULT_OPTIONS_CLASS):
     ...
@@ -66,7 +66,7 @@ No idea why you would do that, but you can.
 ## Some elements of an existing type
 There is no provided way to assign go-classes to specific elements only, but you can use this easy workaround.
 
-Just inherrit a class from the existing element-class and change its `defaults`-attribute:
+Just inherit a class from the existing element-class and change its `defaults`-attribute:
 ```py
 class Example(go.DEFAULT_OPTIONS_CLASS):
     width = 15

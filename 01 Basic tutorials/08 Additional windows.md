@@ -6,7 +6,7 @@ This tutorial teaches the main ways to do this.
 It might look complicated in the beginning, but I can assure you, it is not.
 
 # Very basic popups and such
-This way to create windows is the most simmilar to creating normal windows.
+This way to create windows is the most similar to creating normal windows.
 However, the other ways are much better.
 
 It's fine for popups that exit after the first key-event, even though I'd use another way.
@@ -125,7 +125,7 @@ Just use it like your normal for-loop.
 The window-object is accessible through `self.w`.
 
 Just build your layout like you normally would and you are good to go.
-The key-system is completely seperate from the main one, so use keys however you like.
+The key-system is completely separate from the main one, so use keys however you like.
 
 When you're done, use the popup by "calling" the class:
 ```py
@@ -303,7 +303,7 @@ This window can be called "main window".
 
 **If the main window is closed, all sub-windows close too.**
 
-Pro-tipp: `sg.main_window()` always returns the current main window.
+Pro-tip: `sg.main_window()` always returns the current main window.
 
 Sometimes, you can't be sure if a sub-window is opened before or after the main window is created.\
 E.g.: Popups.\

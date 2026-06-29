@@ -183,7 +183,7 @@ sg.GlobalOptions.Button.fontsize = None
 The resulting window looks like this:\
 ![](../assets/images/2025-08-05-16-01-59.png)
 
-## Additional tipps
+## Additional tips
 If you want to change the global options of any element, you can always return the fitting go-class with `myElement.defaults`:
 ```py
 ### Global options ###

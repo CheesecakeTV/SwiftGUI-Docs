@@ -5,12 +5,15 @@
 Find the main repository here: https://github.com/CheesecakeTV/SwiftGUI
 
 # Structure of this documentation
-1. Basic tutorials: Every user of SwiftGUI should have read all of them. They give a good overview over the most important features provided.
-2. Element tutorials: Seperate tutorials for each element.
-3. Advanced tutorials: Not necessarely harder, just more in-depth explanations for advanced users.
-4. Application notes: "Practical tutorials". These provides tricks to improve your programs.
-5. Examples: Small applications, sorted by their difficulty. Theory is good, but examples can clear up concepts better. Each file contains a list of concepts shown in the example.
+1. Basic tutorials: Every user of SwiftGUI should have read all of them. They give a good overview over the most important features.
+2. Element tutorials: Separate tutorials for each element.
+3. Advanced tutorials: Not necessarily harder, just more in-depth explanations for advanced users.
+4. Application notes: "Practical tutorials". These provide tricks to improve your programs.
+5. Examples: Small applications, grouped by their difficulty. Theory is good, but examples can clear up concepts better. Each file contains a list of concepts shown in the example.
 6. References: Short explanations and links to applications developed using SwiftGUI. (Mostly mine ones at the moment...).
+
+# Single documents
+- `Downward Compatibility Changelog`: A dedicated changelog containing everything that might mess with downward-compatibility. If your code breaks after updating (which probably never happens), this file will save you.
 
 # Does your GUI look bad?
 `import SwiftGUI as sg`
@@ -21,7 +24,7 @@ This applies the `Emerald`-theme, my personal favorite.
 
 See which themes are available by calling `sg.Examples.preview_all_themes()`.
 
-# installation
+# Installation
 Install using pip:
 ```bash
 pip install SwiftGUI
@@ -38,21 +41,19 @@ If SwiftGUI should have any chance on competing with other gui-packages, it has 
 My goal is to make developers use tools they don't know yet, so I better teach them properly.
 
 # Why not just use PySimpleGUI?
-I know how popular PySimpleGUI became over time, which it definetly deserved.
-A lot of time and effort went into creating PySimpleGUI.
+I know how popular PySimpleGUI became over time, which it definitely deserved.
 
 It has a ton of features and is straight-forward to use.
-It is also quite compatible with older Python-versions.
-And don't forget PySimpleGUIWeb and the other two packages.
+It is also compatible with older Python-versions.
+And don't forget the additional packages like PySimpleGUIWeb.
 
 Not to underestimate, its community is quite big nowadays, so it's easy to find helpful articles online.
 
 I really do like PySimpleGUI, don't get me wrong.\
-However, it seems like its creator develops the package, but doesn't apply it to actual applications.
+However, it seems like its creator develops the package, but doesn't use it himself.
 
-Somehow, it misses prette obvious and "simple-to-implement" features.
-
-I for my part used PySimpleGUI in actual applications for years, so I know what's important and what's not.
+Somehow, it misses pretty obvious and "simple-to-implement" features.
+I used PySimpleGUI in actual applications for years, so I know what's important and what's not.
 
 Let me use this part to rant a little about PySimpleGUI.
 

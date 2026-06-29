@@ -16,7 +16,7 @@ It has very bad user-friendliness.
 I have no formal education on any subjects presented here.
 
 I also have strong opinions on a lot of "modern" gui-styles.
-Many modern user-interfaces focus solely on looks and make using it unnecessarely complicated on the way.
+Many modern user-interfaces focus solely on looks and make using it unnecessarily complicated on the way.
 
 # The most important rule
 **Use your program and be petty about it.**
@@ -27,7 +27,7 @@ Sure, going through 2 popups to reach your desired functionality might make for 
 
 Use your own program a lot.\
 Improve everything that doesn't feel natural to you.\
-Improve everything that is slowing you down unnecessarely.
+Improve everything that is slowing you down unnecessarily.
 
 Yes, something very small is only a tiny bit annoying, but trust me, the user is gonna notice.
 
@@ -42,7 +42,7 @@ So try to not mix too many "keyboard-actions" with "mouse-actions".
 ## Don't overuse the keyboard
 The most obvious way to make the user work quicker is by adding a ton of hotkeys and making the mouse obsolete.
 
-While that is definetly true, efficiency isn't the same as user-friendliness.\
+While that is definitely true, efficiency isn't the same as user-friendliness.\
 There is a reason the text-editor vim isn't as popular as it deserves to be.
 
 Also, keep in mind that most pc-users probably can't type as fast as you programmer.
@@ -54,9 +54,9 @@ Examples:
 - A button to clear the input
 - A button to copy the input-text to clipboard (Same as `ctrl+c`)
 - A button to paste the text from clipboard (Same as `ctrl+v`)
-- For numeric inputs, buttons to add/substract 1, multiply/divide by 10, multiply by -1, etc.
+- For numeric inputs, buttons to add/subtract 1, multiply/divide by 10, multiply by -1, etc.
 
-This can easily be done for multiple elements using teplate functions, as described in the advanced tutorial on custom combined elements.
+This can easily be done for multiple elements using template functions, as described in the advanced tutorial on custom combined elements.
 
 ## Replacing button-presses
 A lot of times, an input-element only serves a very specific purpose.
@@ -69,7 +69,7 @@ Examples:
 - An input that adds texts to a list. What do you think is the first thing the user does after adding a text? He clears the input. So clear it for him.
 
 ## Focus
-The focus is one of the most important parts of any GUI, yet noone seems to know it even needs special considerations.
+The focus is one of the most important parts of any GUI, yet no one seems to know it even needs special considerations.
 
 First of all, what is the focus?\
 When an element "has the focus", it can be modified using the keyboard.
@@ -108,7 +108,7 @@ for e,v in w:
 Enter your information as quickly as possible.
 
 Does this feel natural/convenient?\
-In my opinion, definetly not.
+In my opinion, definitely not.
 
 Now, try this variant:
 ```py
@@ -140,7 +140,7 @@ w = sg.Window(layout, title= "Enter your information please")
 for e,v in w:
     ...
 ```
-I know it looks dificult, but all the addition does is to jump the focus to the next input-element when the user presses enter.\
+I know it looks difficult, but all the addition does is to jump the focus to the next input-element when the user presses enter.\
 Keep that in mind and try to enter your information again.
 Much smoother.
 
@@ -165,9 +165,9 @@ Just why.
 
 ### Protecting "dangerous" actions
 Buttons that do something hard/impossible to undo should have an extra layer of protection to them.
-Especially when they are placed next to regularely used buttons.
+Especially when they are placed next to regularly used buttons.
 
-Otherwise, the user needs to move the mouse slower/careful to not accidently cause such actions.
+Otherwise, the user needs to move the mouse slower/careful to not accidentally cause such actions.
 
 Example: I think we all clicked on "reboot" instead of "shutdown" too many times.
 
@@ -262,7 +262,7 @@ My advice:
 - Don't tell them anything on how to use the program, let them figure it out completely on their own
 - If they use the program longer, ask for feedback after 1-2 hours again. New programs are never instantly understood
 
-Little annecdote: My father tested one of my programs.
+Little anecdote: My father tested one of my programs.
 He complained about a button that said "Apply", because he didn't know the English word "apply".
 The word is pretty common in my opinion, so I would have never guessed this could be an issue.
 I changed the text to "Apply/Use".

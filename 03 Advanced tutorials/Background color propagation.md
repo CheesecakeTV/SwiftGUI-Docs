@@ -89,7 +89,7 @@ w = sg.Window(layout, alignment="left")
 myFrame.update(background_color = "lightblue")  # Frame is blue now
 w.update(background_color = "red")  # Frame is red again :C
 ```
-You can disable that behaviour manually by setting `apply_parent_background_color = False`:
+You can disable that behavior manually by setting `apply_parent_background_color = False`:
 ```py
 layout:list[list[sg.BaseElement]] = [
     [

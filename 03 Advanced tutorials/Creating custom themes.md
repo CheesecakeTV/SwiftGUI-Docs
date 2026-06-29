@@ -128,7 +128,7 @@ Not to forget, if elements are added to SwiftGUI, I'll update the template for y
 Not all good looking color-combination also look good using this template.
 In fact, most of them don't.
 
-Follow these guidelines when chosing the colors to maximize your chance of creating something good-looking:
+Follow these guidelines when choosing the colors to maximize your chance of creating something good-looking:
 - col3 and col4 should both have a good contrast to col1 and col2. Text colored col3 or col4 should be readable on either, col1 and col2.
 - col3 should stand out from the rest.
-- col1 and col2 should look somewhat simmilar, even though this is less important than the other points
+- col1 and col2 should look somewhat similar, even though this is less important than the other points

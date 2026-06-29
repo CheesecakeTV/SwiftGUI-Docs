@@ -66,7 +66,7 @@ The proper way to do this is explained later.
 
 Reading values from elements is totally fine.
 
-For the thread, set `deamon= True`, so it stops executing when the window closes.
+For the thread, set `daemon= True`, so it stops executing when the window closes.
 
 # Throwing events manually
 ## Key-event

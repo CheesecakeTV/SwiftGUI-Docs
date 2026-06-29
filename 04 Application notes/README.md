@@ -1,7 +1,7 @@
 
 # Application notes
 
-An application note is simmilar to an example.
+An application note is similar to an example.
 
 However, instead of showing a single, concrete application, an abstract concept is explained.
 

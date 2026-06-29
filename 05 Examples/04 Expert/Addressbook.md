@@ -3,7 +3,7 @@
 Probably my best example yet.
 It absolutely surpassed all my expectations with flying colors.
 
-This example is an addressbook you can use to store information about people.
+This example is an address book you can use to store information about people.
 It's implemented quite abstract, so you can easily change it into something else.
 
 This is the basic window:\
@@ -174,7 +174,7 @@ class Addressbook(sg.BasePopupNonblocking):
                     headings= self._attributes,
                     scrollbar= False,
                 ).bind_event(
-                    sg.Event.ClickDoubleLeft,   # Doubleclicking should do the same as clicking the button "Pin" (later)
+                    sg.Event.ClickDoubleLeft,   # Double-clicking should do the same as clicking the button "Pin" (later)
                     key= "Pin",
                 ),
                 form := sg.Form(
@@ -206,7 +206,7 @@ class Addressbook(sg.BasePopupNonblocking):
         self.table: sg.Table = table
         self.form: sg.Form = form
 
-        # Simmilar to w = sg.Window(...)
+        # similar to w = sg.Window(...)
         super().__init__(layout, alignment = "left", padx = 10, pady = 10, title= f"SwiftGUI Addressbook example opening {self._filepath}")
 
         try:

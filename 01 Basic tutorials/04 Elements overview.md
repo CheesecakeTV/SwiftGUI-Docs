@@ -1,7 +1,7 @@
 
 
 # Elements overview
-Tipp: Preview every element by calling `sg.Examples.preview_all_elements()`.
+Tip: Preview every element by calling `sg.Examples.preview_all_elements()`.
 
 This tutorial gives you a brief overview over all the available SwiftGUI-elements.
 Just read over it quickly so you have an idea of what's possible.
@@ -10,7 +10,7 @@ Most of these elements can do much more than I show in this tutorial, so it pays
 
 SwiftGUI-elements are categorized into 3 groups:
 - Widget elements: Elements containing only a single tkinter-widget that is used as tkinter intends to
-- Extended elements: Elements containing only a single tkinter-widget that is used significantly different to tkinters intention
+- Extended elements: Elements containing only a single tkinter-widget that is used significantly different than intended
 - Combined elements: (Exclusive to SwiftGUI) Elements containing multiple tkinter-widgets
 
 All screenshots in this tutorial use the theme `sg.Themes.FourColors.Emerald`.
@@ -20,7 +20,7 @@ Tkinter, the package behind SwiftGUI already offers a lot of elements (called wi
 
 Widget-elements are basically just a raw tkinter-widget, maybe with some custom, higher-level functionality.
 
-These elements should be simmilar for most GUI-libraries based on tkinter.
+These elements should be similar for most GUI-libraries based on tkinter.
 
 ## Text
 Aliases: T, Label
@@ -91,7 +91,7 @@ It's a bit hard to see, but the lower button looks like it is held down, because
 ## Radiobutton
 Aliases: Radio
 
-The radiobutton is somewhat simmilar to a checkbox, but only one radio of a group can be checked:\
+The radiobutton is somewhat similar to a checkbox, but only one radio of a group can be checked:\
 ![](../assets/images/2025-11-12-13-35-25.png)
 
 When `Radio 2` is clicked, `Radio 1` unchecks.
@@ -197,7 +197,7 @@ The selected string is displayed even when the drop-down is closed:\
 ## Spinbox
 Aliases: Spin
 
-Spinboxes are suprisingly simmilar to comboboxes, but instead of a dropdown-menu, the user needs to cycle through the values:\
+Spinboxes are surprisingly similar to comboboxes, but instead of a dropdown-menu, the user needs to cycle through the values:\
 ![](../assets/images/2025-11-13-18-44-43.png)
 
 Even though this element is usually used with numbers, strings are fine too:\
@@ -276,7 +276,7 @@ sg.Image("Sym3.png", image_width=50),
 sg.Image("Sym3.png", image_width=75),
 ```
 
-Tipp: This site has a ton of open-source icons:
+Tip: This site has a ton of open-source icons:
 https://icon-sets.iconify.design
 
 ## ImageButton
@@ -290,7 +290,7 @@ Can also have text next to the image:\
 A frame that has functionality for using it together with `sg.Notebook`s.
 
 # Combined elements
-SwiftGUI offeres a couple of "combined" elements that consist of multiple SwiftGUI-elements.
+SwiftGUI offers a couple of "combined" elements that consist of multiple SwiftGUI-elements.
 
 It's amazingly simple to create your own custom elements.
 There is a tutorial on it under "Advanced Tutorials", I highly recommend it.
@@ -317,7 +317,7 @@ layout = [
 ```
 
 ## Console
-Something simmilar to a console-window.
+Something similar to a console-window.
 You can input text on the bottom and send it by pressing `enter`:\
 ![](../assets/images/2025-11-13-19-44-40.png)
 
@@ -345,7 +345,7 @@ for e, v in w:
 ```
 
 ## MultistateButton
-A group of buttons that works simmilar to a group of radio-buttons:\
+A group of buttons that works similar to a group of radio-buttons:\
 ![](../assets/images/2025-11-13-20-24-31.png)
 
 It looks a bit better than radiobuttons and has a single key for all buttons combined.

@@ -86,7 +86,7 @@ class Minesweeper(sg.BasePopupNonblocking):
         self._remaining_fields = rows * columns
 
         self._rows = rows
-        self._colums = columns
+        self._columns = columns
         self._bomb_count = min(bomb_count, self._remaining_fields - 1)  # Limit how many bombs there are by the number of fields
 
         self._flag_count = 0    # How many fields are flagged (Just to show the value)
@@ -142,7 +142,7 @@ class Minesweeper(sg.BasePopupNonblocking):
         """
         "Click" a random free field
         """
-        all_fields = list(itertools.product(range(self._rows), range(self._colums)))    # List all field-coordinates
+        all_fields = list(itertools.product(range(self._rows), range(self._columns)))    # List all field-coordinates
         random.shuffle(all_fields)  # Shuffle that list
 
         for c in all_fields:    # Check each of that fields if it is empty
@@ -248,7 +248,7 @@ class Minesweeper(sg.BasePopupNonblocking):
         Reveal all fields
         """
         for r in range(self._rows):
-            for c in range(self._colums):
+            for c in range(self._columns):
                 self._reveal_one((r,c))
 
     def _is_bomb(self, coordinates: tuple[int, int]) -> bool:
@@ -272,7 +272,7 @@ class Minesweeper(sg.BasePopupNonblocking):
         ):
             for c in range(
                     max(col - 1, 0),
-                    min(self._colums, col + 2),
+                    min(self._columns, col + 2),
             ):
                 yield r, c  # "Return" the next value
 

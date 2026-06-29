@@ -13,7 +13,7 @@ When opening the program, the previous list is restored.
 ![](../../assets/images/2025-12-31-02-35-14.png)
 
 To be honest, I just threw this code out there in 20-30 minutes and added comments.
-It's not optimized or particularely beautiful, but demonstrates the intended concepts well.
+It's not optimized or particularly beautiful, but demonstrates the intended concepts well.
 
 # Demonstrated concepts
 - Adding/removing elements dynamically
@@ -104,7 +104,7 @@ except (FileNotFoundError, json.JSONDecodeError):
     # Error
     print("File-loading failed or file not found")
 else:
-    # No exception occured
+    # No exception occurred
     for key, val in loaded.items():
         main_frame.add_row(
             new_row(key, val)

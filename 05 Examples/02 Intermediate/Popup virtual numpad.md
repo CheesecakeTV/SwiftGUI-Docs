@@ -6,7 +6,7 @@ In this case, the keyboard is a popup.
 The popup returns whatever the user typed in.
 
 You may specify a default value, which is the value returned when the user cancels, or closes the window.
-This way, you don't need to worry about accidently returning a string.
+This way, you don't need to worry about accidentally returning a string.
 
 (This time on linux debian)\
 ![](../../assets/images/2025-10-27-13-13-45.png)

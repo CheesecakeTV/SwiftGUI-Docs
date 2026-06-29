@@ -83,7 +83,7 @@ C:.
 ```
 
 ## Simplifying the imports
-Small sidenote:
+Small note:
 When working with files a lot, you'll often use `root_path`.
 
 That's why, going forward, it's imported directly:

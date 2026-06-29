@@ -106,7 +106,7 @@ for e,v in w:
 Note that both elements have the same key.
 
 ## Accessing elements
-The window works simmilar to a dictionary.
+The window works similar to a dictionary.
 If you define the same key twice, the second definition overwrites the first one.
 
 That's why `w[key]` only references the last element created with that key.

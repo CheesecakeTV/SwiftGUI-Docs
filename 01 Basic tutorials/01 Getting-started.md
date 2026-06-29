@@ -12,7 +12,7 @@ The images are old, `SwiftGUI` got a lot of updates since.
 Functionally, the tutorials will stay up to date, I promise!
 
 One of SwiftGUI's purpose is to move away from PySimpleGUI.
-At first glance, both packages are very simmilar, but getting more into it, SwiftGUI is much more flexible and offers more higher functionality.
+At first glance, both packages are very similar, but getting more into it, SwiftGUI is much more flexible and offers more higher functionality.
 
 # Basic template
 For every GUI, you should use this template, until you are familiar with the basic functionality:
@@ -101,7 +101,7 @@ There are a lot of different elements you can use in your gui.
 
 Most of them have a ton of options to customize the element, but we'll only focus on the basic ones in this tutorial.
 
-Pro-tipp: Preview all available elements by calling `sg.Examples.preview_all_elements()`.
+Pro-tip: Preview all available elements by calling `sg.Examples.preview_all_elements()`.
 
 ## sg.Text
 This element allows you to display some text inside your GUI (Who would have guessed...).
@@ -158,7 +158,7 @@ layout:list[list[sg.BaseElement]] = [
 
 How to actually read (and use) what the user writes, will be explained later.
 
-Pro tipp: 
+Pro tip: 
 It is possible to make this element "readonly" (setting `readonly = True`), doing exactly what you think it would.
 The user will still be able select and copy (Ctrl + C) the text inside, but can't change it.
 
@@ -294,7 +294,7 @@ for e,v in w:
 ```
 This functionality is the basic idea behind SwiftGUI (and PySimpleGUI, to be fair).
 
-However, **buttons are the only types of (builtin) element that has threir event enabled by default!**
+However, **buttons are the only types of (builtin) element that has their event enabled by default!**
 For every other element, you'll have to specifically ask for it, by setting `default_event = True`:
 ```py
 import SwiftGUI as sg
@@ -343,7 +343,7 @@ How to actually read what was written into the `sg.Input` will be explained late
 ## Timeout
 (New in version 0.10.8)
 
-A timeout occurs if no event triggeres for some time (default 1 second, if enabled).
+A timeout occurs if no event triggers for some time (default 1 second, if enabled).
 
 Especially beginners like to utilize this feature, but **I recommend to not use it at all!**\
 For most cases, threading is the better choice.
@@ -362,7 +362,7 @@ for e,v in w:
     ... # Some hidden code
     
     if e == "Timeout":
-        print("Timeout occured!")
+        print("Timeout occurred!")
 ```
 Now, if no other event triggers for one second, the event `"Timeout"` is thrown to the event-loop.
 
@@ -370,13 +370,13 @@ Pass `seconds` to specify how long it takes for a timeout to occur:
 ```py
 w = sg.Window(layout).init_timeout(key= "Timeout", seconds= 3.5)
 ```
-Tipp: You shouldn't set this to less than `0.5` seconds.
+Tip: You shouldn't set this to less than `0.5` seconds.
 Also, the timing might not be precise, so don't use it as a timer.
 
 The timeout can be activated/deactivated by setting `w.timeout_active` to `True`/`False`:
 ```py
     if e == "Timeout":
-        print("Timeout occured!")
+        print("Timeout occurred!")
         w.timeout_active = False    # No timeout will occur until this is set to True again
 ```
 
@@ -414,11 +414,11 @@ layout:list[list[sg.BaseElement]] = [
 Now, the `sg.Input`-element will not only throw an event once its text changed (`default_event = True`), but also when any mouse-button is clicked on it (`.bind_event(sg.Event.ClickAny)`), or the mouse simply enters the element (`.bind_event(sg.Event.MouseEnter)`).
 
 Unfortunately, all of these events will throw the same key: `"Input"`, because that's what the element is "called".\
-To keep the events apart, you can use the parameters `key_extention`, or `key`, when calling `bind_event`:
+To keep the events apart, you can use the parameters `key_extension`, or `key`, when calling `bind_event`:
 ```py
-yourElement.bind_event(sg.Event.ClickAny, key_extention="_Click").bind_event(sg.Event.MouseEnter, key="MouseEnter")
+yourElement.bind_event(sg.Event.ClickAny, key_extension="_Click").bind_event(sg.Event.MouseEnter, key="MouseEnter")
 ```
-`key_extention` will be appended to the normal element-key, so the `ClickAny`-event will throw `Input_Click`. (`key="Input"` was defined earlier)\
+`key_extension` will be appended to the normal element-key, so the `ClickAny`-event will throw `Input_Click`. (`key="Input"` was defined earlier)\
 `key` replaces the key all together, so the `MouseEnter`-event will throw `MouseEnter`.
 
 # Reading and changing values
@@ -476,7 +476,7 @@ my_text.value = "Hello GitHub"
 ```
 
 To make transitioning from PySimpleGUI easier, all "keyed" values are also accessible through `v` (`for e, v in w`), as stated before.
-`v` is simmilar to a dictionary, but linked to the actual elements.
+`v` is similar to a dictionary, but linked to the actual elements.
 
 `v[key]` is the same as `w[key].value`, so `v[key] = new_value` does the same as `w[key].value = new_value`.
 
@@ -548,12 +548,12 @@ However, a lot of elements have some unexpected features you should know about.
 For these, I can recommend checking out the element-tutorials.
 You don't need to read everything closely, just give yourself an overview.
 
-The advanced tutorials are not necessarely more difficult, they just explain advanced functionality that usually doesn't concern beginners.
+The advanced tutorials are not necessarily more difficult, they just explain advanced functionality that usually doesn't concern beginners.
 "Specific" might be a more fitting than "advanced".
 Again, just see what's possible, maybe you'll find something you like.
 
 **If you have any questions, feel free to ask them in the GitHub Forum**.\
-I like to say "There definetly are stupid questions, but everyone begins stupid".\
+I like to say "There definitely are stupid questions, but everyone begins stupid".\
 This is not StackOverflow.
 I'm happy about everyone who uses SwiftGUI and won't tear you apart for stupid questions.
 
