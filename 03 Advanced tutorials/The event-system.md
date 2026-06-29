@@ -1,4 +1,4 @@
-Writte in SwiftGUI version 0.11.14.
+Written in SwiftGUI version 0.11.14.
 
 # The event-system
 This tutorial takes a deeper dive into the SwiftGUI event-system.
@@ -77,12 +77,12 @@ Manually thrown events through `.throw_event` skip the whole event-function part
 I could go more into detail on `throw_event`, but won't.
 
 # Timeout
-Every key-handler has its own, seperate timeout-functionality.
-The timeout triggers when no event occured on that key-handler for a specified time.
+Every key-handler has its own, separate timeout-functionality.
+The timeout triggers when no event occurred on that key-handler for a specified time.
 This includes events without keys.
 
 When any event occurs, its key-handler saves the current time.
-A separate thread checks, how long ago that most recent event occured and causes an event if necessary.
+A separate thread checks, how long ago that most recent event occurred and causes an event if necessary.
 
 You can actually change the attributes `timeout_seconds` (float) and `timeout_active` (bool) while the timeout is active:
 ```py

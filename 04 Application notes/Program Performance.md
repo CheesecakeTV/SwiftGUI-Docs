@@ -40,7 +40,7 @@ my_elem.update(
 # Background color propagation
 One of SwiftGUI's most costly features is background-color-propagation.
 
-You might recall that elements can't have a truely transparent background.
+You might recall that elements can't have a truly transparent background.
 It looks transparent, because the background-color of "transparent" elements is kept the same as its container's background-color.
 
 When the background-color of the container changes, all of those elements inside also change background-color.

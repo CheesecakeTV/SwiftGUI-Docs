@@ -69,7 +69,7 @@ def new_file(filename: str | None):
     load_file(filename)
 
 def del_file(filename: str | None):
-    if not filename in all_filenames:   # Already non-existant
+    if not filename in all_filenames:   # Already non-existent
         return
 
     all_filenames.remove(filename)

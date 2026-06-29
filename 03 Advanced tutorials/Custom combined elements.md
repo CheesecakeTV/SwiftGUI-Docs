@@ -1,15 +1,15 @@
 
 # Custom combined elements
-When using SwiftGUI regularely, you might end up implementing the same layouts (or layout-parts) over and over again.
+When using SwiftGUI regularly, you might end up implementing the same layouts (or layout-parts) over and over again.
 
 Combined elements provide a way to turn such layout-parts into its own element, which you can use over and over again.
-It's simmilar to a template, but a lot more powerful.
+It's similar to a template, but a lot more powerful.
 
 Additionally, since SwiftGUI version 0.8.0, combined elements have their own key-system.
 That makes creating combined elements as easy as creating a normal window.
 
 ## What is a combined element?
-It's an element that contains multiple "inner" elements, simmilar to a frame.
+It's an element that contains multiple "inner" elements, similar to a frame.
 However, unlike a frame, combined elements already have elements inside.
 
 E.g.: `sg.Form` contains multiple `sg.Label`, `sg.Button` and `sg.Input` elements:
@@ -104,7 +104,7 @@ Also, you can't (shouldn't) use the same text twice, because keys should be uniq
 I only use template-functions for very small parts of the layout, a single row at max.
 It's quick and dirty.
 
-For anything bigger, you should definetly create a combined element instead.
+For anything bigger, you should definitely create a combined element instead.
 
 # How to create combined elements
 To demonstrate how to create combined elements, let's recreate `sg.Form` in the following tutorial.
@@ -162,7 +162,7 @@ class Example(sg.BaseCombinedElement):
     def _update_special_key(self,key:str,new_val:any) -> bool|None:
         """
         When calling .update, this method gets called first.
-        If it returns anything truethy (like True), execution of .update ends for this key.
+        If it returns anything truthy (like True), execution of .update ends for this key.
 
         Otherwise, ._update_default_keys gets called for the key.
 
@@ -262,7 +262,7 @@ The thrown event works just like any other event.
 If you provided a key, the event gets thrown to the event-loop.
 If you provided key-functions, they will be executed.
 
-Tipp: When some inner element should cause `throw_event()`, just use it as a key-function:
+Tip: When some inner element should cause `throw_event()`, just use it as a key-function:
 ```py
     sg.Input(
         default_event= True,
@@ -326,7 +326,7 @@ Instead of the main event-loop, we need to use the internal event-method:
         """An event-loop just for this element. Use self.w to refer to keys inside this element."""
         print(e, v) # Clear {'Organization': 'SwiftGUI', 'Name': 'Eric', 'Clear': 'Clear', 'Birthday': '', 'Favorite Food': ''}
 ```
-When the `clear`-button is clicked, `_event_loop` is called simmilar to the main-loop doing one iteration.
+When the `clear`-button is clicked, `_event_loop` is called similar to the main-loop doing one iteration.
 
 As you can see, the value-dict `v` of that method only contains the elements inside the combined element.
 

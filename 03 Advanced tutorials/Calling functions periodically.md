@@ -52,7 +52,7 @@ The counter resets at `counter_reset`, restarting at `0`.
 The value of `counter_reset` will NEVER be passed.
 
 ## No reset
-To make the counter count indefinetly, set `counter_reset = 0`:
+To make the counter count indefinitely, set `counter_reset = 0`:
 ```py
 @sg.call_periodically(counter_reset= 0)
 ```

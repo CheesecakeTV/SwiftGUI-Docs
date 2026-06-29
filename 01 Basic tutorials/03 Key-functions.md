@@ -13,12 +13,12 @@ It also needs its own unique key, which is quite annoying.
 To have a proper key-structure, you'd need to create very long keys, like `"LeftColumn.TablePart.NameInput.ClearButton"`.\
 Don't like that.
 
-The solution: Skip the whole event-loop-tingy and tell the element directly what to do.
+The solution: Skip the whole event-loop-thingy and tell the element directly what to do.
 No extra key and no going through the event-loop.
 
 Since version 0.8.0, there is a very elegant way to reduce clutter in the event-loop.
-This is explained in basic tutorial 07 (Seperate key-systems).\
-However, its usecase is a lot different from key-functions.
+This is explained in basic tutorial 07 (separate key-systems).\
+However, its use case is quite different from key-functions.
 Both are incredibly useful.
 
 # Basic concept

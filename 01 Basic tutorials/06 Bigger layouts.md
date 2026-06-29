@@ -49,7 +49,7 @@ This might be intended for some layouts, your decision.
 ## LabelFrame
 There are different kinds of frames (2 since version 0.5.3, 5 since version 0.10.8).
 
-I find `sg.LabelFrame` especially useful for bigger layouts, because it divides seperate parts of the layout visibly:\
+I find `sg.LabelFrame` especially useful for bigger layouts, because it divides separate parts of the layout visibly:\
 ![](../assets/images/2025-08-21-10-30-47.png)
 ```py
 layout:list[list[sg.BaseElement]] = [
@@ -64,7 +64,7 @@ layout:list[list[sg.BaseElement]] = [
     ]
 ]
 ```
-`sg.LabelFrame` has all the options a normal `sg.Frame` has and some additionl ones that won't be covered by this tutorial.
+`sg.LabelFrame` has all the options a normal `sg.Frame` has and some additional ones that won't be covered by this tutorial.
 
 To not draw sketchy red borders all the time, I'm going to use `sg.LabelFrame` with `no_label=True` going further:\
 ![](../assets/images/2025-08-21-10-37-10.png)
@@ -176,11 +176,11 @@ layout:list[list[sg.BaseElement]] = [
 ```
 ![](../assets/images/2025-09-10-14-22-00.png)
 
-As you can see, the elements can't expand further than their row/colum, because this would resize the container (`sg.GridFrame`).
+As you can see, the elements can't expand further than their row/column, because this would resize the container (`sg.GridFrame`).
 
 ## Horizontal alignment
 Elements are aligned "center" by default.
-To allign them differently, pass the option `alignment` to the container/frame:
+To align them differently, pass the option `alignment` to the container/frame:
 ```py
     sg.LabelFrame(
         inner_layout,
@@ -337,7 +337,7 @@ The notebook won't see a difference, but the element has no key.
 It can throw an event when the tab changes, but also throw specific events depending on the selected tab.
 You may also change the opened tab manually.
 
-Since this tutorial is ment to be mainly about layouts, you'll find the rest in the element-tutorial for `sg.Notebook`.
+Since this tutorial is meant to be mainly about layouts, you'll find the rest in the element-tutorial for `sg.Notebook`.
 
 # Separators
 `sg.HorizontalSeparator` and `sg.VerticalSeparator` are basically just horizontal/vertical lines:\
@@ -399,7 +399,7 @@ You may change these options using `.update` too, even though you'll probably ne
 
 # Spacer
 A `sg.Spacer` is an invisible element with a certain size.
-Use it to add some space inbetween elements/rows.
+Use it to add some space between elements/rows.
 
 Example:
 ```py
@@ -460,7 +460,7 @@ inner_layout = [
 ```
 ![](../assets/images/2025-08-21-12-23-22.png)
 
-Simmilarely, you can align some elements to the top and some to the bottom:
+similarly, you can align some elements to the top and some to the bottom:
 ```py
 inner_layout = [
     [sg.T("Smaller element")],

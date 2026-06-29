@@ -60,7 +60,7 @@ Even though the button "World" technically is inside `my_frame`, that doesn't co
 **Important!**\
 This does __NOT__ delete the row this element is in, even if it's empty.
 If you add and delete an element 50000 times, there will be 50000 empty rows.
-Performance desaster.
+Performance disaster.
 
 The easiest way to delete an element is to call `.delete()` on it.
 Run this script yourself:
@@ -233,7 +233,7 @@ for e,v in w:
     )
 ```
 
-Unfortunately, it is not possible to insert elements between other elements of that row, due to tkinters packing-manager.\
+Unfortunately, it is not possible to insert elements between other elements of that row, due to Tkinter being Tkinter.\
 Writing this tutorial, I realized how to work around that, but haven't so far (version 0.10.25).
 
 ## Adding whole rows

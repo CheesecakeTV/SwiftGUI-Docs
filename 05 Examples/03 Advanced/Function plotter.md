@@ -1,5 +1,5 @@
 
-# Prequisites
+# Prerequisites
 You need to install `numpy` and `SwiftGUI_Matplot` to run this example.
 
 # Function-plotter
@@ -30,14 +30,14 @@ from numpy import * # This way, sin/cos/... refer to their numpy variants in eva
 sg.Themes.FourColors.IvoryTerracotta()
 
 def to_float(val: str, default: float = 0) -> float:
-    """If val is a valid float, return it. Otherwise retuen default"""
+    """If val is a valid float, return it. Otherwise return default"""
     try:
         return float(val)
     except ValueError:
         return default
 
 def update_x(v, val):
-    """Update x-axxs"""
+    """Update x-axes"""
 
     # Get the configuration input by the user
     x_min = to_float(val["x_min"], default= -10)

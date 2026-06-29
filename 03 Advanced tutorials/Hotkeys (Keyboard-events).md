@@ -13,7 +13,7 @@ The selected element has the focus.
 Different elements behave differently regarding the focus, but usually the last clicked element has the focus.
 
 Window-events can trigger when any element in that window has the focus.
-This is pretty simmilar to having the focus.
+This is pretty similar to having the focus.
 The last selected (clicked, or `alt+tab`bed) window has the "window-focus" (not its real name).
 
 Element-events are bound to elements and window-events to the window:
@@ -146,7 +146,7 @@ This will result in the hotkey `Ctrl+Shift+e`:
 sg.Event.Control_("E")
 ```
 
-There is also `.Double_` and `.Tripple_` which require the key-presses to be caused two, or three times in a row for the event to trigger.
+There is also `.Double_` and `.Triple_` which require the key-presses to be caused two, or three times in a row for the event to trigger.
 
 These modifications also work with most non-keyboard events:
 ```py

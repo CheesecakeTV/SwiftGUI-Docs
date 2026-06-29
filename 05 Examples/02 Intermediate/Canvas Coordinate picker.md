@@ -2,7 +2,7 @@
 # Coordinate picker
 This example lets you pick coordinates on a 2d-grid.
 
-It was ment to be a simple example for the canvas, but turned out a bit more complex.
+It was meant to be a simple example for the canvas, but turned out a bit more complex.
 
 The screenshot doesn't really cover what this can do, so just run the code and play around with it a bit:
 ![](../../assets/images/2026-06-03-16-02-03.png)

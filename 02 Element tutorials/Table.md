@@ -27,7 +27,7 @@ Let's call PySimpleGUI `psg` and SwiftGUI `sg` for an easier read.
 What really annoyed me about psg-Table is that you clear all the user-selections when replacing/updating the table.
 Also, the view gets reset to the beginning of the table.
 Imagine editing an Excel-Cell, but when you press enter, the selection is gone and you are looking at the top left corner of the sheet.\
-In Germany, we say "Katastrophe" ("Catastrophy").\
+In Germany, we say "Katastrophe" ("Catastrophe").\
 Again, there are workarounds, but you shouldn't need to work around such a trivial feature.
 
 The most infuriating part is how easy it was for me to implement these features.
@@ -48,7 +48,7 @@ Another annoying thing about psg-Tables is that they return the index of the tab
 Also, most times you don't need all selected rows, just one.
 So why always return a list with all selections?
 
-In sg, you can read the value, index, all values and all indexes seperately.
+In sg, you can read the value, index, all values and all indexes separately.
 
 # Basic functionality
 After ranting about PySimpleGUI excessively, let's dive into SwiftGUI's Table.
@@ -101,7 +101,7 @@ layout = [
     ]
 ]
 ```
-Tipp: You don't have to pass elements, you could just leave the table it empty.
+Tip: You don't have to pass elements, you could just leave the table it empty.
 
 # Replacing the whole table
 
@@ -152,7 +152,7 @@ elements[0][2] = "3rd column"
 you'd get an index-error, because the inner list doesn't contain the index `2`.
 It's too short.
 
-**The `sg.Table` does not fill empty columns with an empty value, it just stays non-existant.**
+**The `sg.Table` does not fill empty columns with an empty value, it just stays non-existent.**
 That's why you need to use `.append` to modify the 3rd column in the above example, which is a bit counter-intuitive.
 
 You might want to pass an empty element as a placeholder instead:
@@ -181,11 +181,11 @@ table[0] = ["Some","New","Row"] # Does not break the reference (magic)
 
 table_row[0] = "Hello World"    # This still works
 
-table_row = ["Anything","Else"] # This doesn't work and table_row is now unuseable.
+table_row = ["Anything","Else"] # This doesn't work and table_row is now unusable.
 ```
 ![](../assets/images/2025-08-06-14-14-51.png)
 
-Tipp: If you can't use `table[index] = new_row` for any reason (e.g. inside a lambda function), use `table.__setitem__(index, new_row)` instead.
+Tip: If you can't use `table[index] = new_row` for any reason (e.g. inside a lambda function), use `table.__setitem__(index, new_row)` instead.
 Literally the same method.
 
 ## Adding rows
@@ -241,7 +241,7 @@ If you can't use `del table[index]` for any reason (e.g. inside a lambda-functio
 
 # Sorting the table
 
-SwiftGUI's Table can actually be sorted simmilar to normal lists.
+SwiftGUI's Table can actually be sorted similar to normal lists.
 Selections will be preserved.
 
 ## Default Column-sorting
@@ -497,8 +497,8 @@ table.index = 0
 ```
 
 ## Multiple selections
-There are 3 selectmodes you can chose from:
-- `none`: The user can select nothing. Simmilar to `readonly` or `disabled` on other sg-elements.
+There are 3 select-modes you can chose from:
+- `none`: The user can select nothing. Similar to `readonly` or `disabled` on other sg-elements.
 - `browse`: The user can select a single row (default)
 - `extended`: Holding down `Ctrl`, or `Shift`, the user can select multiple rows at once
 
@@ -534,7 +534,7 @@ for e,v in w:
 ```
 ![](../assets/images/2025-08-06-17-44-43.png)
 
-Tipp: Instead of `table.all_indexes = ...` you can also use `table.set_all_indexes(new_indexes)` with new_indexes being a tuple (or any Iterable).
+Tip: Instead of `table.all_indexes = ...` you can also use `table.set_all_indexes(new_indexes)` with new_indexes being a tuple (or any Iterable).
 
 # Moving rows around
 
@@ -553,7 +553,7 @@ elements = [
     [1, "Second row", "Second column"],
     [2, "Third row", "Second column"],
     [3, "Forth row", "Second column"],
-    [4, "Fith row", "Second column"],
+    [4, "Fifth row", "Second column"],
 ]
 
 layout = [
@@ -633,7 +633,7 @@ Besides `.overwrite_table_threaded`, the following methods are available as a th
 - `insert_multiple_threaded`
 - `extend_threaded`
 
-Tipp: To append to the front of the list, use `insert_multiple_threaded` with `index= 0`.
+Tip: To append to the front of the list, use `insert_multiple_threaded` with `index= 0`.
 
 ## Important! "Interrupting" threaded methods
 There is a risk to using these "threaded methods", so handle them with care.
@@ -654,7 +654,7 @@ While the thread is running, these effects might/will occur:
 - Updating the look (colors, font, ...) of the table is perfectly safe
 - The scrollbar might act somewhat strange while rows are being added, but is safe
 
-Tipp: While the thread is running, `table.thread_running` is `True`.
+Tip: While the thread is running, `table.thread_running` is `True`.
 
 Follow these rules and you'll be fine using threaded methods:
 - If row-order is important, only use threaded methods to append rows.
@@ -673,7 +673,7 @@ By default, a scrollbar is visible.
 It's not shown in this tutorial, because I just added it (SwiftGUI Version 0.4.4).
 Not gonna replace every image.
 
-Also, the scrollbar looks different since version 0.6.2, so don't be too suprised.
+Also, the scrollbar looks different since version 0.6.2, so don't be too surprised.
 
 The scrollbar will be as high as the current row.
 That means, for the table to look good with a scrollbar, the table has to be **the tallest element** in its row:\
@@ -702,7 +702,7 @@ Implementing a solution means more invisible elements slowing down the code and 
 So let's just call it a feature, not a bug.
 
 ## Customization
-There are a couple of options you can use to change the apperance of this element.
+There are a couple of options you can use to change the appearance of this element.
 Most of them are for coloring certain aspect of the element, so let's talk about these later.
 
 As with every sg-element, you may pass the options when creating the table, but most of them can be changed later using `.update`.

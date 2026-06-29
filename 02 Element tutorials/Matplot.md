@@ -8,7 +8,7 @@ pip install SwiftGUI_Matplot
 `sg.Matplot` is an element that allows you to integrate `matplotlib`-figures into your SwiftGUI layout.
 
 It also tries its best to fit into the currently applied theme:\
-Theme: `FourColors.SinCity`\
+Theme: `FourColors.TransgressionTown`\
 ![](../assets/images/2025-10-23-17-42-10.png)
 
 Theme: `FourColors.LightCloud`\
@@ -31,7 +31,7 @@ Modify them to your liking:
 import SwiftGUI as sg
 import numpy as np
 
-sg.Themes.FourColors.SinCity()
+sg.Themes.FourColors.TransgressionTown()
 
 layout = [
     [
@@ -80,7 +80,7 @@ import SwiftGUI as sg
 import numpy as np
 from matplotlib.figure import Figure
 
-sg.Themes.FourColors.SinCity()
+sg.Themes.FourColors.TransgressionTown()
 
 figure = Figure((8,5))
 ax = figure.add_subplot()
@@ -135,7 +135,7 @@ To remove everything from the plot, call `.clear()`:
 import SwiftGUI as sg
 import numpy as np
 
-sg.Themes.FourColors.SinCity()
+sg.Themes.FourColors.TransgressionTown()
 
 layout = [
     [
@@ -168,7 +168,7 @@ Disable themes for matplot-elements by setting `sg.Matplot.default` to "empty":
 import SwiftGUI as sg
 import numpy as np
 
-sg.Themes.FourColors.SinCity()
+sg.Themes.FourColors.TransgressionTown()
 sg.Matplot.defaults = sg.GlobalOptions.EMPTY
 
 layout = [
@@ -213,7 +213,7 @@ Add a navbar by setting `navigation_bar = True`:
 import SwiftGUI as sg
 import numpy as np
 
-sg.Themes.FourColors.SinCity()
+sg.Themes.FourColors.TransgressionTown()
 
 layout = [
     [
@@ -236,7 +236,7 @@ for e,v in w:
 You can use the navigation-bar to control the view like in the viewer of matplotlib.
 
 Unfortunately, I haven't found a good way to recolor the navbar yet...
-Maybe use a theme that isn't as dark as `SinCity`.
+Maybe use a theme that isn't as dark as `TransgressionTown`.
 
 # Global options for sg.Matplot
 `sg.Matplot` does have its own go-class, but accessing it is a bit different.
@@ -246,7 +246,7 @@ If you don't want to import the class directly from `SwiftGUI_Matplot.GlobalOpti
 import SwiftGUI as sg
 import numpy as np
 
-sg.Themes.FourColors.SinCity()
+sg.Themes.FourColors.TransgressionTown()
 sg.Matplot.defaults.background_color = "blue"
 sg.Matplot.defaults.background_color_outside = "darkblue"
 

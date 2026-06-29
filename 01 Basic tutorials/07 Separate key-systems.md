@@ -1,7 +1,7 @@
 
 # Separate event-loops (Sub-layouts)
 GUIs with many elements don't only get crowded visually, but also in their code.
-The prior tutorial talked about "visible tidyness", this one is about "code tidyness".
+The prior tutorial talked about "visible tidiness", this one is about "code tidiness".
 
 Especially when using a lot of keys, new/unused keys are harder and harder to find.
 Your keys will get longer and longer, which kinda defies the purpose of using an event-loop all together.
@@ -10,7 +10,7 @@ That's why SwiftGUI offers ways to divide the main layout into sub-layouts (diff
 
 This way, you can use the same key multiple times in the same application without conflicts.
 
-Pro-tipp: If you want to copy/reuse parts of the layout, the best way to do so is to create a custom combined element.\
+Pro-tip: If you want to copy/reuse parts of the layout, the best way to do so is to create a custom combined element.\
 This topic has its own tutorial under the advanced topics: [Custom combined elements](https://github.com/CheesecakeTV/SwiftGUI-Docs/blob/main/03%20Advanced%20tutorials/Custom%20combined%20elements.md)
 
 Other event-loops are not actually a loop, but a function:
@@ -60,7 +60,7 @@ for e,v in w:
 When pressing buttons in the sub-layout, `other_layout` will be called.
 Pressing other buttons executes the main loop (`for e,v in w`), like you're already used to.
 
-## Accessing elements and values inside sub-layouts
+## accessing elements and values inside sub-layouts
 Remember, `w[key]` returns the element with that key.
 However, the window doesn't "know" elements from inside the sub-layout.
 
@@ -74,11 +74,11 @@ So access these elements through the sub-layout:
 ...
 
 w = sg.Window(layout)
-my_sublayout["Button2"].value = "Works like a charm!"   # Access the element "Button2" inside the sub-layout
+my_sublayout["Button2"].value = "Works like a charm!"   # access the element "Button2" inside the sub-layout
 ```
 ![](../assets/images/2025-09-19-17-32-33.png)
 
-Access the value-dict of the sub-layout by calling `my_sublayout.value`.
+access the value-dict of the sub-layout by calling `my_sublayout.value`.
 
 If you don't want to use an additional variable for the sub-layout, just set a key for it like with any other element:
 ```py

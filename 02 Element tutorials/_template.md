@@ -27,6 +27,6 @@ Since the elements can be very different from each other, the element-tutorials 
 # Methods
 
 
-# Tipps
+# Tips
 
 

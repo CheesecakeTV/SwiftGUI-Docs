@@ -16,7 +16,7 @@ You could implement all of these features using combined elements, true.
 However, the combined element is a segregated container.
 You'll need to manually implement a way to transfer information from/to the element.
 
-Extending an element makes sure all of the unmodified functionalty still does what it's supposed to do.
+Extending an element makes sure all of the unmodified functionality still does what it's supposed to do.
 You only need to change what you want to change and not worry about the rest.
 
 # Basics
@@ -187,7 +187,7 @@ Let's say, our example element is supposed to change its color if the user-entry
 We can implement this easily by modifying `_event_callback`:
 ```py
     def _event_callback(self, *_):  # Don't forget *_
-        value = super()._get_value()    # We modified self._get_value earlier, so use super()._get_value() for the acutal value
+        value = super()._get_value()    # We modified self._get_value earlier, so use super()._get_value() for the actual value
 
         try:    # Try to convert to int
             int(value)
@@ -392,7 +392,7 @@ class ModifiedInput(sg.Input):
         ...
 ```
 
-One small hickup:\
+One small hiccup:\
 Obviously, this doesn't work for methods that return something.
 So these functions always return `self`.
 
@@ -452,7 +452,7 @@ class ModifiedInput(sg.Input):
         return value
 
     def _event_callback(self, *_):  # Don't forget *_
-        value = super()._get_value()    # We modified self._get_value earlier, so use super()._get_value() for the acutal value
+        value = super()._get_value()    # We modified self._get_value earlier, so use super()._get_value() for the actual value
 
         try:
             int(value)

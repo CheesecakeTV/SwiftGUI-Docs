@@ -57,7 +57,7 @@ Reliefs are explained in-depth in the element-tutorial of `sg.Text`.
     )
 ```
 
-`overrelief` is the type of relif shown while the mouse **hovers over** the button, not when it's pressed.
+`overrelief` is the type of relief shown while the mouse **hovers over** the button, not when it's pressed.
 
 Unfortunately, there is no decent way of changing the relief when the button is pressed.
 Tkinter doesn't support it, which makes absolutely no sense to me.
@@ -97,7 +97,7 @@ If you'd like to display the bitmap in addition to the text, set `bitmap_positio
     ),
 ```
 
-There is one minor hickup to keep in mind:
+There is one minor hiccup to keep in mind:
 Whenever a bitmap is shown, `width` and `height` are given in pixels, not in characters/rows.
 
 ## borderwidth

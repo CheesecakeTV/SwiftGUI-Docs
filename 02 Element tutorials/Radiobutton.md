@@ -1,6 +1,6 @@
 
 # sg.Radiobutton
-Radiobuttons look simmilar to `sg.Checkbox`, but can only be unchecked by checking another radiobutton in that group.
+Radiobuttons look similar to `sg.Checkbox`, but can only be unchecked by checking another radiobutton in that group.
 
 It can be used like a checkbox for two or more options:\
 ![](../assets/images/2025-11-08-19-25-11.png)

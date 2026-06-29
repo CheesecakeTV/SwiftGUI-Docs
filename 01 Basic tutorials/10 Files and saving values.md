@@ -1,7 +1,7 @@
 
 # Saving data is annoying
 Unfortunately, it is also essential for most programs.
-It's not particularely difficult, just soooo off-putting.
+It's not particularly difficult, just soooo off-putting.
 
 This tutorial explains how SwiftGUI makes saving data less annoying.
 
@@ -301,7 +301,7 @@ my_file.save("backups/file_backup.json")    # Saving to a different file
 my_file.save()  # Saving to "My File.json"
 ```
 
-Simmilarely, you can load from different files by passing a path to `.load()`.
+similarly, you can load from different files by passing a path to `.load()`.
 
 Note that the next time you call `.save()`, it will still overwrite the original file.
 
@@ -322,7 +322,7 @@ If that file already exists, `reload=True` calls `.load()` after updating the pa
 ## Password-protected dict-files
 Since SwiftGUI version 0.11.9, you can password-protect dict-files.
 
-However, this is it's own package called `SwiftGUI_Encryption`, which you need to install seperately (via pip).
+However, this is it's own package called `SwiftGUI_Encryption`, which you need to install separately (via pip).
 A lot of that package can be used without SwiftGUI, so you can use it to encrypt things without GUIs too.
 
 `SwiftGUI_Encryption` contains a class called `PasswordJSONDictFile`, which works exactly like a normal `JSONDictFile`, but can only be accessed if the correct password is passed:
@@ -331,7 +331,7 @@ import SwiftGUI_Encryption as sge
 
 my_file = sge.sg.PasswordJSONDictFile(
     "secrets/ConfidentialInformation", # Choose a file-ending if you like
-    "Password", # This is the password to acces the file
+    "Password", # This is the password to access the file
 )
 
 my_file["SecretHello"] = "Secret world"
@@ -400,7 +400,7 @@ my_file.update(v.to_json())
 my_file.save()  # Only necessary if auto-save is disabled
 ```
 
-Tipp: You can also use `.to_json()` on most elements, which returns its value in a format json-files support.\
+tip: You can also use `.to_json()` on most elements, which returns its value in a format json-files support.\
 Some elements return more information than the current value (E.g.: `sg.Listbox`).
 So when saving a value, you should stick to `.to_json()`.
 
@@ -426,7 +426,7 @@ my_file.save()
 w.value.from_json(my_file.to_dict())
 ```
 
-Tipp: Like `to_json` can be used on most elements, `from_json` also works.
+tip: Like `to_json` can be used on most elements, `from_json` also works.
 Just keep in mind that `from_json` always requires a format fitting to `to_json`.
 
 ## Sub-layouts
