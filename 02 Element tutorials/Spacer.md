@@ -2,7 +2,7 @@
 Written for SwiftGUI version 0.11.17 if not stated further.
 
 
-# sg.Spacer (Not a real element)
+# sg.Spacer
 Alias: `S`
 
 The spacer is a pseudo-invisible element that can be used to add some space between elements.
