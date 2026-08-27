@@ -191,21 +191,38 @@ How can creating an `Example`-object produce something other than an `Example`-o
 But yes, `Example(...)` actually returns a string, not an `Example`-object.\
 SwiftGUI-magic!
 
-## Typehints
+## Proper typing
 There is one minor, yet annoying downside to this.
 
 Many IDEs, like PyCharm, won't recognize that `Example(...)` might return anything but an `Example`-object, possibly resulting in warnings:\
 ![](../assets/images/2025-09-26-13-41-54.png)
 
-To counter this, I'm afraid, you'll have to commit an atrocity:\
-![](../assets/images/2025-09-26-13-43-18.png)
+There are two ways, both are not quite ideal:
 
-You'll have to inherit from the return-type too.
+### Casting
+The `typing`-module has a function to force Python (and your IDE) to assume an object has a certain type.
+It does not change the actual type, just forces Python to accept your reality:
+```py
+from typing import cast
 
-Make sure that `sg.BasePopup` (yes, it's wrong in the image) is on the left, so `super().__init__()...` works as expected.
+answer: str = cast(str, Example("How are you today?"))
+```
+However, this is a lot of additional code for every single call. 
+Very annoying.
 
-I found no other way to do this.\
-Happy about any ideas.
+### BasePopupTyped
+Since SwiftGUI version 0.11.19, there is a better way: `sg.BasePopupTyped`.
+
+That type of popup allows you to specify a return-type:
+```py
+class Example(sg.BasePopupTyped[str]):
+    ...
+```
+HOWEVER, you'll need to call the instance manually:
+```py
+answer: str = Example("How are you today?")()   # Notice the additional () at the end
+```
+This is the cleanest and least annoying way in my opinion, but you do need to remember to "call" the popup.
 
 ## Default return
 By default, if the user closes the window himself, `None` is returned.
