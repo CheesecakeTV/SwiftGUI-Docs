@@ -289,6 +289,11 @@ Can also have text next to the image:\
 ## TabFrame
 A frame that has functionality for using it together with `sg.Notebook`s.
 
+## PythonConsole
+An element that mirrors the python-console.
+
+`print` and `input` both work even without a python-console now.
+ 
 # Combined elements
 SwiftGUI offers a couple of "combined" elements that consist of multiple SwiftGUI-elements.
 
@@ -321,7 +326,7 @@ Something similar to a console-window.
 You can input text on the bottom and send it by pressing `enter`:\
 ![](../assets/images/2025-11-13-19-44-40.png)
 
-The console has a print-function that can be used pretty much the same as the normal `print(...)`.
+The console has a print-function (method) that can be used pretty much the same as the normal `print(...)`.
 
 You can even go one (very unholy) step further and replace the builtin print function:
 ```py
@@ -343,6 +348,7 @@ print("Hi from the console")
 for e, v in w:
     print(e, v)
 ```
+However, if you want to show the output of `print` on your user-interface, use `sg.PythonConsole` instead.
 
 ## MultistateButton
 A group of buttons that works similar to a group of radio-buttons:\
