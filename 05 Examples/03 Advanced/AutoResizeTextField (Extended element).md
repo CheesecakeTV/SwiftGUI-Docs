@@ -17,6 +17,7 @@ A new element that works like `sg.TextField`, but adjusts its height to always s
 Using SwiftGUI version 0.11.19.
 
 ```py
+from typing import Any
 from typing_extensions import Self  # You may import from typing for newer python-versions
 import SwiftGUI as sg
 
