@@ -56,15 +56,7 @@ Same with combined elements.
 
 # Customization
 ## Colors / Look
-Customize tooltips by mofidying the global options `sg.GlobalOptions.Tooltip` and `sg.GlobalOptions.Text`.
-
-The following options can be be modified in `sg.GlobalOptions.Tooltip`:
-- `text_color`
-- `background_color`
-- `padding`
-- `relief`
-
-Everything else needs to be modified in `sg.GlobalOptions.Text` for now.
+Customize tooltips by modifying the global options `sg.GlobalOptions.Tooltip`:
 ```py
 sg.Themes.FourColors.TransgressionTown()
 sg.GlobalOptions.Tooltip.background_color = "navy"
@@ -81,7 +73,9 @@ layout = [
 ```
 ![](../assets/images/2026-09-02-16-06-07.png)
 
-Right now, there is no way of customizing only a single tooltip.
+Most options of `sg.Text` can be modified through that go-class.
+
+Right now, there is no way of customizing only a single tooltip, all of them look the same for all elements.
 
 ## Delay
 You may specify how long it takes until a tooltip opens by setting `sg.Tooltips.tooltip_open_delay` to your desired delay (in seconds):

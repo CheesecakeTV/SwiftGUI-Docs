@@ -79,6 +79,36 @@ class Text_Special(sg.Text):
 
 It might be a good idea to derive `Example` from `go.Text` though, but that's up to you.
 
+### Inline
+Since SwiftGUI version 0.11.20, there is a way to do this inline:
+
+```py
+class Example(go.DEFAULT_OPTIONS_CLASS):
+    width = 15
+    height = 1
+
+layout = [
+    [
+        sg.Text.with_go(Example)(
+            "I'm a text with a different global-option class",
+        )
+    ],[
+        sg.Text(
+            "I'm a normal text"
+        )
+    ]
+]
+```
+
+You can also use this functionality to create a new class, simmilar to the previous example:
+```py
+class Example(go.DEFAULT_OPTIONS_CLASS):
+    width = 15
+    height = 1
+
+Text_Special = sg.Text.with_go(Example) # New sg.Text-class that can be used as usual
+```
+
 # How to apply global options
 ## The "automatic" way
 Usually, global options are applied, when `.update` is called on an element.
