@@ -84,8 +84,56 @@ sg.Tooltips.tooltip_open_delay = 0.1
 ```
 
 # Overwriting the tooltip-class
-It is possible to redefine the whole tooltip-popup.
+The tooltip is actually a popup, deriving from `sg.BasePopupNonblocking`.
 
-However, it is not documented yet.
+You can create your own popup and set it as the tooltip one by calling `sg.Tooltips.set_tooltip_callable(YourPopup)`.
+
+When opened, the tooltip-text is passed to the popup, so make sure that the first parameter of your `__init__` is the text.
+
+If you just want to change the layout of the tooltip-popup, it's best to derive from `sg.Popups.TooltipPopup`.
+Then, you can overwrite `_create_layout` to specify your own layout:
+```py
+class CustomTooltip(sg.Popups.TooltipPopup):
+
+    # Overwriting the method
+    def _create_layout(self, tooltip_text: str) -> list[list[sg.BaseElement]]:
+        return [
+            [
+                sg.HSep()
+            ], [
+                sg.T("Welcome to my tooltip.")
+            ],[
+                sg.T("Please enjoy the following tooltip-message:")
+            ],[
+                sg.TextField(   # Let's include the actual tooltip-text here
+                    tooltip_text,
+                    readonly=True,
+                    width=20,
+                    height=3,
+                )
+            ],[
+                sg.T("Please come again!")
+            ], [
+                sg.HSep()
+            ]
+        ]
+
+
+sg.Tooltips.set_tooltip_callable(CustomTooltip) # Specify your own popup as the tooltip-popup
+
+layout = [
+    [
+        sg.Text(
+            "Hover over me"
+        ).set_tooltip(
+            "Tooltip!!!"
+        )
+    ]
+]
+```
+![](../assets/images/2026-09-03-15-34-47.png)
+
+
+
 
 
