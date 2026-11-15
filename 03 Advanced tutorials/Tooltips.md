@@ -88,7 +88,7 @@ The tooltip is actually a popup, deriving from `sg.BasePopupNonblocking`.
 
 You can create your own popup and set it as the tooltip one by calling `sg.Tooltips.set_tooltip_callable(YourPopup)`.
 
-When opened, the tooltip-text is passed to the popup, so make sure that the first parameter of your `__init__` is the text.
+When opened, the tooltip-text is passed to the popup, so make sure that the first parameter of your `__init__` is the text (after `self`, of course).
 
 If you just want to change the layout of the tooltip-popup, it's best to derive from `sg.Popups.TooltipPopup`.
 Then, you can overwrite `_create_layout` to specify your own layout:

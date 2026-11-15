@@ -15,10 +15,12 @@ To make an input validate, you need to specify when the validation should happen
 There are a couple of different options:
 |Mode|Description|
 |-|-|
+|none|Don't validate at all (default)|
 |all|Validate in any case|
 |key|Validate when any key is pressed while focussing the element|
 
-The default value is `none`.
+In theory, there are more modes, but they don't seem to work properly.
+In practice, there should be no noticable difference between `all` and `key`.
 
 Pass the mode as a string to the element:
 ```py
@@ -28,9 +30,12 @@ sg.Input(
 ```
 
 # Validators
-Set the option `validatecommand` to the validator that validates however you like.
+Validators decide which input is allowed and which isn't.
+If validation is enabled, an invalid input will not be possible - the user can't input invalid text.
 
-For example, let's restrict the length of the input to 5:
+Set the option `validatecommand` to the validator of your choice.
+
+For example, let's restrict the length of the input text to 5:
 ```py
 sg.Input(
     validate="key",
@@ -47,12 +52,18 @@ These validators are implemented in SwiftGUI version 0.12.0:
 - `FullValueFunction`: Apply your own function to check if the value is allowed
 - `ReFullMatch`: Only allowed, if the provided regex-pattern fully matches
 
+Note that the validators never change the actual text/value.
+`CanConvertTo(int)` will check if you can convert the text to an `int`, but won't do it itself.
+
+Also, backend changes are not validated.
+That means, you can set the text to something invalid from the code: `elem.value = ...`.
+
 ## Combining validators
-Usual validators can be combined with and/or conditions.
+Most (all) validators can be combined with and-/or-conditions.
 
-Instead of the usual `AND` and `OR`, you'll need to use `&` and `|`.
+For `AND` and `OR`, you'll need to use `&` and `|`.
 
-For example, let's create an input that allows an integer with a maximum of 4 digits:
+For example, let's create an input that allows integers with a maximum of 4 digits:
 ```py
 sg.Input(
     validate="key",
@@ -95,3 +106,90 @@ sg.Input(
     validatecommand= sg.Validate.FullValueFunction(is_valid),
 )
 ```
+
+# Creating custom validators
+If you think, the implemented selection of validators is incomplete, feel free to create your own.
+
+There are two base classes you may utilize:
+`sg.Validate.BaseValidator` and `sg.Validate.BaseValidateValue`.
+
+`BaseValidator` is less restrictive, but doesn't allow combinations (`&`, `|`, `-`).
+Use `BaseValidateValue` if possible.
+
+With `BaseValidateValue`, there are different methods to implement your own validation.
+The change is valid, if ALL OF THESE METHODS return `True`.
+
+## Full value check
+The easiest check is for the full value.
+
+Overwrite the method `is_valid_full_value` to return `True`, if the passed value is valid:
+```py
+import SwiftGUI as sg
+
+sg.Themes.FourColors.Emerald()
+
+class UppercaseOnly(sg.Validate.BaseValidateValue):
+
+    def is_valid_full_value(self, val: str) -> bool:
+        return val == val.upper()   # True, if the whole string is uppercase
+
+layout = [
+    [
+        sg.Input(
+            validate="all",
+            validatecommand=UppercaseOnly(),    # Using the custom validator
+        )
+    ]
+]
+
+w = sg.Window(layout)
+w.loop()
+```
+
+`val` gets passed the full element-value every time a validation occurs (at least after each change).
+
+## Value-change checks
+`is_valid_insertion(self, val: str, val_before: str, inserted_val: str) -> bool` is called when text is added to the value.
+
+`def is_valid_deletion(self, val: str, val_before: str, deleted_val: str) -> bool` is called when text is removed from the value.
+
+There are 3 parameters:
+- `val`: The text AFTER the change being validated
+- `val_before`: The text BEFORE the change
+- `inserted_val`/`deleted_val`: The part of the text added/deleted
+
+Keep in mind that you can add more than one character in a single change by pasting text it into the input.
+That means, `inserted_val` can be longer than one character.
+
+Let's forbid all spaces in an input:
+```py
+class NoSpaces(sg.Validate.BaseValidateValue):
+
+    def is_valid_insertion(self, val: str, val_before: str, inserted_val: str) -> bool:
+        return " " not in inserted_val
+```
+
+Let's forbid all deletions:
+```py
+class NoDeletions(sg.Validate.BaseValidateValue):
+
+    def is_valid_deletion(self, val: str, val_before: str, deleted_val: str) -> bool:
+        return False
+```
+
+Keep in mind that working with value-changes instead of full values has an interesting effect:
+Text already in the input will not be validated again.
+
+You can add invalid text from the backend and the user will still be able to insert text.
+
+This is good, or annoying, depending on your application.
+
+## BaseValidator
+This is the more flexible base-class for validators, but won't be explained in this tutorial, since it would mostly describe tkinter topics.
+
+To use this baseclass, first understand how validation works in tkinter:
+https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/entry-validation.html
+
+Then, look at the implementation of the two base-classes.
+I am sure you'll quickly understand the purpose of each attribute and method.
+
