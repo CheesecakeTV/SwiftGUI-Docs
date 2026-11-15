@@ -1,4 +1,6 @@
 
+![](10%20Others/SwiftGUI%20Logo.png)
+
 # SwiftGUI
 ### ...Documentation
 
@@ -34,6 +36,9 @@ Update to use the newest features and elements:
 ```bash
 pip install SwiftGUI -U
 ```
+
+# Contributions / Mentions
+- Pebble: Drew the logo and icon
 
 # Documentations and tutorials are very important to me
 If SwiftGUI should have any chance on competing with other gui-packages, it has to have a solid documentation.
